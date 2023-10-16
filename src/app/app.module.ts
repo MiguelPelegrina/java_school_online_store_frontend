@@ -12,6 +12,8 @@ import { UpdateCountryComponent } from './components/country/update-country/upda
 import { DetailCountryComponent } from './components/country/detail-country/detail-country.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ListBookComponent } from './components/book/list-book/list-book.component';
 import { AddBookComponent } from './components/book/add-book/add-book.component';
 
@@ -27,14 +29,18 @@ import { AddBookComponent } from './components/book/add-book/add-book.component'
   ],
   imports: [
     AppRoutingModule,
+    BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,
     MatIconModule,
     MatSlideToggleModule,
+    MatSnackBarModule,
     RouterModule,
   ],
-  providers: [],
+  providers: [
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 5000}}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

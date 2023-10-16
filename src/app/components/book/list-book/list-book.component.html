@@ -1,1 +1,35 @@
-<p>list-book works!</p>
+<!-- TODO
+  - Searchbar
+  - Sort with header
+  - Multi-select with Deactivate -> FAB for soft delete
+-->
+<h2 class="text-center">List of books</h2>
+<table class="table table-striped">
+  <thead class="table-dark">
+    <tr>
+      <th>Title</th>
+      <th>Autor</th>
+      <th>Active</th>
+      <th>Price</th>
+      <th>Stock</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody *ngFor="let book of this.books">
+    <tr>
+      <td>{{book.title}}</td>
+      <td>{{book.parameters.author}}</td>
+      <td>
+        <mat-slide-toggle (click)="setBookActivity(book)" [(ngModel)]="book.active"></mat-slide-toggle>
+      </td>
+      <td>{{book.price}}</td>
+      <td>{{book.stock}}</td>
+      <td>
+        <mat-icon aria-hidden="false" (click)="viewBookDetails(book.id)" fontIcon="remove_red_eye"></mat-icon>
+        <mat-icon aria-hidden="false" (click)="editBook(book.id)" color="accent" fontIcon="edit" style="margin-left:5px"></mat-icon>
+        <mat-icon aria-hidden="false" (click)="deleteBook(book.id)" color="warn" fontIcon="delete" style="margin-left:5px"></mat-icon>
+      </td>
+    </tr>
+  </tbody>
+</table>

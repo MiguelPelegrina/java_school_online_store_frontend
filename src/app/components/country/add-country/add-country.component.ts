@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CountryService } from '../../../services/country/country.service';
 import { Router } from '@angular/router';
 import { StringValues } from '../../../shared/string-values';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-country',
@@ -13,7 +14,7 @@ import { StringValues } from '../../../shared/string-values';
 export class AddCountryComponent extends FormsModule {
   protected country: Country = {name: '', active: false};
 
-  constructor(private service: CountryService, private router: Router){
+  constructor(private router: Router, private service: CountryService, private snackbar: MatSnackBar){
     super();
   }
 
@@ -23,8 +24,8 @@ export class AddCountryComponent extends FormsModule {
 
   protected saveCountry(){
     this.service.create(this.country).subscribe(response => {
+      this.snackbar.open("Country saved");
       this.navigateToCountryList();
-      console.error();
     });
   }
 

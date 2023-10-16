@@ -1,8 +1,8 @@
-import { BookParameterFormats } from "../../enums/book-parameter-formats";
+import { BookParametersFormat } from "./book-parameters-format/book-parameters-format";
 
-export interface BookParamters {
+export interface BookParameters {
   id: number,
   author: string,
-  format: BookParameterFormats,
+  format: BookParametersFormat,
   active: boolean,
 }

@@ -1,16 +1,15 @@
-import { BookGenres } from "../enums/book-genres";
-import { BookParameterFormats } from "../enums/book-parameter-formats";
+import { BookGenre } from "./book-genre/book-genre";
+import { BookParameters } from "./parameters/book-parameters";
 
 export interface Book {
   id: number;
   title: string;
   price: number;
   isbn: string;
-  author: string;
-  genre: BookGenres;
-  parameters: BookParameterFormats;
+  genre: BookGenre;
+  parameters: BookParameters;
   stock: number;
-  isActive: boolean;
+  active: boolean;
   // TODO Correct data type? byte[] in backend
   image?: number[];
 }

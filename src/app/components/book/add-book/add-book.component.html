@@ -1,6 +1,7 @@
 <h2 class="text-center">Add a new book</h2>
 <div class="container">
   <form (ngSubmit)="onSubmit()" #bookForm="ngForm">
+    <!-- ROW-->
     <div class="row">
       <div class="form-group col-sm">
         <label>Title</label>
@@ -10,7 +11,7 @@
         name="title"
         [(ngModel)]="book.title"
         required
-        placeholder="Enter the title of the book"
+        placeholder="Enter the title"
         #name ="ngModel"
         >
         <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
@@ -20,78 +21,152 @@
         </div>
       </div>
 
+
       <div class="form-group col-sm" >
         <label>Author</label>
         <input type="text"
-      class="form-control"
-      id="author"
-      name="author"
-      [(ngModel)]="book.author"
-      required
-      placeholder="Enter the author of the book"
-      #name ="ngModel"
-      >
-      <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
-        <div *ngIf="['author.errors.required']">
-          You need to enter a title for the book
+        class="form-control"
+        id="author"
+        name="author"
+        [(ngModel)]="book.parameters.author"
+        required
+        placeholder="Enter the author"
+        #name ="ngModel"
+        >
+        <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
+          <div *ngIf="['author.errors.required']">
+            You need to enter a title for the book
+          </div>
         </div>
       </div>
     </div>
-  </div>
+    <!-- /ROW-->
 
-  <div class="row">
-
-    <div class="form-group col-sm">
-      <label>Price</label>
-      <input type="number"
-      class="form-control"
-      id="price"
-      name="price"
-      [(ngModel)]="book.price"
-      required
-      placeholder="0.00"
-      #name ="ngModel"
-      >
-      <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
-        <div *ngIf="['price.errors.required']">
-          You need to enter a price for the book
+    <!-- ROW-->
+    <div class="row">
+      <div class="form-group col-sm">
+        <label>ISBN</label>
+        <input type="text"
+        class="form-control"
+        id="isbn"
+        name="isbn"
+        [(ngModel)]="book.isbn"
+        required
+        placeholder="Enter the ISBN"
+        #name ="ngModel"
+        >
+        <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
+          <div *ngIf="['isbn.errors.required']">
+            You need to enter the ISBN of the book
+          </div>
         </div>
       </div>
     </div>
+    <!-- /ROW-->
 
-    <div class="form-group col-sm">
-      <label>ISBN</label>
-      <input type="text"
-      class="form-control"
-      id="isbn"
-      name="isbn"
-      [(ngModel)]="book.isbn"
-      required
-      placeholder="Enter the isbn of the book"
-      #name ="ngModel"
-      >
-      <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
-        <div *ngIf="['isbn.errors.required']">
-          You need to enter the ISBN of the book
+    <!-- ROW-->
+    <div class="row">
+      <div class="form-group col-sm">
+        <!-- TODO Limit input to two decimal -> .00 -->
+        <!-- TODO Table for different prices depending on currencies
+          Option 1: Create a auto incremental table -> one row with empty fields for price and currency.
+          If the fields of the row are set, generate a new row with empty. <-- I favor this option
+          Option 2: Create a table with as many rows as currencies are supported. At least one must be filled.
+          Optional: Checkbox or toggle to enable currency converter. The conversion values need to be managed by someone (employees?).
+          Problem: What if more then one price is manually set?
+          Solution: Only allow one currency to be inserted manully, disable the fields of other rows and convert the prices from
+          the setted one to the others?
+        -->
+        <label>Price</label>
+        <input type="number"
+        class="form-control"
+        id="price"
+        name="price"
+        [(ngModel)]="book.price"
+        required
+        placeholder="0.00"
+        #name ="ngModel"
+        >
+        <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
+          <div *ngIf="['price.errors.required']">
+            You need to enter a price for the book
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-group col-sm">
+        <div>
+          <label>Stock</label>
+          <input type="number"
+          class="form-control"
+          id="stock"
+          name="stock"
+          [(ngModel)]="book.stock"
+          required
+          #name ="ngModel"
+          >
+          <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
+            <div *ngIf="['stock.errors.required']">
+              You need to enter your stock
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <!-- /ROW-->
 
-    <div class="form-group col-sm">
-      <div>
-        <label>Genre</label>
+    <!-- ROW-->
+    <div class="row">
+      <div class="form-group col-sm">
+        <div>
+          <label>Genre</label>
+        </div>
+        <select>
+          <option value="">Select a genre</option>
+          <option *ngFor="let genre of genreTypes" [value]="genre.name">
+            {{genre.name}}
+          </option>
+        </select>
       </div>
-      <select>
-        <option *ngFor="let genre of genreTypes" [value]="genre">
-          {{genre}}
-        </option>
-      </select>
+
+      <div class="form-group col-sm">
+        <div>
+          <label>Format</label>
+        </div>
+        <select>
+          <option value="">Select a format</option>
+          <option *ngFor="let format of formatTypes" [value]="format.name">
+            {{format.name}}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group col-sm">
+        <div>
+          <label>Active</label>
+        </div>
+        <mat-slide-toggle [(ngModel)]="book.active" name="active"></mat-slide-toggle>
+      </div>
     </div>
-  </div>
+    <!-- /ROW-->
 
+    <!-- ROW-->
+    <div class="row">
+      <div class="form-group col-sm">
+        <div>
+          <label>Book cover</label>
+        </div>
+        <input type="file" class="file-input" (change)="onFileSelected($event)">
+        <div *ngIf="fileUrl">
+          <img [src]="fileUrl" alt="Uploaded File">
+        </div>
+        <!-- TODO Add a remove image button -->
+      </div>
+    </div>
+    <!-- /ROW-->
 
-
-    <!-- TODO Does not check for string with white spaces-->
+    <!-- TODO Does not check for strings with white spaces-->
     <button class="btn btn-success" [disabled]="bookForm.form.invalid">Save book</button>
   </form>
 </div>

@@ -7,6 +7,18 @@ export class StringValues{
   public static BOOK_URL: string = '/books';
   public static BASE_BOOK_URL: string = `${this.BASE_URL}${this.BOOK_URL}`;
 
+  /////////////////////////////////////////////////////
+  // Book formats
+  /////////////////////////////////////////////////////
+  public static BOOK_FORMAT_URL: string = '/bookparametersformat';
+  public static BASE_BOOK_FORMAT_URL: string = `${this.BASE_URL}${this.BOOK_FORMAT_URL}`;
+
+  /////////////////////////////////////////////////////
+  // Book genres
+  /////////////////////////////////////////////////////
+  public static BOOK_GENRE_URL: string = '/bookgenres';
+  public static BASE_BOOK_GENRE_URL: string = `${this.BASE_URL}${this.BOOK_GENRE_URL}`;
+
   //////////////////////////////////////////////////////
   // Countries
   //////////////////////////////////////////////////////
