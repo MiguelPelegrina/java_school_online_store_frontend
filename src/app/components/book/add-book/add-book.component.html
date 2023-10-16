@@ -1,0 +1,98 @@
+<h2 class="text-center">Add a new book</h2>
+<div class="container">
+  <form (ngSubmit)="onSubmit()" #bookForm="ngForm">
+    <div class="row">
+      <div class="form-group col-sm">
+        <label>Title</label>
+        <input type="text"
+        class="form-control"
+        id="title"
+        name="title"
+        [(ngModel)]="book.title"
+        required
+        placeholder="Enter the title of the book"
+        #name ="ngModel"
+        >
+        <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
+          <div *ngIf="['title.errors.required']">
+            You need to enter a title for the book
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-sm" >
+        <label>Author</label>
+        <input type="text"
+      class="form-control"
+      id="author"
+      name="author"
+      [(ngModel)]="book.author"
+      required
+      placeholder="Enter the author of the book"
+      #name ="ngModel"
+      >
+      <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
+        <div *ngIf="['author.errors.required']">
+          You need to enter a title for the book
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="form-group col-sm">
+      <label>Price</label>
+      <input type="number"
+      class="form-control"
+      id="price"
+      name="price"
+      [(ngModel)]="book.price"
+      required
+      placeholder="0.00"
+      #name ="ngModel"
+      >
+      <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
+        <div *ngIf="['price.errors.required']">
+          You need to enter a price for the book
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group col-sm">
+      <label>ISBN</label>
+      <input type="text"
+      class="form-control"
+      id="isbn"
+      name="isbn"
+      [(ngModel)]="book.isbn"
+      required
+      placeholder="Enter the isbn of the book"
+      #name ="ngModel"
+      >
+      <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
+        <div *ngIf="['isbn.errors.required']">
+          You need to enter the ISBN of the book
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group col-sm">
+      <div>
+        <label>Genre</label>
+      </div>
+      <select>
+        <option *ngFor="let genre of genreTypes" [value]="genre">
+          {{genre}}
+        </option>
+      </select>
+    </div>
+  </div>
+
+
+
+    <!-- TODO Does not check for string with white spaces-->
+    <button class="btn btn-success" [disabled]="bookForm.form.invalid">Save book</button>
+  </form>
+</div>
+
