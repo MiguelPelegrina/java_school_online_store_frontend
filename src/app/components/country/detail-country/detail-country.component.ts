@@ -18,7 +18,7 @@ export class DetailCountryComponent {
 
   constructor(private router: ActivatedRoute, private service: CountryService){}
 
-  ngOnInit(): void{
+  public ngOnInit(): void{
     this.id = this.router.snapshot.params['name'];
     this.service.getById(this.id).subscribe(response => {
       this.country = response;

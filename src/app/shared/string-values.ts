@@ -10,13 +10,13 @@ export class StringValues{
   /////////////////////////////////////////////////////
   // Book formats
   /////////////////////////////////////////////////////
-  public static BOOK_FORMAT_URL: string = '/bookparametersformat';
+  public static BOOK_FORMAT_URL: string = '/book_parameters_format';
   public static BASE_BOOK_FORMAT_URL: string = `${this.BASE_URL}${this.BOOK_FORMAT_URL}`;
 
   /////////////////////////////////////////////////////
   // Book genres
   /////////////////////////////////////////////////////
-  public static BOOK_GENRE_URL: string = '/bookgenres';
+  public static BOOK_GENRE_URL: string = '/book_genres';
   public static BASE_BOOK_GENRE_URL: string = `${this.BASE_URL}${this.BOOK_GENRE_URL}`;
 
   //////////////////////////////////////////////////////

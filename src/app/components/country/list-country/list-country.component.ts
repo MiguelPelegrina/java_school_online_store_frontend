@@ -62,7 +62,6 @@ export class ListCountryComponent implements OnInit{
    * @param name
    */
   protected updateCountry(name: string){
-    // TODO This is necessary for more complex classes, but not for country.
     this.router.navigate(['countries/update', name]);
   }
 

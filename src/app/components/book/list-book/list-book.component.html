@@ -3,7 +3,12 @@
   - Sort with header
   - Multi-select with Deactivate -> FAB for soft delete
 -->
+<div class="text-right m-3">
 <h2 class="text-center">List of books</h2>
+  <button (click)="addBook()" mat-mini-fab matTooltip="Add a new book to the list">
+    <mat-icon >add</mat-icon>
+  </button>
+</div>
 <table class="table table-striped">
   <thead class="table-dark">
     <tr>
@@ -26,9 +31,9 @@
       <td>{{book.price}}</td>
       <td>{{book.stock}}</td>
       <td>
-        <mat-icon aria-hidden="false" (click)="viewBookDetails(book.id)" fontIcon="remove_red_eye"></mat-icon>
-        <mat-icon aria-hidden="false" (click)="editBook(book.id)" color="accent" fontIcon="edit" style="margin-left:5px"></mat-icon>
-        <mat-icon aria-hidden="false" (click)="deleteBook(book.id)" color="warn" fontIcon="delete" style="margin-left:5px"></mat-icon>
+        <mat-icon matTooltip="View more book details" aria-hidden="false" (click)="viewBookDetails(book.id)" fontIcon="remove_red_eye"></mat-icon>
+        <mat-icon matTooltip="Edit the book details" aria-hidden="false" (click)="editBook(book.id)" color="accent" fontIcon="edit" style="margin-left:5px"></mat-icon>
+        <!-- <mat-icon aria-hidden="false" (click)="deleteBook(book)" color="warn" fontIcon="delete" style="margin-left:5px"></mat-icon> -->
       </td>
     </tr>
   </tbody>

@@ -19,7 +19,7 @@ export class UpdateCountryComponent extends FormsModule implements OnInit{
     super();
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.name = this.route.snapshot.params['name'];
     this.service.getById(this.name!).subscribe(response => {
       this.country = response;

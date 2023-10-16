@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { BookService } from 'src/app/services/book/book.service';
 import { Book } from 'src/app/shared/domain/book/book';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-list-book',
@@ -14,7 +14,11 @@ export class ListBookComponent implements OnInit {
   protected books: Book[] = [];
 
   // Constructor
-  constructor(private service: BookService, private router: Router){}
+  constructor(
+    private service: BookService,
+    private router: Router,
+    private snackbar: MatSnackBar,
+  ){}
 
   // Methods
   // Public
@@ -22,16 +26,62 @@ export class ListBookComponent implements OnInit {
     this.getAllBooks();
   }
 
+  // Protected
+  protected addBook(){
+    this.router.navigate(['books/add']);
+  }
+
+  protected editBook(id: number){
+    this.router.navigate(['books/edit', id]);
+  }
+
   protected setBookActivity(book: Book){
-    console.log(book);
     this.service.update(book.id, book).subscribe(response => {
       this.getAllBooks();
+      this.snackbar.open(`Activity of ${book.title} updated!`);
     })
   }
 
-  protected deleteBook(id: number){
+  protected viewBookDetails(id: number){
+    this.router.navigate(['books/view', id]);
+  }
+
+
+  // Private
+  private getAllBooks(){
+    this.service.getAll().subscribe(bookList => {
+      this.sortBookListByActivtyName(bookList);
+      this.books = bookList;
+    });
+  }
+
+  /**
+   *
+   * @param bookList
+   * @returns
+   */
+  private sortBookListByActivtyName(bookList: Book[]): Book[] {
+    return bookList.sort((a, b) => {
+      if (a.active && !b.active) {
+        return -1;
+      } else if (!a.active && b.active) {
+        return 1;
+      } else {
+        // If both are active or both are inactive, compare by name
+        return a.title.localeCompare(b.title);
+      }
+    });
+  }
+
+  // Deprecated
+  // ONLY SOFT DELETE IS ENABLED
+  /**
+   *
+   * @param book
+   */
+  /*protected deleteBook(book: Book){
     Swal.fire({
-      title: `Do you really want to delete ${name}?`,
+      title: `Do you really want to delete ${book.title}?`,
       icon: 'warning',
       showCloseButton: true,
       showCancelButton: true,
@@ -40,7 +90,7 @@ export class ListBookComponent implements OnInit {
       cancelButtonText: 'No, keep it',
     }).then((result) => {
       if(result.isConfirmed){
-        this.service.delete(id).subscribe(response =>{
+        this.service.delete(book.id).subscribe(response =>{
           this.getAllBooks();
           Swal.fire('Delete successful', '', 'success');
           error: Swal.fire('An error ocurred, contact your support', '', 'warning');
@@ -49,22 +99,5 @@ export class ListBookComponent implements OnInit {
         Swal.fire('Changes are not saved', '', 'info')
       }
     })
-  }
-
-  protected editBook(id: number){
-    this.router.navigate([`$`]);
-  }
-
-  protected viewBookDetails(id: number){
-    this.router.navigate([`$`]);
-  }
-
-
-  // Private
-  private getAllBooks(){
-    this.service.getAll().subscribe(bookList => {
-      //this.sortBookListByName(bookList);
-      this.books = bookList;
-    });
-  }
+  }*/
 }

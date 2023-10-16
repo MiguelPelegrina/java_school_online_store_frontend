@@ -13,9 +13,13 @@ import { DetailCountryComponent } from './components/country/detail-country/deta
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ListBookComponent } from './components/book/list-book/list-book.component';
 import { AddBookComponent } from './components/book/add-book/add-book.component';
+import { ViewBookComponent } from './components/book/view-book/view-book.component';
+import { EditBookComponent } from './components/book/edit-book/edit-book.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -26,6 +30,8 @@ import { AddBookComponent } from './components/book/add-book/add-book.component'
     ListBookComponent,
     ListCountryComponent,
     UpdateCountryComponent,
+    ViewBookComponent,
+    EditBookComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -33,9 +39,11 @@ import { AddBookComponent } from './components/book/add-book/add-book.component'
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    MatButtonModule,
     MatIconModule,
     MatSlideToggleModule,
     MatSnackBarModule,
+    MatTooltipModule,
     RouterModule,
   ],
   providers: [
