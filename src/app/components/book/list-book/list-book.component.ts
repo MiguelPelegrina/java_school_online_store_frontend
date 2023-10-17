@@ -11,64 +11,102 @@ import { Book } from 'src/app/shared/domain/book/book';
 })
 export class ListBookComponent implements OnInit {
   // Fields
-  protected books: Book[] = [];
-
   protected allowActivityUpdates: boolean = true;
+
+  protected loading: boolean = true;
+
+  protected books: Book[] = [];
 
   // Constructor
   constructor(
     private service: BookService,
-    private router: Router,
     private snackbar: MatSnackBar,
+    private router: Router,
   ){}
 
   // Methods
-  // Public
+  // Public methods
+  /**
+   * Fill the table with data from the database.
+   */
   public ngOnInit(): void {
     this.getAllBooks();
   }
 
-  // Protected
+  // Protected methods
+  /**
+   * Navigates the user to the 'Add book' page, allowing them to create a new one.
+   */
   protected addBook(){
     this.router.navigate(['books/add']);
   }
 
+  /**
+   * Navigates the user to the 'Edit book' page, allowing them to modify an existing one.
+   * @param id Id of the chosen book.
+   */
   protected editBook(id: number){
     this.router.navigate(['books/edit', id]);
   }
 
+  /**
+   * Sets the book 'active' state. If it was active before, it's not active now and viceversa. Disables the toggle button during the transaction until success or error.
+   * @param book Book whose 'active' state will be changed.
+   */
   protected setBookActivity(book: Book){
     this.allowActivityUpdates = false;
+    this.loading = true;
     this.service.update(book.id, book).subscribe({
-      complete: ()  => this.handleUpdateSuccessResponse(book.title),
-      error: () => this.handleUpdateErrorResponse(book)
+      complete: () => this.handleUpdateSuccessResponse(`Activity of ${book.title} updated!`),
+      error: () => this.handleUpdateErrorResponse(book, `Activity of ${book.title} could not be changed.`)
     })
   }
 
+  /**
+   * Navigates the user to the 'View book' page, allowing them to see more details of the chosen book.
+   * @param id Id of the chosen book.
+   */
   protected viewBookDetails(id: number){
     this.router.navigate(['books/view', id]);
   }
 
-  // Private
+  // Private methods
+  /**
+   * Retrieves all books from the database and sorts them by 'active' first and then alphabetically by book 'title' (A-Z).
+   */
   private getAllBooks(){
     this.service.getAll().subscribe(bookList => {
       this.sortBookListByActivityName(bookList);
       this.books = bookList;
+      this.loading = false;
     });
   }
 
-  private handleUpdateErrorResponse(book: Book){
+  // TODO Abstract the responses?
+  /**
+   *
+   * @param book
+   * @param message
+   */
+  private handleUpdateErrorResponse(book: Book, message: string){
     book.active = !book.active;
+    this.loading = false;
     this.allowActivityUpdates = true;
-    this.snackbar.open(`Activity of ${book.title} could not be changed.`)
+    this.snackbar.open(message);
   }
 
-  private handleUpdateSuccessResponse(title: string){
+  /**
+   *
+   * @param message
+   */
+  private handleUpdateSuccessResponse(message: string){
     this.getAllBooks();
+    this.loading = false;
     this.allowActivityUpdates = true;
-    this.snackbar.open(`Activity of ${title} updated!`);
+    this.snackbar.open(message);
   }
 
+  // TODO Abstract it
   /**
    *
    * @param bookList
@@ -87,7 +125,7 @@ export class ListBookComponent implements OnInit {
     });
   }
 
-  // Deprecated
+  // Deprecated methods
   // ONLY SOFT DELETE IS ENABLED
   /**
    *

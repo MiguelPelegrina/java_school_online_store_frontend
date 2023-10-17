@@ -1,45 +1,81 @@
 <!-- TODO
   - Progress bar while loading, inform the user if loading led to an error
+    -> more than just a snackbar?
+    -> progress spinner?
+  - Sort with header -> MatTable?
+  - Add pagination of elements -> 20 elements for one each page for example
   - Searchbar
-  - Sort with header
   - Multi-select with Deactivate -> FAB for soft delete
   - Book import from excel
 -->
+<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 <div class="text-right m-3">
-<h2 class="text-center">List of books</h2>
+  <h2 class="text-center">List of books</h2>
+
+  <!-- FABs -->
   <button (click)="addBook()" mat-mini-fab matTooltip="Add a new book to the list">
     <mat-icon>add</mat-icon>
   </button>
-  <button class="ml-3" mat-mini-fab matTooltip="Import a list of books from an excel file. NOT IMPLEMENTED YET.">
+
+  <button class="m-2" mat-mini-fab matTooltip="Import a list of books from an excel file. NOT IMPLEMENTED YET.">
     <mat-icon>cloud_upload</mat-icon>
   </button>
+  <!-- TODO Return and refresh buttons? Or are they redundant? -->
+  <!-- /FABs -->
 </div>
+
+<!-- TABLE -->
 <table class="table table-striped">
+  <!-- TABLE HEADER -->
   <thead class="table-dark">
     <tr>
-      <th>Title</th>
-      <th>Autor</th>
-      <th>Active</th>
-      <th>Price</th>
-      <th>Stock</th>
-      <th>Actions</th>
+      <th matTooltip="Title of the book">Title</th>
+      <th matTooltip="Autor of the book">Autor</th>
+      <th matTooltip="Active books are available for sale">Active</th>
+      <th matTooltip="Price of the book">Price</th>
+      <th matTooltip="Amount of books available">Stock</th>
+      <th matTooltip="View more details or edit a book">Actions</th>
     </tr>
   </thead>
+  <!-- /TABLE HEADER -->
 
+  <!-- TABLE BODY -->
   <tbody *ngFor="let book of this.books">
     <tr>
       <td>{{book.title}}</td>
       <td>{{book.parameters.author}}</td>
       <td>
-        <mat-slide-toggle (click)="setBookActivity(book)" [(ngModel)]="book.active" [disabled]="!this.allowActivityUpdates"></mat-slide-toggle>
-      </td>
-      <td>{{book.price}}€</td>
-      <td>{{book.stock}}</td>
-      <!-- TODO Might add a plus and minus sign to directly increase or decrease? Or unnecessary with triggers? -->
-      <td>
-        <mat-icon matTooltip="View more details" aria-hidden="false" (click)="viewBookDetails(book.id)" fontIcon="remove_red_eye"></mat-icon>
-        <mat-icon matTooltip="Edit the book" aria-hidden="false" (click)="editBook(book.id)" color="accent" fontIcon="edit" style="margin-left:5px"></mat-icon>
-      </td>
-    </tr>
-  </tbody>
+        <mat-slide-toggle
+          (click)="setBookActivity(book)"
+          [disabled]="!this.allowActivityUpdates"
+          matTooltip="If active, the book is available for sale"
+          [(ngModel)]="book.active"
+        >
+        </mat-slide-toggle>
+    </td>
+    <td>{{book.price}}€</td>
+    <td>{{book.stock}}</td>
+    <!-- TODO Might add a plus and minus sign to directly increase or decrease? Or unnecessary with triggers? -->
+    <td>
+      <mat-icon
+        aria-hidden="false"
+        (click)="viewBookDetails(book.id)"
+        fontIcon="remove_red_eye"
+        matTooltip="View more details"
+        >
+      </mat-icon>
+      <mat-icon
+        aria-hidden="false"
+        (click)="editBook(book.id)"
+        color="accent"
+        fontIcon="edit"
+        matTooltip="Edit the book"
+        style="margin-left:5px"
+        >
+      </mat-icon>
+    </td>
+  </tr>
+</tbody>
+<!-- /TABLE BODY -->
 </table>
+<!-- /TABLE -->

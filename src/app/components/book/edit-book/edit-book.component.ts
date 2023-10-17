@@ -9,11 +9,9 @@ import { Book } from 'src/app/shared/domain/book/book';
   templateUrl: './edit-book.component.html',
   styleUrls: ['./edit-book.component.css']
 })
-export class EditBookComponent extends FormsModule implements OnInit{
+export class EditBookComponent extends FormsModule implements OnInit {
   // Fields
   // TODO Not sure if default values or undefined fields with ? and continous checking with if's and ngIf's is better
-  protected id: number = 0;
-
   protected book: Book = {
     id: 0,
     title: '',
@@ -32,6 +30,8 @@ export class EditBookComponent extends FormsModule implements OnInit{
     active: true,
   };
 
+  protected id: number = 0;
+
   protected isBookLoaded: boolean = false;
 
   // Constructor
@@ -42,12 +42,17 @@ export class EditBookComponent extends FormsModule implements OnInit{
   // Methods
   // Public
   public ngOnInit(): void {
+    this.loadBook();
+  }
+
+  /**
+   *
+   */
+  private loadBook(){
     this.id = this.activatedRoute.snapshot.params['id'];
     this.service.getById(this.id).subscribe(response => {
       this.book = response;
       this.isBookLoaded = true;
     });
   }
-
-
 }

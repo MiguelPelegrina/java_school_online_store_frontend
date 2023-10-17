@@ -1,5 +1,9 @@
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <ul class="navbar-nav">
+    <!-- TODO Add home component and route it -->
+    <li class="nav-item">
+      <a routerLink="home" routerLinkActive="active" class="nav-link">{{title}}</a>
+    </li>
     <li class="nav-item">
       <a routerLink="books" routerLinkActive="active" class="nav-link">Books</a>
     </li>
@@ -11,7 +15,6 @@
     </li>
   </ul>
 </nav>
-<h1 class="text-center">{{title}}</h1>
 <div class="container">
   <router-outlet></router-outlet>
 </div>
