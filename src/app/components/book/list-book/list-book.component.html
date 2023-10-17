@@ -1,12 +1,17 @@
 <!-- TODO
+  - Progress bar while loading, inform the user if loading led to an error
   - Searchbar
   - Sort with header
   - Multi-select with Deactivate -> FAB for soft delete
+  - Book import from excel
 -->
 <div class="text-right m-3">
 <h2 class="text-center">List of books</h2>
   <button (click)="addBook()" mat-mini-fab matTooltip="Add a new book to the list">
-    <mat-icon >add</mat-icon>
+    <mat-icon>add</mat-icon>
+  </button>
+  <button class="ml-3" mat-mini-fab matTooltip="Import a list of books from an excel file. NOT IMPLEMENTED YET.">
+    <mat-icon>cloud_upload</mat-icon>
   </button>
 </div>
 <table class="table table-striped">
@@ -26,14 +31,14 @@
       <td>{{book.title}}</td>
       <td>{{book.parameters.author}}</td>
       <td>
-        <mat-slide-toggle (click)="setBookActivity(book)" [(ngModel)]="book.active"></mat-slide-toggle>
+        <mat-slide-toggle (click)="setBookActivity(book)" [(ngModel)]="book.active" [disabled]="!this.allowActivityUpdates"></mat-slide-toggle>
       </td>
-      <td>{{book.price}}</td>
+      <td>{{book.price}}€</td>
       <td>{{book.stock}}</td>
+      <!-- TODO Might add a plus and minus sign to directly increase or decrease? Or unnecessary with triggers? -->
       <td>
-        <mat-icon matTooltip="View more book details" aria-hidden="false" (click)="viewBookDetails(book.id)" fontIcon="remove_red_eye"></mat-icon>
-        <mat-icon matTooltip="Edit the book details" aria-hidden="false" (click)="editBook(book.id)" color="accent" fontIcon="edit" style="margin-left:5px"></mat-icon>
-        <!-- <mat-icon aria-hidden="false" (click)="deleteBook(book)" color="warn" fontIcon="delete" style="margin-left:5px"></mat-icon> -->
+        <mat-icon matTooltip="View more details" aria-hidden="false" (click)="viewBookDetails(book.id)" fontIcon="remove_red_eye"></mat-icon>
+        <mat-icon matTooltip="Edit the book" aria-hidden="false" (click)="editBook(book.id)" color="accent" fontIcon="edit" style="margin-left:5px"></mat-icon>
       </td>
     </tr>
   </tbody>

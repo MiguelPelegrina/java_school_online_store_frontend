@@ -13,6 +13,8 @@ export class ListBookComponent implements OnInit {
   // Fields
   protected books: Book[] = [];
 
+  protected allowActivityUpdates: boolean = true;
+
   // Constructor
   constructor(
     private service: BookService,
@@ -36,9 +38,10 @@ export class ListBookComponent implements OnInit {
   }
 
   protected setBookActivity(book: Book){
-    this.service.update(book.id, book).subscribe(response => {
-      this.getAllBooks();
-      this.snackbar.open(`Activity of ${book.title} updated!`);
+    this.allowActivityUpdates = false;
+    this.service.update(book.id, book).subscribe({
+      complete: ()  => this.handleUpdateSuccessResponse(book.title),
+      error: () => this.handleUpdateErrorResponse(book)
     })
   }
 
@@ -46,13 +49,24 @@ export class ListBookComponent implements OnInit {
     this.router.navigate(['books/view', id]);
   }
 
-
   // Private
   private getAllBooks(){
     this.service.getAll().subscribe(bookList => {
-      this.sortBookListByActivtyName(bookList);
+      this.sortBookListByActivityName(bookList);
       this.books = bookList;
     });
+  }
+
+  private handleUpdateErrorResponse(book: Book){
+    book.active = !book.active;
+    this.allowActivityUpdates = true;
+    this.snackbar.open(`Activity of ${book.title} could not be changed.`)
+  }
+
+  private handleUpdateSuccessResponse(title: string){
+    this.getAllBooks();
+    this.allowActivityUpdates = true;
+    this.snackbar.open(`Activity of ${title} updated!`);
   }
 
   /**
@@ -60,7 +74,7 @@ export class ListBookComponent implements OnInit {
    * @param bookList
    * @returns
    */
-  private sortBookListByActivtyName(bookList: Book[]): Book[] {
+  private sortBookListByActivityName(bookList: Book[]): Book[] {
     return bookList.sort((a, b) => {
       if (a.active && !b.active) {
         return -1;
@@ -78,6 +92,7 @@ export class ListBookComponent implements OnInit {
   /**
    *
    * @param book
+   * @deprecated
    */
   /*protected deleteBook(book: Book){
     Swal.fire({

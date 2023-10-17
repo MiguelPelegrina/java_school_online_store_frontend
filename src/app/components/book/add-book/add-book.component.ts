@@ -68,10 +68,11 @@ export class AddBookComponent extends FormsModule implements OnInit{
     if (inputElement.files && inputElement.files[0]) {
       const file = event.target.files[0];
 
-        const reader = new FileReader();
-        reader.onload = e => this.fileUrl = reader.result;
+      const reader = new FileReader();
 
-        reader.readAsDataURL(file);
+      reader.onload = e => this.fileUrl = reader.result;
+
+      reader.readAsDataURL(file);
     }
   }
 

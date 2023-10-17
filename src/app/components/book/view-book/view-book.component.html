@@ -1,22 +1,92 @@
-<h2 class="text-center">Details of {{book.title}}</h2>
+<mat-progress-bar *ngIf="!isBookLoaded" mode="indeterminate"></mat-progress-bar>
+<h2 *ngIf="isBookLoaded" class="text-center">Details of {{book.title}}</h2>
 <div class="text-right m-3">
   <button (click)="editBook(book.id)" mat-mini-fab matTooltip="Add a new book to the list">
     <mat-icon>edit</mat-icon>
   </button>
 </div>
-<div class="container">
+
+<div class="container" *ngIf="book">
+  <!-- ROW -->
+  <div class="row">
+    <!-- COLUMN  -->
+    <div class="col-sm">
+      <label>Name:</label>
+      <p>{{book.title}}</p>
+    </div>
+    <!-- /COLUMN  -->
+
+    <!-- COLUMN  -->
+    <div class="col-sm">
+      <label>Author:</label>
+      <p>{{book.parameters.author}}</p>
+    </div>
+    <!-- /COLUMN  -->
+
+    <!-- COLUMN  -->
+    <div class="col-sm">
+      <label>ISBN: </label>
+      <p>{{book.isbn}}</p>
+    </div>
+    <!-- /COLUMN  -->
+  </div>
+  <!-- /ROW -->
+
+  <!-- ROW -->
+  <div class="row">
+    <!-- COLUMN -->
+    <div class="col-sm">
+      <label>Genre:</label>
+      <p>{{book.genre.name}}</p>
+    </div>
+    <!-- /COLUMN -->
+
+    <!-- COLUMN -->
+    <div class="col-sm">
+      <label>Format:</label>
+      <p>{{book.parameters.format.name}}</p>
+    </div>
+    <!-- /COLUMN -->
+  </div>
+  <!-- /ROW -->
+
+  <!-- ROW -->
+  <div class="row">
+    <!-- COLUMN -->
+    <div class="col-sm">
+      <label>Price:</label>
+      <p>{{book.price}}</p>
+    </div>
+    <!-- /COLUMN -->
+
+    <!-- COLUMN -->
+    <div class="col-sm">
+      <label>Stock:</label>
+      <p>{{book.stock}}</p>
+    </div>
+    <!-- /COLUMN -->
+  </div>
+  <!-- /ROW -->
+
+  <!-- ROW -->
   <div class="row">
     <div class="col-sm">
-      <label><b>Name: </b>{{book.title}}</label>
+      <img>
     </div>
+
     <div class="col-sm">
-      <label><b>Author: </b>{{book.parameters.author}}</label>
+
     </div>
   </div>
+  <!-- /ROW -->
+
+  <!-- ROW -->
   <div class="row">
-    <div class="col">
-      <label><b>Active: <mat-slide-toggle [(ngModel)]="book.active" disabled></mat-slide-toggle></b></label>
+    <!-- COLUMN -->
+    <div class="col-sm">
+      <label>Active:</label> <mat-slide-toggle [(ngModel)]="book.active" disabled></mat-slide-toggle>
     </div>
-    <div></div>
+    <!-- /COLUMN -->
   </div>
+  <!-- /ROW -->
 </div>

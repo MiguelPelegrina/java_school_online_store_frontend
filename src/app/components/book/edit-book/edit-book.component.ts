@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookService } from 'src/app/services/book/book.service';
 import { Book } from 'src/app/shared/domain/book/book';
@@ -8,10 +9,11 @@ import { Book } from 'src/app/shared/domain/book/book';
   templateUrl: './edit-book.component.html',
   styleUrls: ['./edit-book.component.css']
 })
-export class EditBookComponent implements OnInit{
+export class EditBookComponent extends FormsModule implements OnInit{
   // Fields
   // TODO Not sure if default values or undefined fields with ? and continous checking with if's and ngIf's is better
   protected id: number = 0;
+
   protected book: Book = {
     id: 0,
     title: '',
@@ -30,8 +32,12 @@ export class EditBookComponent implements OnInit{
     active: true,
   };
 
+  protected isBookLoaded: boolean = false;
+
   // Constructor
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private service: BookService){}
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private service: BookService){
+    super();
+  }
 
   // Methods
   // Public
@@ -39,6 +45,7 @@ export class EditBookComponent implements OnInit{
     this.id = this.activatedRoute.snapshot.params['id'];
     this.service.getById(this.id).subscribe(response => {
       this.book = response;
+      this.isBookLoaded = true;
     });
   }
 
