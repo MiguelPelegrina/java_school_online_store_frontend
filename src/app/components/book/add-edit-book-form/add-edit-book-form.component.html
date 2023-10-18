@@ -89,8 +89,8 @@
       </div>
       <!-- TODO Select current value -->
       <select class="form-control" formControlName="genre" [ngClass]="{ 'is-invalid': submitted && f['genre'].errors}">
-        <option *ngIf="isAddMode" value="">Select a genre</option>
-        <option *ngFor="let genre of genreTypes" selected [value]="genre.name">
+        <option disabled *ngIf="isAddMode" value="">Select a genre</option>
+        <option *ngFor="let genre of genreTypes" [selected]="genre.name == this.selectedGenre" [value]="genre.name">
           {{genre.name}}
         </option>
       </select>
@@ -112,8 +112,8 @@
       </div>
       <!-- TODO Select current value -->
       <select class="form-control" formControlName="format" [ngClass]="{ 'is-invalid': submitted && f['format'].errors}">
-        <option *ngIf="isAddMode" value="">Select a format</option>
-        <option *ngFor="let format of formatTypes" [value]="format.name">
+        <option disabled *ngIf="isAddMode" value="">Select a format</option>
+        <option *ngFor="let format of formatTypes" [selected]="format.name == this.selectedFormat" [value]="format.name">
           {{format.name}}
         </option>
       </select>

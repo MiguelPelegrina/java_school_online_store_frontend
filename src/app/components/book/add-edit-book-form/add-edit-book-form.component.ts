@@ -26,6 +26,8 @@ export class AddEditBookFormComponent implements OnInit{
   protected isAddMode?: boolean;
   protected loading = false;
   protected submitted = false;
+  protected selectedGenre: string = '';
+  protected selectedFormat: string = '';
 
   // Constructor
   constructor(
@@ -75,6 +77,8 @@ export class AddEditBookFormComponent implements OnInit{
       ){
       this.bookService.getById(this.id)
         .subscribe((response) => {
+          this.selectedFormat = response.parameters.format.name;
+          this.selectedGenre = response.genre.name;
           // TODO I should not be force to enter this manually
           this.form.patchValue(response)
         });
