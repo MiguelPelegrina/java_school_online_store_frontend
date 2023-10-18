@@ -13,7 +13,7 @@ export class ListBookComponent implements OnInit {
   // Fields
   protected allowActivityUpdates: boolean = true;
 
-  protected loading: boolean = true;
+  protected isLoading: boolean = true;
 
   protected books: Book[] = [];
 
@@ -55,9 +55,10 @@ export class ListBookComponent implements OnInit {
    */
   protected setBookActivity(book: Book){
     this.allowActivityUpdates = false;
-    this.loading = true;
+    this.isLoading = true;
     this.service.update(book.id, book).subscribe({
-      complete: () => this.handleUpdateSuccessResponse(`Activity of ${book.title} updated!`),
+      // TODO Possible implementation of multi-language support.
+      complete: () => this.handleUpdateSuccessResponse(`Activity of ${book.title} updated successfully!`),
       error: () => this.handleUpdateErrorResponse(book, `Activity of ${book.title} could not be changed.`)
     })
   }
@@ -78,35 +79,42 @@ export class ListBookComponent implements OnInit {
     this.service.getAll().subscribe(bookList => {
       this.sortBookListByActivityName(bookList);
       this.books = bookList;
-      this.loading = false;
+      this.isLoading = false;
     });
   }
 
-  // TODO Abstract the responses?
   /**
-   *
-   * @param book
-   * @param message
+   * Handles the response when updating the state of a book from 'active' to 'inactive' or viceversa. Resets the value of 'active',
+   * terminates the progress bar, allows further changes and informs the user that the modification was successful.
+   * @param book Book that was updated.
+   * @param message Message to the user.
    */
   private handleUpdateErrorResponse(book: Book, message: string){
     book.active = !book.active;
-    this.loading = false;
+    this.handleUpdateResponse(message);
+  }
+
+  /**
+   * terminates the progress bar, allows further changes and informs the user about the result of the modification.
+   * @param message Message to the user.
+   */
+  private handleUpdateResponse(message: string){
+    this.isLoading = false;
     this.allowActivityUpdates = true;
     this.snackbar.open(message);
   }
 
   /**
-   *
+   * Handles the error when trying to update the state of a book from 'active' to 'inactive' or viceversa. Terminates the progress bar,
+   * allows further changes and informs the user that the modification could not be done.
    * @param message
    */
   private handleUpdateSuccessResponse(message: string){
     this.getAllBooks();
-    this.loading = false;
-    this.allowActivityUpdates = true;
-    this.snackbar.open(message);
+    this.handleUpdateResponse(message);
   }
 
-  // TODO Abstract it
+  // TODO Abstract it?
   /**
    *
    * @param bookList

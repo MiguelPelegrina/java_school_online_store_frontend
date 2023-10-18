@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -8,7 +8,8 @@ import { BookService } from 'src/app/services/book/book.service';
 import { Book } from 'src/app/shared/domain/book/book';
 import { BookParametersFormat } from 'src/app/shared/domain/book/parameters/book-parameters-format/book-parameters-format';
 import { BookGenre } from 'src/app/shared/domain/book/book-genre/book-genre';
-import { StringValues } from 'src/app/shared/string-values';
+import { StringValues } from 'src/app/shared/utils/string-values';
+import { ImageSelectorComponent } from 'src/app/shared/components/image-selector/image-selector.component';
 
 @Component({
   selector: 'app-add-book',
@@ -17,26 +18,29 @@ import { StringValues } from 'src/app/shared/string-values';
 })
 export class AddBookComponent extends FormsModule implements OnInit{
   // Fields
+  // Not sure if right
+  @ViewChild(ImageSelectorComponent)
+  protected imageSelector?: ImageSelectorComponent;
+
   // TODO This might not be really sustainable, dont initialize?
   protected book: Book = {
+    active: true,
     id: 0,
-    title: '',
-    price: 0.00,
+    image: '',
     isbn: '',
     genre: { name: "Thriller"},
     parameters: {
-      id: 0,
+      active: true,
       author: '',
       format: {
         name: "Ebook"
       },
-      active: true,
+      id: 0,
     },
+    price: 0.00,
     stock: 1,
-    active: true,
+    title: '',
   };
-
-  protected fileUrl: string | ArrayBuffer | null = null;
 
   protected genreTypes: BookGenre [] = [];
 
@@ -62,32 +66,28 @@ export class AddBookComponent extends FormsModule implements OnInit{
   }
 
   // Methods
-  // Protected
-  protected onFileSelected(event: any): void{
-    const inputElement: HTMLInputElement = event.target;
-    if (inputElement.files && inputElement.files[0]) {
-      const file = event.target.files[0];
-
-      const reader = new FileReader();
-
-      reader.onload = e => this.fileUrl = reader.result;
-
-      reader.readAsDataURL(file);
-    }
-  }
-
+  // Protected methods
   protected onSubmit(){
     this.saveBook();
   }
 
   protected saveBook(){
-    this.bookService.create(this.book).subscribe(response => {
-      this.snackbar.open('Book saved');
-      this.navigateToBookList();
+    this.bookService.create(this.book).subscribe({
+      complete: () => this.handleCreateSuccessResponse(),
+      error: () => this.handleCreateErrorResponse()
     })
   }
 
-  // Private
+  // Private methods
+  private handleCreateSuccessResponse(){
+    this.snackbar.open('Book saved');
+    this.navigateToBookList();
+  }
+
+  private handleCreateErrorResponse(){
+    this.snackbar.open('Book could not be saved');
+  }
+
   private navigateToBookList(){
     this.router.navigate([`${StringValues.BOOK_URL}`])
   }

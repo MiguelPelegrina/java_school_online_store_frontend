@@ -1,14 +1,14 @@
 <!-- TODO
-  - Progress bar while loading, inform the user if loading led to an error
-    -> more than just a snackbar?
-    -> progress spinner?
   - Sort with header -> MatTable?
   - Add pagination of elements -> 20 elements for one each page for example
   - Searchbar
   - Multi-select with Deactivate -> FAB for soft delete
+  - Progress bar while loading, inform the user if loading led to an error
+    -> more than just a snackbar?
+    -> progress spinner?
   - Book import from excel
 -->
-<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
 <div class="text-right m-3">
   <h2 class="text-center">List of books</h2>
 
@@ -62,8 +62,9 @@
         (click)="viewBookDetails(book.id)"
         fontIcon="remove_red_eye"
         matTooltip="View more details"
-        >
+      >
       </mat-icon>
+
       <mat-icon
         aria-hidden="false"
         (click)="editBook(book.id)"
@@ -71,7 +72,7 @@
         fontIcon="edit"
         matTooltip="Edit the book"
         style="margin-left:5px"
-        >
+      >
       </mat-icon>
     </td>
   </tr>

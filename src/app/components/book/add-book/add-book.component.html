@@ -1,44 +1,50 @@
+<app-add-edit-book-form></app-add-edit-book-form>
 <h2 class="text-center">Add a new book</h2>
 <div class="container">
   <form (ngSubmit)="onSubmit()" #bookForm="ngForm">
     <!-- ROW-->
     <div class="row">
+      <!-- COLUMN -->
       <div class="form-group col-sm">
         <label>Title</label>
         <input type="text"
-        class="form-control"
-        id="title"
-        name="title"
-        [(ngModel)]="book.title"
-        required
-        placeholder="Enter the title"
-        #name ="ngModel"
+          class="form-control"
+          id="title"
+          name="title"
+          #title ="ngModel"
+          [(ngModel)]="book.title"
+          required
+          placeholder="Enter the title"
         >
-        <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
+        <div class="alert alert-danger" *ngIf="title.invalid && (title.dirty || title.touched)">
           <div *ngIf="['title.errors.required']">
             You need to enter a title for the book
           </div>
         </div>
       </div>
+      <!-- /COLUMN -->
 
+      <!-- COLUMN -->
       <div class="form-group col-sm" >
         <label>Author</label>
         <input type="text"
-        class="form-control"
-        id="author"
-        name="author"
-        [(ngModel)]="book.parameters.author"
-        required
-        placeholder="Enter the author"
-        #name ="ngModel"
+          #author ="ngModel"
+          class="form-control"
+          id="author"
+          name="author"
+          [(ngModel)]="book.parameters.author"
+          required
+          placeholder="Enter the author"
         >
-        <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
+        <div class="alert alert-danger" *ngIf="author.invalid && (author.dirty || author.touched)">
           <div *ngIf="['author.errors.required']">
             You need to enter a title for the book
           </div>
         </div>
       </div>
+      <!-- /COLUMN -->
 
+      <!-- COLUMN -->
       <div class="form-group col-sm">
         <label>ISBN</label>
         <input type="text"
@@ -48,14 +54,15 @@
         [(ngModel)]="book.isbn"
         required
         placeholder="Enter the ISBN"
-        #name ="ngModel"
+        #isbn ="ngModel"
         >
-        <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
+        <div class="alert alert-danger" *ngIf="isbn.invalid && (isbn.dirty || isbn.touched)">
           <div *ngIf="['isbn.errors.required']">
             You need to enter the ISBN of the book
           </div>
         </div>
       </div>
+      <!-- /COLUMN -->
     </div>
     <!-- /ROW-->
 
@@ -74,6 +81,7 @@
         </select>
       </div>
 
+      <!-- COLUMN -->
       <div class="form-group col-sm">
         <div>
           <label>Format</label>
@@ -85,6 +93,7 @@
           </option>
         </select>
       </div>
+      <!-- /COLUMN -->
     </div>
     <!-- /ROW-->
 
@@ -103,15 +112,15 @@
         -->
         <label>Price</label>
         <input type="number"
-        class="form-control"
-        id="price"
-        name="price"
-        [(ngModel)]="book.price"
-        required
-        placeholder="0.00"
-        #name ="ngModel"
+          class="form-control"
+          id="price"
+          name="price"
+          [(ngModel)]="book.price"
+          required
+          placeholder="0.00"
+          #price ="ngModel"
         >
-        <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
+        <div class="alert alert-danger" *ngIf="price.invalid && (price.dirty || price.touched)">
           <div *ngIf="['price.errors.required']">
             You need to enter a price for the book
           </div>
@@ -128,9 +137,9 @@
           name="stock"
           [(ngModel)]="book.stock"
           required
-          #name ="ngModel"
+          #stock ="ngModel"
           >
-          <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
+          <div class="alert alert-danger" *ngIf="stock.invalid && (stock.dirty || stock.touched)">
             <div *ngIf="['stock.errors.required']">
               You need to enter your stock
             </div>
@@ -143,14 +152,7 @@
     <!-- ROW-->
     <div class="row">
       <div class="form-group col-sm">
-        <div>
-          <label>Book cover</label>
-        </div>
-        <input type="file" class="file-input" (change)="onFileSelected($event)">
-        <div class="m-3" *ngIf="fileUrl">
-          <img class="w-25 h-25" [src]="fileUrl" alt="Uploaded File">
-        </div>
-        <!-- TODO Add a remove image button -->
+        <app-image-selector></app-image-selector>
       </div>
     </div>
     <!-- /ROW-->
@@ -159,7 +161,7 @@
     <div class="d-flex justify-content-around form-group col-sm">
       <div>
         <label>Active</label>
-        <mat-slide-toggle [(ngModel)]="book.active" name="active"></mat-slide-toggle>
+        <mat-slide-toggle class="ml-2" [(ngModel)]="book.active" name="active"></mat-slide-toggle>
       </div>
       <button class="btn btn-success" [disabled]="bookForm.form.invalid">Save book</button>
     </div>

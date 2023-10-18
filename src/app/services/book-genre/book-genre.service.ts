@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BookGenre } from 'src/app/shared/domain/book/book-genre/book-genre';
 import { AbstractService } from 'src/app/shared/service/abstract.service';
-import { StringValues } from 'src/app/shared/string-values';
+import { StringValues } from 'src/app/shared/utils/string-values';
 
 @Injectable({
   providedIn: 'root'
