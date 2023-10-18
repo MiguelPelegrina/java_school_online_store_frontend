@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StringValues } from '../../shared/string-values';
+import { StringValues } from '../../shared/utils/string-values';
 import { HttpClient } from '@angular/common/http';
 import { Country } from '../../shared/domain/country/country';
 import { AbstractService } from '../../shared/service/abstract.service';

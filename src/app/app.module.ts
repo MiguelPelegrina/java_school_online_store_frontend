@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { ListCountryComponent } from './components/country/list-country/list-country.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing-module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddCountryComponent } from './components/country/add-country/add-country.component';
 import { RouterModule } from '@angular/router';
 import { UpdateCountryComponent } from './components/country/update-country/update-country.component';
@@ -21,6 +21,8 @@ import { AddBookComponent } from './components/book/add-book/add-book.component'
 import { ViewBookComponent } from './components/book/view-book/view-book.component';
 import { EditBookComponent } from './components/book/edit-book/edit-book.component';
 import { MatButtonModule } from '@angular/material/button';
+import { ImageSelectorComponent } from './shared/components/image-selector/image-selector.component';
+import { AddEditBookFormComponent } from './components/book/add-edit-book-form/add-edit-book-form.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { MatButtonModule } from '@angular/material/button';
     ListCountryComponent,
     UpdateCountryComponent,
     ViewBookComponent,
+    ImageSelectorComponent,
+    AddEditBookFormComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -46,6 +50,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatSlideToggleModule,
     MatSnackBarModule,
     MatTooltipModule,
+    ReactiveFormsModule,
     RouterModule,
   ],
   providers: [

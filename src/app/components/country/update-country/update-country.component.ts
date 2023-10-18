@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CountryService } from 'src/app/services/country/country.service';
 import { Country } from 'src/app/shared/domain/country/country';
-import { StringValues } from 'src/app/shared/string-values';
+import { StringValues } from 'src/app/shared/utils/string-values';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -35,12 +35,6 @@ export class UpdateCountryComponent extends FormsModule implements OnInit{
 
   protected onSubmit(){
     this.service.update(this.name, this.country).subscribe(response => {
-      this.navigateToCountryList();
-    }, error => console.log(error));
-  }
-
-  protected saveCountry(){
-    this.service.create(this.country).subscribe(response => {
       this.navigateToCountryList();
     }, error => console.log(error));
   }

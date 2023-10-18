@@ -3,7 +3,7 @@ import { Country } from '../../../shared/domain/country/country';
 import { FormsModule } from '@angular/forms';
 import { CountryService } from '../../../services/country/country.service';
 import { Router } from '@angular/router';
-import { StringValues } from '../../../shared/string-values';
+import { StringValues } from '../../../shared/utils/string-values';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({

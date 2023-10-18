@@ -11,5 +11,5 @@ export interface Book {
   stock: number;
   active: boolean;
   // TODO Correct data type? byte[] in backend
-  image?: number[];
+  image?: string | ArrayBuffer | null;
 }
