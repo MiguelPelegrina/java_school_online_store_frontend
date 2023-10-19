@@ -1,6 +1,5 @@
 <!-- TODO
   - Sort with header -> MatTable?
-  - Add pagination of elements -> 20 elements for one each page for example
   - Searchbar
   - Multi-select with Deactivate -> FAB for soft delete
   - Progress bar while loading, inform the user if loading led to an error
@@ -24,7 +23,6 @@
     <!-- TODO Return and refresh buttons? Or are they redundant? -->
     <!-- /FABs -->
   </div>
-
 
   <!-- TABLE -->
   <table mat-table class="mat-elevation-z8" [dataSource]="bookDatasource">
@@ -96,8 +94,15 @@
   </ng-container>
   <!-- /ACTIONS -->
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsOfBooks"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsOfBooks;"></tr>
   </table>
   <!-- /TABLE -->
+
+  <!-- PAGINATOR -->
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+    aria-label="Select page of the book list">
+  </mat-paginator>
+  <!-- /PAGINATOR -->
 </div>

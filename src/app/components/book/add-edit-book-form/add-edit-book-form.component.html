@@ -5,6 +5,7 @@
 
 <form [formGroup]="form" (ngSubmit)="onSubmit()" #bookForm="ngForm">
   <div class="form-row" [hidden]="true">
+    <!-- TODO Not what to do with this, need to exist for edit, but dont need to be visible? -->
     <input class="formControlName" formControlName="id"  type="text">
     <div formGroupName="parameters">
       <input class="formControlName" formControlName="id" type="text">

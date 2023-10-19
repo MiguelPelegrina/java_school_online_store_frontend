@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -12,13 +13,16 @@ import { Book } from 'src/app/shared/domain/book/book';
 })
 export class ListBookComponent implements OnInit {
   // Fields
+  @ViewChild(MatPaginator)
+  protected paginator!: MatPaginator;
+
   protected allowActivityUpdates: boolean = true;
 
   protected books: Book[] = [];
 
-  protected bookDatasource = new MatTableDataSource(this.books);
+  protected bookDatasource = new MatTableDataSource<Book>(this.books);
 
-  protected displayedColumns: string [] = ['title', 'author', 'active', 'price', 'stock', 'actions'];
+  protected displayedColumnsOfBooks: string [] = ['title', 'author', 'active', 'price', 'stock', 'actions'];
 
   protected isLoading: boolean = true;
 
@@ -36,6 +40,10 @@ export class ListBookComponent implements OnInit {
    */
   public ngOnInit(): void {
     this.getAllBooks();
+  }
+
+  public ngAfterViewInit(){
+    this.bookDatasource.paginator = this.paginator;
   }
 
   // Protected methods

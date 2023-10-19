@@ -15,6 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ListBookComponent } from './components/book/list-book/list-book.component';
 import { AddBookComponent } from './components/book/add-book/add-book.component';
@@ -39,6 +40,7 @@ import {MatTableModule} from '@angular/material/table';
     UpdateCountryComponent,
     ViewBookComponent,
   ],
+  // TODO Only import here when the module is being used in more then one component
   imports: [
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -47,6 +49,7 @@ import {MatTableModule} from '@angular/material/table';
     HttpClientModule,
     MatButtonModule,
     MatIconModule,
+    MatPaginatorModule,
     MatProgressBarModule,
     MatSlideToggleModule,
     MatSnackBarModule,
