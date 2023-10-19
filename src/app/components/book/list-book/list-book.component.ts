@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { BookService } from 'src/app/services/book/book.service';
@@ -12,10 +13,14 @@ import { Book } from 'src/app/shared/domain/book/book';
   styleUrls: ['./list-book.component.css']
 })
 export class ListBookComponent implements OnInit {
-  // Fields
+  // Components
+  @ViewChild(MatSort)
+  protected sort!: MatSort;
+
   @ViewChild(MatPaginator)
   protected paginator!: MatPaginator;
 
+  // Fields
   protected allowActivityUpdates: boolean = true;
 
   protected books: Book[] = [];
@@ -28,22 +33,25 @@ export class ListBookComponent implements OnInit {
 
   // Constructor
   constructor(
-    private service: BookService,
+    private bookService: BookService,
     private snackbar: MatSnackBar,
     private router: Router,
   ){}
 
   // Methods
   // Public methods
+  public ngAfterViewInit(){
+    this.bookDatasource.paginator = this.paginator;
+    this.bookDatasource.sort = this.sort;
+  }
+
   /**
    * Fill the table with data from the database.
    */
   public ngOnInit(): void {
     this.getAllBooks();
-  }
 
-  public ngAfterViewInit(){
-    this.bookDatasource.paginator = this.paginator;
+    this.setFilterToSearchByTitleOrAuthor();
   }
 
   // Protected methods
@@ -52,6 +60,12 @@ export class ListBookComponent implements OnInit {
    */
   protected addBook(){
     this.router.navigate(['books/add']);
+  }
+
+  protected applyFilter(event: Event){
+    const filterValue = (event.target as HTMLInputElement).value;
+
+    this.bookDatasource.filter = filterValue.trim().toLowerCase();
   }
 
   /**
@@ -69,7 +83,7 @@ export class ListBookComponent implements OnInit {
   protected setBookActivity(book: Book){
     this.allowActivityUpdates = false;
     this.isLoading = true;
-    this.service.update(book.id, book).subscribe({
+    this.bookService.update(book.id, book).subscribe({
       // TODO Possible implementation of multi-language support.
       complete: () => this.handleUpdateSuccessResponse(`Activity of ${book.title} updated successfully!`),
       error: () => this.handleUpdateErrorResponse(book, `Activity of ${book.title} could not be changed.`)
@@ -89,7 +103,7 @@ export class ListBookComponent implements OnInit {
    * Retrieves all books from the database and sorts them by 'active' first and then alphabetically by book 'title' (A-Z).
    */
   private getAllBooks(){
-    this.service.getAll().subscribe(bookList => {
+    this.bookService.getAll().subscribe(bookList => {
       this.sortBookListByActivityName(bookList);
       this.books = bookList;
       this.bookDatasource.data = this.books;
@@ -128,7 +142,20 @@ export class ListBookComponent implements OnInit {
     this.handleUpdateResponse(message);
   }
 
-  // TODO Abstract it?
+  private setFilterToSearchByTitleOrAuthor() {
+    this.bookDatasource.filterPredicate = function (record, filter){
+      let found = false;
+      if(record.parameters.author.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ||
+        record.title.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
+      ){
+        found = true;
+      }
+
+      return found;
+    }
+  }
+
+  // TODO Abstract it? Don't overuse it?
   /**
    *
    * @param bookList
