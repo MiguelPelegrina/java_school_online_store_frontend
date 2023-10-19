@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { BookService } from 'src/app/services/book/book.service';
 import { Book } from 'src/app/shared/domain/book/book';
@@ -13,9 +14,13 @@ export class ListBookComponent implements OnInit {
   // Fields
   protected allowActivityUpdates: boolean = true;
 
-  protected isLoading: boolean = true;
-
   protected books: Book[] = [];
+
+  protected bookDatasource = new MatTableDataSource(this.books);
+
+  protected displayedColumns: string [] = ['title', 'author', 'active', 'price', 'stock', 'actions'];
+
+  protected isLoading: boolean = true;
 
   // Constructor
   constructor(
@@ -79,6 +84,7 @@ export class ListBookComponent implements OnInit {
     this.service.getAll().subscribe(bookList => {
       this.sortBookListByActivityName(bookList);
       this.books = bookList;
+      this.bookDatasource.data = this.books;
       this.isLoading = false;
     });
   }

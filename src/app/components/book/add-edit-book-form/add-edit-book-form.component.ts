@@ -16,6 +16,7 @@ import { ImageSelectorComponent } from '../../../shared/components/image-selecto
 })
 export class AddEditBookFormComponent implements OnInit{
   // Fields
+  // TODO Save image with the book
   // Not sure if right
   @ViewChild(ImageSelectorComponent)
   protected imageSelector?: ImageSelectorComponent;

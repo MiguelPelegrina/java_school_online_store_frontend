@@ -23,20 +23,21 @@ import { EditBookComponent } from './components/book/edit-book/edit-book.compone
 import { MatButtonModule } from '@angular/material/button';
 import { ImageSelectorComponent } from './shared/components/image-selector/image-selector.component';
 import { AddEditBookFormComponent } from './components/book/add-edit-book-form/add-edit-book-form.component';
+import {MatTableModule} from '@angular/material/table';
 
 @NgModule({
   declarations: [
     AppComponent,
     AddBookComponent,
     AddCountryComponent,
+    AddEditBookFormComponent,
     DetailCountryComponent,
     EditBookComponent,
+    ImageSelectorComponent,
     ListBookComponent,
     ListCountryComponent,
     UpdateCountryComponent,
     ViewBookComponent,
-    ImageSelectorComponent,
-    AddEditBookFormComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -49,6 +50,7 @@ import { AddEditBookFormComponent } from './components/book/add-edit-book-form/a
     MatProgressBarModule,
     MatSlideToggleModule,
     MatSnackBarModule,
+    MatTableModule,
     MatTooltipModule,
     ReactiveFormsModule,
     RouterModule,

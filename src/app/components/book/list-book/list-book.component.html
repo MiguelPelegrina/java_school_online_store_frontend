@@ -9,60 +9,78 @@
   - Book import from excel
 -->
 <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
-<div class="text-right m-3">
-  <h2 class="text-center">List of books</h2>
+<h2 class="text-center mt-3">List of books</h2>
 
-  <!-- FABs -->
-  <button (click)="addBook()" mat-mini-fab matTooltip="Add a new book to the list">
-    <mat-icon>add</mat-icon>
-  </button>
+<div class="container">
+  <div class="text-right m-3">
+    <!-- FABs -->
+    <button (click)="addBook()" mat-mini-fab matTooltip="Add a new book to the list">
+      <mat-icon>add</mat-icon>
+    </button>
 
-  <button class="m-2" mat-mini-fab matTooltip="Import a list of books from an excel file. NOT IMPLEMENTED YET.">
-    <mat-icon>cloud_upload</mat-icon>
-  </button>
-  <!-- TODO Return and refresh buttons? Or are they redundant? -->
-  <!-- /FABs -->
-</div>
+    <button class="m-2" mat-mini-fab matTooltip="Import a list of books from an excel file. NOT IMPLEMENTED YET.">
+      <mat-icon>cloud_upload</mat-icon>
+    </button>
+    <!-- TODO Return and refresh buttons? Or are they redundant? -->
+    <!-- /FABs -->
+  </div>
 
-<!-- TABLE -->
-<table class="table table-striped">
-  <!-- TABLE HEADER -->
-  <thead class="table-dark">
-    <tr>
-      <th matTooltip="Title of the book">Title</th>
-      <th matTooltip="Autor of the book">Autor</th>
-      <th matTooltip="Active books are available for sale">Active</th>
-      <th matTooltip="Price of the book">Price</th>
-      <th matTooltip="Amount of books available">Stock</th>
-      <th matTooltip="View more details or edit a book">Actions</th>
-    </tr>
-  </thead>
-  <!-- /TABLE HEADER -->
 
-  <!-- TABLE BODY -->
-  <tbody *ngFor="let book of this.books">
-    <tr>
-      <td>{{book.title}}</td>
-      <td>{{book.parameters.author}}</td>
-      <td>
+  <!-- TABLE -->
+  <table mat-table class="mat-elevation-z8" [dataSource]="bookDatasource">
+    <!-- TITLE -->
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef matTooltip="Title of the book"> Title </th>
+      <td mat-cell *matCellDef="let book"> {{book.title}}</td>
+    </ng-container>
+    <!-- /TITLE -->
+
+    <!-- AUTHOR -->
+    <ng-container matColumnDef="author">
+      <th mat-header-cell *matHeaderCellDef matTooltip="Author of the book"> Author </th>
+      <td mat-cell *matCellDef="let book"> {{book.parameters.author}}</td>
+    </ng-container>
+    <!-- /AUTHOR -->
+
+    <!-- ACTIVE -->
+    <ng-container matColumnDef="active">
+      <th mat-header-cell *matHeaderCellDef matTooltip="Book available for sale"> Active </th>
+      <td mat-cell *matCellDef="let book">
         <mat-slide-toggle
-          (click)="setBookActivity(book)"
-          [disabled]="!this.allowActivityUpdates"
-          matTooltip="If active, the book is available for sale"
-          [(ngModel)]="book.active"
+        (click)="setBookActivity(book)"
+        [disabled]="!this.allowActivityUpdates"
+        matTooltip="If active, the book is available for sale"
+        [(ngModel)]="book.active"
         >
-        </mat-slide-toggle>
+      </mat-slide-toggle>
     </td>
-    <td>{{book.price}}€</td>
-    <td>{{book.stock}}</td>
-    <!-- TODO Might add a plus and minus sign to directly increase or decrease? Or unnecessary with triggers? -->
-    <td>
+  </ng-container>
+  <!-- /ACTIVE -->
+
+  <!-- PRICE -->
+  <ng-container matColumnDef="price">
+    <th mat-header-cell *matHeaderCellDef matTooltip="Price of the book"> Price </th>
+    <td mat-cell *matCellDef="let book"> {{book.price}}</td>
+  </ng-container>
+  <!-- /PRICE -->
+
+  <!-- STOCK -->
+  <ng-container matColumnDef="stock">
+    <th mat-header-cell *matHeaderCellDef matTooltip="Remaining stock of the book"> Stock </th>
+    <td mat-cell *matCellDef="let book"> {{book.stock}}</td>
+  </ng-container>
+  <!-- /STOCK -->
+
+  <!-- ACTIONS -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef matTooltip="View more details or edit the book"> Actions </th>
+    <td mat-cell *matCellDef="let book">
       <mat-icon
-        aria-hidden="false"
+      aria-hidden="false"
         (click)="viewBookDetails(book.id)"
         fontIcon="remove_red_eye"
         matTooltip="View more details"
-      >
+        >
       </mat-icon>
 
       <mat-icon
@@ -75,8 +93,11 @@
       >
       </mat-icon>
     </td>
-  </tr>
-</tbody>
-<!-- /TABLE BODY -->
-</table>
-<!-- /TABLE -->
+  </ng-container>
+  <!-- /ACTIONS -->
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <!-- /TABLE -->
+</div>
