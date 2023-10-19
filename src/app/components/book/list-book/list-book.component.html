@@ -1,43 +1,50 @@
 <!-- TODO
-  - Searchbar
-    -> Advanced filter? So the user can select the columns they want to search by
-  - Paginator not responsive under 767px width
-  - Multi-select with Deactivate -> FAB for soft delete
-  - Progress bar while loading, inform the user if loading led to an error
-    -> more than just a snackbar?
-    -> progress spinner?
+  - Paginator and searchbar not responsive between xs and sm
+  - Multi-select with Deactivate -> FABs for activate/deactivate of several books
+  - Change search evento to click with a button instead of keyup
   - Book import from excel
+  - Currently a progress bar is shown while loading and the user is informed if loading led to an error
+    -> more than just a snackbar?
+    -> progress spinner instead of progressbar?
+  - Advanced filter for searchbar? So the user can choose the criteria
   - Sorting title and author with header orders like ASCII table -> B < a
+  - Return and refresh buttons? Or are they redundant?
 -->
+<!-- PROGRESS BAR -->
 <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
-<h2 class="text-center mt-3">List of books</h2>
+<!-- /PROGRESS BAR -->
+
+<!-- TITLE -->
+<h1 class="text-center mt-3">List of books</h1>
+<!-- /TITLE -->
 
 <div class="container">
+  <!-- FLOATING ACTIONS BUTTONS -->
   <div class="text-right m-2">
-    <!-- FABs -->
+    <!-- ADD BOOK ICON -->
     <button (click)="addBook()" mat-mini-fab matTooltip="Add a new book to the list">
       <mat-icon>add</mat-icon>
     </button>
+    <!-- /ADD BOOK ICON -->
 
+    <!-- IMPORT BOOKS ICON -->
     <button class="m-2" mat-mini-fab matTooltip="Import a list of books from an excel file. NOT IMPLEMENTED YET.">
       <mat-icon>cloud_upload</mat-icon>
     </button>
-    <!-- TODO Return and refresh buttons? Or are they redundant? -->
-    <!-- /FABs -->
+    <!-- /IMPORT BOOKS ICON -->
   </div>
+  <!-- /FLOATING ACTIONS BUTTONS -->
 
   <!-- SEARCHBAR -->
-  <div class="container">
-    <mat-form-field style="width:100%">
-      <mat-label>Search books</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Search books" #input>
-      <!-- TODO Use a button instead of continous filtering -->
-    </mat-form-field>
-  </div>
+  <mat-form-field style="width:100%">
+    <mat-label>Search books</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Search books" #input>
+    <!-- TODO Use a button instead of continous filtering -->
+  </mat-form-field>
   <!-- /SEARCHBAR -->
 
     <!-- TABLE -->
-  <table class="container mat-elevation-z8" mat-table [dataSource]="bookDatasource" matSort>
+  <table class="container mat-elevation-z8 table-responsive-sm" mat-table [dataSource]="bookDatasource" matSort>
     <!-- TITLE -->
     <ng-container matColumnDef="title">
       <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Title of the book" sortActionDescription="Sort by title"> Title </th>

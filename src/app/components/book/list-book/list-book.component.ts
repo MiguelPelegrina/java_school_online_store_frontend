@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort, Sort } from '@angular/material/sort';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { BookService } from 'src/app/services/book/book.service';
@@ -13,12 +13,12 @@ import { Book } from 'src/app/shared/domain/book/book';
   styleUrls: ['./list-book.component.css']
 })
 export class ListBookComponent implements OnInit {
-  // Components
-  @ViewChild(MatSort)
-  protected sort!: MatSort;
-
+  // Subcomponents
   @ViewChild(MatPaginator)
   protected paginator!: MatPaginator;
+
+  @ViewChild(MatSort)
+  protected sort!: MatSort;
 
   // Fields
   protected allowActivityUpdates: boolean = true;
@@ -32,6 +32,12 @@ export class ListBookComponent implements OnInit {
   protected isLoading: boolean = true;
 
   // Constructor
+  /**
+   * Constructor of the component.
+   * @param bookService - Service that gets all the books
+   * @param snackbar - Snackbar to inform the user of events
+   * @param router - Router to nagivate the user
+   */
   constructor(
     private bookService: BookService,
     private snackbar: MatSnackBar,
@@ -40,13 +46,18 @@ export class ListBookComponent implements OnInit {
 
   // Methods
   // Public methods
+  /**
+   * A lifecycle hook that is called after Angular has fully initialized a component's view.
+   * Assigns the Paginator and the Sort components to the respective properties of the book datasource to handle pages and sorting of the table.
+   */
   public ngAfterViewInit(){
     this.bookDatasource.paginator = this.paginator;
     this.bookDatasource.sort = this.sort;
   }
 
   /**
-   * Fill the table with data from the database.
+   * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
+   * Fills the table with data from the database and sets the filter of the searchbar to search by book title or book author
    */
   public ngOnInit(): void {
     this.getAllBooks();
@@ -62,6 +73,10 @@ export class ListBookComponent implements OnInit {
     this.router.navigate(['books/add']);
   }
 
+  /**
+   * Runs on every keyup inside the searchbar. Obtains the inserted value and filters the table by it.
+   * If the value is 'the' all books with the title or author containg 'the' are shown.
+   */
   protected applyFilter(event: Event){
     const filterValue = (event.target as HTMLInputElement).value;
 
@@ -100,51 +115,63 @@ export class ListBookComponent implements OnInit {
 
   // Private methods
   /**
-   * Retrieves all books from the database and sorts them by 'active' first and then alphabetically by book 'title' (A-Z).
+   * Retrieves all books from the database and sorts them by 'active' first and then alphabetically by book 'title' (A-Z). Hides the progress bar when the data is loaded.
    */
   private getAllBooks(){
     this.bookService.getAll().subscribe(bookList => {
       this.sortBookListByActivityName(bookList);
+
       this.books = bookList;
+
       this.bookDatasource.data = this.books;
+
       this.isLoading = false;
     });
   }
 
   /**
-   * Handles the response when updating the state of a book from 'active' to 'inactive' or viceversa. Resets the value of 'active',
-   * terminates the progress bar, allows further changes and informs the user that the modification was successful.
+   * Handles the response when updating the state of a book from 'active' to 'inactive' or viceversa. Sets the value of 'active',
+   * hides the progress bar, allows further changes and informs the user that the modification was successful.
    * @param book Book that was updated.
    * @param message Message to the user.
    */
   private handleUpdateErrorResponse(book: Book, message: string){
     book.active = !book.active;
+
     this.handleUpdateResponse(message);
   }
 
   /**
-   * terminates the progress bar, allows further changes and informs the user about the result of the modification.
+   * Handles the response when trying to update the state of a book. Hides the progress bar, allows further changes and
+   * informs the user about the result of the modification.
    * @param message Message to the user.
    */
   private handleUpdateResponse(message: string){
-    this.isLoading = false;
-    this.allowActivityUpdates = true;
     this.snackbar.open(message);
+
+    this.isLoading = false;
+
+    this.allowActivityUpdates = true;
   }
 
   /**
-   * Handles the error when trying to update the state of a book from 'active' to 'inactive' or viceversa. Terminates the progress bar,
+   * Handles the error when trying to update the state of a book from 'active' to 'inactive' or viceversa. Hides the progress bar,
    * allows further changes and informs the user that the modification could not be done.
    * @param message
    */
   private handleUpdateSuccessResponse(message: string){
     this.getAllBooks();
+
     this.handleUpdateResponse(message);
   }
 
+  /**
+   * Sets the filter of the book datasource. The datasource will only consist of those elements whose title or author contain the filter.
+   */
   private setFilterToSearchByTitleOrAuthor() {
     this.bookDatasource.filterPredicate = function (record, filter){
       let found = false;
+
       if(record.parameters.author.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ||
         record.title.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
       ){
@@ -157,9 +184,9 @@ export class ListBookComponent implements OnInit {
 
   // TODO Abstract it? Don't overuse it?
   /**
-   *
-   * @param bookList
-   * @returns
+   *The book list is sorted by the activity first and then by the title of the book
+   * @param bookList - Book list that will be sorted.
+   * @returns The sorted book list.
    */
   private sortBookListByActivityName(bookList: Book[]): Book[] {
     return bookList.sort((a, b) => {
