@@ -1,5 +1,5 @@
 <!-- TODO
-  - Fix errors with f['author'].errors and f['format'].errors as they need parameters
+  - Validation of author and format with f['parameters'] does not seem right
   - Implement material form?
 -->
 
@@ -48,15 +48,15 @@
         <input
           class="form-control"
           formControlName="author"
-          [ngClass]="{'is-invalid': submitted && f['parameters.author'].errors}"
+          [ngClass]="{'is-invalid': submitted && f['parameters'].errors}"
           placeholder="Enter the author"
           type="text"
         >
         <!-- /AUTHOR -->
 
         <!-- REQUIRED -->
-        <div *ngIf="submitted && f['author'].errors" class="invalid-feedback">
-          <div *ngIf="f['author'].errors['required']">Author is required</div>
+        <div *ngIf="submitted && f['parameters'].errors" class="invalid-feedback">
+          <div *ngIf="f['parameters'].errors['required']">Author is required</div>
         </div>
         <!-- /REQUIRED -->
       </div>
@@ -95,7 +95,7 @@
           <label>Genre</label>
         </div>
         <!-- TODO Select current value -->
-        <select class="form-control" formControlName="genre" [ngClass]="{ 'is-invalid': submitted && f['parameters.genre'].errors}">
+        <select class="form-control" formControlName="genre" [ngClass]="{ 'is-invalid': submitted && f['genre'].errors}">
           <option disabled *ngIf="isAddMode" value="">Select a genre</option>
           <option *ngFor="let genre of genreTypes" [selected]="genre.name == this.selectedGenre" [value]="genre.name">
             {{genre.name}}
@@ -118,7 +118,7 @@
           <label>Format</label>
         </div>
         <!-- TODO Select current value -->
-        <select class="form-control" formControlName="format" [ngClass]="{ 'is-invalid': submitted && f['format'].errors}">
+        <select class="form-control" formControlName="format" [ngClass]="{ 'is-invalid': submitted && f['parameters'].errors}">
           <option disabled *ngIf="isAddMode" value="">Select a format</option>
           <option *ngFor="let format of formatTypes" [selected]="format.name == this.selectedFormat" [value]="format.name">
             {{format.name}}
@@ -127,8 +127,8 @@
         <!-- /FORMAT -->
 
         <!-- REQUIRED -->
-        <div *ngIf="submitted && f['format'].errors" class="invalid-feedback">
-          <div *ngIf="f['format'].errors['required']">Format is required</div>
+        <div *ngIf="submitted && f['parameters'].errors" class="invalid-feedback">
+          <div *ngIf="f['parameters'].errors['required']">Format is required</div>
         </div>
         <!-- /REQUIRED -->
       </div>
