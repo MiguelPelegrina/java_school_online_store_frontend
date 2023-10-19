@@ -1,3 +1,5 @@
+<!-- TODO Implement more material? -->
+
 <mat-progress-bar *ngIf="!isBookLoaded" mode="indeterminate"></mat-progress-bar>
 <h2 *ngIf="isBookLoaded" class="text-center m-3">Details of {{book.title}}</h2>
 <div class="text-right m-3">
@@ -73,7 +75,7 @@
     <!-- COLUMN -->
     <div class="col-sm">
       <!-- TODO Show image -->
-      <img>
+      <img alt="Book Cover" *ngIf="book.image" [src]="book.image" >
     </div>
     <!-- /COLUMN -->
   </div>

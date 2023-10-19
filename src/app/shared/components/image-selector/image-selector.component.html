@@ -1,8 +1,14 @@
-<div>
-  <label>Book cover</label>
+<!-- ROW-->
+<div class="row">
+  <div class="form-group col-sm">
+    <div>
+      <label>Book cover</label>
+    </div>
+    <input type="file" class="file-input" (change)="onFileSelected($event)">
+    <div class="m-3" >
+      <img class="w-25 h-25" *ngIf="image" [src]="image" alt="Uploaded File">
+    </div>
+    <!-- TODO Add a remove image button -->
+  </div>
 </div>
-<input type="file" class="file-input" (change)="onFileSelected($event)">
-<div class="m-3" >
-  <img class="w-25 h-25" *ngIf="image" [src]="image" alt="Uploaded File">
-</div>
-<!-- TODO Add a reset image button -->
+<!-- /ROW-->

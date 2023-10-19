@@ -1,165 +1,62 @@
+<!-- TODO
+  - Fix errors with f['author'].errors and f['format'].errors as they need parameters
+  - Implement material form?
+-->
+
 <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 
 <h2 class="text-center" *ngIf="isAddMode">Add a new book</h2>
 <h2 class="text-center" *ngIf="!isAddMode">Edit book</h2>
 
-<form [formGroup]="form" (ngSubmit)="onSubmit()" #bookForm="ngForm">
-  <div class="form-row" [hidden]="true">
-    <!-- TODO Not what to do with this, need to exist for edit, but dont need to be visible? -->
-    <input class="formControlName" formControlName="id"  type="text">
-    <div formGroupName="parameters">
-      <input class="formControlName" formControlName="id" type="text">
-      <input class="formControlName" formControlName="active" type="text">
+<div class="container">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" #bookForm="ngForm">
+    <div class="form-row" [hidden]="true">
+      <!-- TODO Not what to do with this, need to exist for edit, but dont need to be visible? -->
+      <input class="formControlName" formControlName="id"  type="text">
+      <div formGroupName="parameters">
+        <input class="formControlName" formControlName="id" type="text">
+        <input class="formControlName" formControlName="active" type="text">
+      </div>
     </div>
-  </div>
-  <!-- ROW -->
-  <div class="form-row">
-    <!-- COLUMN -->
-    <div class="form-group col-sm">
-      <!-- TITLE -->
-      <label>Title</label>
-      <input
-      class="form-control"
-      formControlName="title"
-      [ngClass]="{'is-invalid': submitted && f['title'].errors}"
-      placeholder="Enter the title"
-      type="text"
-      >
-      <!-- /TITLE -->
-
-      <!-- REQUIRED -->
-      <div *ngIf="submitted && f['title'].errors" class="invalid-feedback">
-        <div *ngIf="f['title'].errors['required']">Title is required</div>
-      </div>
-      <!-- /REQUIRED -->
-    </div>
-    <!-- /COLUMN -->
-
-    <!-- COLUMN -->
-    <div class="form-group col-sm" formGroupName="parameters">
-      <!-- AUTHOR -->
-      <label>Author</label>
-      <input
-        class="form-control"
-        formControlName="author"
-        [ngClass]="{'is-invalid': submitted && f['author'].errors}"
-        placeholder="Enter the author"
-        type="text"
-      >
-      <!-- /AUTHOR -->
-
-      <!-- REQUIRED -->
-      <div *ngIf="submitted && f['author'].errors" class="invalid-feedback">
-        <div *ngIf="f['author'].errors['required']">Author is required</div>
-      </div>
-      <!-- /REQUIRED -->
-    </div>
-    <!-- /COLUMN -->
-
-    <!-- COLUMN -->
-    <div class="form-group col-sm">
-      <!-- ISBN -->
-      <label>ISBN</label>
-      <input
-      class="form-control"
-      formControlName="isbn"
-      [ngClass]="{'is-invalid': submitted && f['isbn'].errors}"
-      placeholder="Enter the ISBN"
-      type="text"
-      >
-      <!-- /ISBN -->
-
-      <!-- REQUIRED -->
-      <div *ngIf="submitted && f['isbn'].errors" class="invalid-feedback">
-        <div *ngIf="f['isbn'].errors['required']">ISBN is required</div>
-      </div>
-      <!-- /REQUIRED -->
-    </div>
-    <!-- /COLUMN -->
-
-  </div>
-  <!-- /ROW -->
-
-  <!-- ROW -->
-  <div class="form-row">
-    <!-- COLUMN -->
-    <div class="form-group col-sm">
-      <!-- GENRE -->
-      <div>
-        <label>Genre</label>
-      </div>
-      <!-- TODO Select current value -->
-      <select class="form-control" formControlName="genre" [ngClass]="{ 'is-invalid': submitted && f['genre'].errors}">
-        <option disabled *ngIf="isAddMode" value="">Select a genre</option>
-        <option *ngFor="let genre of genreTypes" [selected]="genre.name == this.selectedGenre" [value]="genre.name">
-          {{genre.name}}
-        </option>
-      </select>
-      <!-- /GENRE -->
-
-      <!-- REQUIRED -->
-      <div *ngIf="submitted && f['genre'].errors" class="invalid-feedback">
-        <div *ngIf="f['genre'].errors['required']">Genre is required</div>
-      </div>
-      <!-- /REQUIRED -->
-    </div>
-    <!-- /COLUMN -->
-
-    <!-- COLUMN -->
-    <div class="form-group col-sm" formGroupName="parameters">
-      <!-- FORMAT -->
-      <div>
-        <label>Format</label>
-      </div>
-      <!-- TODO Select current value -->
-      <select class="form-control" formControlName="format" [ngClass]="{ 'is-invalid': submitted && f['format'].errors}">
-        <option disabled *ngIf="isAddMode" value="">Select a format</option>
-        <option *ngFor="let format of formatTypes" [selected]="format.name == this.selectedFormat" [value]="format.name">
-          {{format.name}}
-        </option>
-      </select>
-      <!-- /FORMAT -->
-
-      <!-- REQUIRED -->
-      <div *ngIf="submitted && f['format'].errors" class="invalid-feedback">
-        <div *ngIf="f['format'].errors['required']">Format is required</div>
-      </div>
-      <!-- /REQUIRED -->
-    </div>
-    <!-- /COLUMN -->
-  </div>
-  <!-- /ROW -->
-
-  <!-- ROW -->
-  <div class="form-row">
-    <!-- COLUMN -->
-    <div class="form-group col-sm">
-      <!-- TODO Limit input to two decimal -> .00 -->
-      <!-- TODO Table for different prices depending on currencies
-          Option 1: Create a auto incremental table -> one row with empty fields for price and currency.
-          If the fields of the row are set, generate a new row with empty. <-- I favor this option
-          Option 2: Create a table with as many rows as currencies are supported. At least one must be filled.
-          Optional: Checkbox or toggle to enable currency converter. The conversion values need to be managed by someone (employees?).
-          Problem: What if more then one price is manually set?
-          Solution: Only allow one currency to be inserted manully, disable the fields of other rows and convert the prices from
-          the setted one to the others?
-        -->
-        <!-- PRICE -->
-        <div>
-          <label>Price</label>
-        </div>
+    <!-- ROW -->
+    <div class="form-row">
+      <!-- COLUMN -->
+      <div class="form-group col-sm">
+        <!-- TITLE -->
+        <label>Title</label>
         <input
         class="form-control"
-        formControlName="price"
-        [ngClass]="{ 'is-invalid': submitted && f['price'].errors }"
-        placeholder="Enter the price"
-        type="number"
+        formControlName="title"
+        [ngClass]="{'is-invalid': submitted && f['title'].errors}"
+        placeholder="Enter the title"
+        type="text"
         >
-        <!-- /PRICE -->
+        <!-- /TITLE -->
 
         <!-- REQUIRED -->
-        <div *ngIf="submitted && f['price'].errors" class="invalid-feedback">
-          <div *ngIf="f['price'].errors['required']">Price is required</div>
+        <div *ngIf="submitted && f['title'].errors" class="invalid-feedback">
+          <div *ngIf="f['title'].errors['required']">Title is required</div>
+        </div>
+        <!-- /REQUIRED -->
+      </div>
+      <!-- /COLUMN -->
+
+      <!-- COLUMN -->
+      <div class="form-group col-sm" formGroupName="parameters">
+        <!-- AUTHOR -->
+        <label>Author</label>
+        <input
+          class="form-control"
+          formControlName="author"
+          [ngClass]="{'is-invalid': submitted && f['parameters.author'].errors}"
+          placeholder="Enter the author"
+          type="text"
+        >
+        <!-- /AUTHOR -->
+
+        <!-- REQUIRED -->
+        <div *ngIf="submitted && f['author'].errors" class="invalid-feedback">
+          <div *ngIf="f['author'].errors['required']">Author is required</div>
         </div>
         <!-- /REQUIRED -->
       </div>
@@ -167,20 +64,71 @@
 
       <!-- COLUMN -->
       <div class="form-group col-sm">
-        <div>
-          <label>Stock</label>
-        </div>
+        <!-- ISBN -->
+        <label>ISBN</label>
         <input
         class="form-control"
-        formControlName="stock"
-        [ngClass]="{ 'is-invalid': submitted && f['stock'].errors }"
-        placeholder="Enter the stock"
-        type="number"
+        formControlName="isbn"
+        [ngClass]="{'is-invalid': submitted && f['isbn'].errors}"
+        placeholder="Enter the ISBN"
+        type="text"
         >
+        <!-- /ISBN -->
 
         <!-- REQUIRED -->
-        <div *ngIf="submitted && f['stock'].errors" class="invalid-feedback">
-          <div *ngIf="f['stock'].errors['required']">Stock is required</div>
+        <div *ngIf="submitted && f['isbn'].errors" class="invalid-feedback">
+          <div *ngIf="f['isbn'].errors['required']">ISBN is required</div>
+        </div>
+        <!-- /REQUIRED -->
+      </div>
+      <!-- /COLUMN -->
+
+    </div>
+    <!-- /ROW -->
+
+    <!-- ROW -->
+    <div class="form-row">
+      <!-- COLUMN -->
+      <div class="form-group col-sm">
+        <!-- GENRE -->
+        <div>
+          <label>Genre</label>
+        </div>
+        <!-- TODO Select current value -->
+        <select class="form-control" formControlName="genre" [ngClass]="{ 'is-invalid': submitted && f['parameters.genre'].errors}">
+          <option disabled *ngIf="isAddMode" value="">Select a genre</option>
+          <option *ngFor="let genre of genreTypes" [selected]="genre.name == this.selectedGenre" [value]="genre.name">
+            {{genre.name}}
+          </option>
+        </select>
+        <!-- /GENRE -->
+
+        <!-- REQUIRED -->
+        <div *ngIf="submitted && f['genre'].errors" class="invalid-feedback">
+          <div *ngIf="f['genre'].errors['required']">Genre is required</div>
+        </div>
+        <!-- /REQUIRED -->
+      </div>
+      <!-- /COLUMN -->
+
+      <!-- COLUMN -->
+      <div class="form-group col-sm" formGroupName="parameters">
+        <!-- FORMAT -->
+        <div>
+          <label>Format</label>
+        </div>
+        <!-- TODO Select current value -->
+        <select class="form-control" formControlName="format" [ngClass]="{ 'is-invalid': submitted && f['format'].errors}">
+          <option disabled *ngIf="isAddMode" value="">Select a format</option>
+          <option *ngFor="let format of formatTypes" [selected]="format.name == this.selectedFormat" [value]="format.name">
+            {{format.name}}
+          </option>
+        </select>
+        <!-- /FORMAT -->
+
+        <!-- REQUIRED -->
+        <div *ngIf="submitted && f['format'].errors" class="invalid-feedback">
+          <div *ngIf="f['format'].errors['required']">Format is required</div>
         </div>
         <!-- /REQUIRED -->
       </div>
@@ -188,28 +136,94 @@
     </div>
     <!-- /ROW -->
 
-    <!-- TODO Save image with the book -->
-    <!-- ROW-->
-    <div class="row">
+    <!-- ROW -->
+    <div class="form-row">
+      <!-- COLUMN -->
       <div class="form-group col-sm">
-        <app-image-selector></app-image-selector>
+        <!-- TODO Limit input to two decimal -> .00 -->
+        <!-- TODO Table for different prices depending on currencies
+            Option 1: Create a auto incremental table -> one row with empty fields for price and currency.
+            If the fields of the row are set, generate a new row with empty. <-- I favor this option
+            Option 2: Create a table with as many rows as currencies are supported. At least one must be filled.
+            Optional: Checkbox or toggle to enable currency converter. The conversion values need to be managed by someone (employees?).
+            Problem: What if more then one price is manually set?
+            Solution: Only allow one currency to be inserted manully, disable the fields of other rows and convert the prices from
+            the setted one to the others?
+          -->
+          <!-- PRICE -->
+          <div>
+            <label>Price</label>
+          </div>
+          <input
+          class="form-control"
+          formControlName="price"
+          [ngClass]="{ 'is-invalid': submitted && f['price'].errors }"
+          placeholder="Enter the price"
+          type="number"
+          >
+          <!-- /PRICE -->
+
+          <!-- REQUIRED -->
+          <div *ngIf="submitted && f['price'].errors" class="invalid-feedback">
+            <div *ngIf="f['price'].errors['required']">Price is required</div>
+          </div>
+          <!-- /REQUIRED -->
+        </div>
+        <!-- /COLUMN -->
+
+        <!-- COLUMN -->
+        <div class="form-group col-sm">
+          <div>
+            <label>Stock</label>
+          </div>
+          <input
+          class="form-control"
+          formControlName="stock"
+          [ngClass]="{ 'is-invalid': submitted && f['stock'].errors }"
+          placeholder="Enter the stock"
+          type="number"
+          >
+
+          <!-- REQUIRED -->
+          <div *ngIf="submitted && f['stock'].errors" class="invalid-feedback">
+            <div *ngIf="f['stock'].errors['required']">Stock is required</div>
+          </div>
+          <!-- /REQUIRED -->
+        </div>
+        <!-- /COLUMN -->
+      </div>
+      <!-- /ROW -->
+
+      <!-- TODO Save image with the book -->
+      <!-- ROW-->
+      <div class="row">
+        <div class="form-group col-sm">
+          <div>
+            <label>Book cover</label>
+          </div>
+          <input type="file" class="file-input" (change)="onFileSelected($event)">
+          <div class="m-3" >
+            <img class="w-25 h-25" *ngIf="this.image" [src]="this.image" alt="Uploaded File">
+          </div>
+          <!-- TODO Add a remove image button -->
+        </div>
+      </div>
+    <!-- /ROW-->
+
+    <!-- ROW-->
+    <div class="d-flex justify-content-around form-group col-sm">
+      <div>
+        <label class="mr-3">Active</label>
+        <mat-slide-toggle formControlName="active"></mat-slide-toggle>
+      </div>
+
+      <div>
+        <button class="btn btn-success" [disabled]="form.invalid">
+          Save
+        </button>
+        <a routerLink="/books" class="btn btn-link">Cancel</a>
       </div>
     </div>
-  <!-- /ROW-->
-
-  <!-- ROW-->
-  <div class="d-flex justify-content-around form-group col-sm">
-    <div>
-      <label class="mr-3">Active</label>
-      <mat-slide-toggle formControlName="active"></mat-slide-toggle>
-    </div>
-
-    <div>
-      <button class="btn btn-success" [disabled]="form.invalid">
-        Save
-      </button>
-      <a routerLink="/books" class="btn btn-link">Cancel</a>
-    </div>
-  </div>
-  <!-- /ROW-->
-</form>
+    <!-- /ROW-->
+  </form>
+</div>

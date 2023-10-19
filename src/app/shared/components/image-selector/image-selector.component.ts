@@ -1,4 +1,4 @@
-import { Component, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { getBase64 } from '../../utils/utils';
 
 @Component({

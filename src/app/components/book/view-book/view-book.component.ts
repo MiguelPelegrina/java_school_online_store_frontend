@@ -13,22 +13,25 @@ export class ViewBookComponent implements OnInit {
   // TODO Not sure if default values or undefined fields with ? and continous checking with if's and ngIf's is better
   protected id: number = 0;
   protected book: Book = {
+    active: true,
     id: 0,
-    title: '',
-    price: 0.00,
+    image: '',
     isbn: '',
+    price: 0.00,
     genre: { name: 'Thriller'},
     parameters: {
-      id: 0,
+      active: true,
       author: '',
+      id: 0,
       format: {
         name: 'Ebook'
       },
-      active: true,
     },
     stock: 1,
-    active: true,
+    title: '',
   };
+
+  protected image: string = '';
 
   protected isBookLoaded: boolean = false;
 
