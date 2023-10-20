@@ -1,7 +1,8 @@
 <!-- TODO
   - Paginator and searchbar not responsive between xs and sm
   - Multi-select with Deactivate -> FABs for activate/deactivate of several books
-  - Change search evento to click with a button instead of keyup
+  - Change search event to click with a button instead of keyup
+  - Remove div between searchbar and table
   - Book import from excel
   - Currently a progress bar is shown while loading and the user is informed if loading led to an error
     -> more than just a snackbar?
@@ -39,7 +40,6 @@
   <mat-form-field class="mat-elevation-z8" style="width:100%">
     <mat-label>Search books by title or author</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Search books" #input>
-    <!-- TODO Use a button instead of continous filtering -->
   </mat-form-field>
   <!-- /SEARCHBAR -->
 

@@ -1,0 +1,62 @@
+<!-- PROGRESS BAR -->
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+<!-- /PROGRESS BAR -->
+
+<!-- TITLE -->
+<h1 class="text-center mt-3">List of books</h1>
+<!-- /TITLE -->
+
+<div class="container">
+  <!-- FLOATING ACTIONS BUTTONS -->
+  <div class="text-right m-2">
+    <!-- ADD BOOK ICON -->
+    <button (click)="addGenre()" mat-mini-fab matTooltip="Add a new genre to the list">
+      <mat-icon>add</mat-icon>
+    </button>
+    <!-- /ADD BOOK ICON -->
+  </div>
+  <!-- /FLOATING ACTIONS BUTTONS -->
+
+  <!-- SEARCHBAR -->
+  <mat-form-field class="mat-elevation-z8" style="width:100%">
+    <mat-label>Search genres</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Search genres" #input>
+  </mat-form-field>
+  <!-- /SEARCHBAR -->
+
+  <!-- TABLE -->
+  <table class="container mat-elevation-z8 table-responsive-sm" mat-table [dataSource]="bookGenreDatasource" matSort>
+    <!-- GENRE -->
+    <ng-container matColumnDef="genre">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Title of the book" sortActionDescription="Sort by title"> Genre </th>
+      <td mat-cell *matCellDef="let genre"> {{genre.name}}</td>
+    </ng-container>
+    <!-- /GENRE -->
+
+    <!-- ACTIONS -->
+    <ng-container matColumnDef="actions">
+      <th class="text-right" mat-header-cell *matHeaderCellDef matTooltip="Delete genre"> Actions </th>
+      <td class="text-right" mat-cell *matCellDef="let bookGenre">
+        <mat-icon
+        aria-hidden="false"
+          (click)="deleteBookGenre(bookGenre.name)"
+          color="warn"
+          fontIcon="delete"
+          matTooltip="Delete genre"
+          >
+        </mat-icon>
+      </td>
+    </ng-container>
+    <!-- /ACTIONS -->
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsOfBookGenres; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsOfBookGenres;"></tr>
+  </table>
+  <!-- /TABLE -->
+
+  <!-- PAGINATOR -->
+  <mat-paginator class="mat-elevation-z8" [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons>
+  </mat-paginator>
+  <!-- /PAGINATOR -->
+</div>

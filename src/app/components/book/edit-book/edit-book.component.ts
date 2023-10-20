@@ -11,6 +11,7 @@ import { BookGenre } from 'src/app/shared/domain/book/book-genre/book-genre';
 import { BookParametersFormat } from 'src/app/shared/domain/book/parameters/book-parameters-format/book-parameters-format';
 import { StringValues } from 'src/app/shared/utils/string-values';
 
+// TODO Check if anything is required for AddEdit
 @Component({
   selector: 'app-edit-book',
   templateUrl: './edit-book.component.html',

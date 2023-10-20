@@ -28,6 +28,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { ListBookGenreComponent } from './components/book-genres/list-book-genre/list-book-genre.component';
+import { ListBookParametersFormatComponent } from './components/book-parameters-formats/list-book-parameters-format/list-book-parameters-format.component';
 
 @NgModule({
   declarations: [
@@ -39,9 +41,11 @@ import { MatInputModule } from '@angular/material/input';
     EditBookComponent,
     ImageSelectorComponent,
     ListBookComponent,
+    ListBookGenreComponent,
     ListCountryComponent,
     UpdateCountryComponent,
     ViewBookComponent,
+    ListBookParametersFormatComponent,
   ],
   // TODO Only import here when the module is being used in more then one component?
   imports: [

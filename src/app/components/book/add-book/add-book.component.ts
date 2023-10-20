@@ -11,6 +11,7 @@ import { BookGenre } from 'src/app/shared/domain/book/book-genre/book-genre';
 import { StringValues } from 'src/app/shared/utils/string-values';
 import { ImageSelectorComponent } from 'src/app/shared/components/image-selector/image-selector.component';
 
+// TODO Check if anything is required for AddEdit
 @Component({
   selector: 'app-add-book',
   templateUrl: './add-book.component.html',

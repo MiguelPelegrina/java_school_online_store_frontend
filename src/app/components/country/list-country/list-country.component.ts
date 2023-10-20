@@ -49,7 +49,6 @@ export class ListCountryComponent implements OnInit{
         this.countryService.delete(name).subscribe(response =>{
           this.getAllCountries();
           Swal.fire('Delete successful', '', 'success');
-          error: Swal.fire('An error ocurred, contact your support', '', 'warning');
         });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire('Changes are not saved', '', 'info')

@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { BookService } from 'src/app/services/book/book.service';
 import { Book } from 'src/app/shared/domain/book/book';
 
+// TODO Should try to abstract table component
 @Component({
   selector: 'app-list-book',
   templateUrl: './list-book.component.html',

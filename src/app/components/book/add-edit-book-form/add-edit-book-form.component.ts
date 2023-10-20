@@ -11,6 +11,7 @@ import { ImageSelectorComponent } from '../../../shared/components/image-selecto
 import { getBase64 } from 'src/app/shared/utils/utils';
 import { requiredFileType } from 'src/app/shared/utils/required-file-type';
 
+// TODO Document
 @Component({
   selector: 'app-add-edit-book-form',
   templateUrl: './add-edit-book-form.component.html',

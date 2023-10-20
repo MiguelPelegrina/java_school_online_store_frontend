@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BookService } from 'src/app/services/book/book.service';
 import { Book } from 'src/app/shared/domain/book/book';
 
+// TODO Document
 @Component({
   selector: 'app-view-book',
   templateUrl: './view-book.component.html',

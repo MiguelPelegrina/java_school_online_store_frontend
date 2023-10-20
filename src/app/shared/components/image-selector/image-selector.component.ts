@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { getBase64 } from '../../utils/utils';
 
+// TODO Implement changes from AddEditBookComponent to make it reusable.
 @Component({
   selector: 'app-image-selector',
   templateUrl: './image-selector.component.html',
