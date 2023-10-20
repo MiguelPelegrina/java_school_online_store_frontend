@@ -6,8 +6,8 @@ import { BookGenreService } from 'src/app/services/book-genre/book-genre.service
 import { BookGenre } from 'src/app/shared/domain/book/book-genre/book-genre';
 import Swal from 'sweetalert2';
 
+// TODO Document
 // TODO Try to abstract and use with book parameters format
-// TODO Should try to abstract table as well
 @Component({
   selector: 'app-list-book-genre',
   templateUrl: './list-book-genre.component.html',

@@ -8,6 +8,7 @@ import { ListBookComponent } from "./components/book/list-book/list-book.compone
 import { ViewBookComponent } from "./components/book/view-book/view-book.component";
 import { AddEditBookFormComponent } from "./components/book/add-edit-book-form/add-edit-book-form.component";
 import { ListBookGenreComponent } from "./components/book-genres/list-book-genre/list-book-genre.component";
+import { CatalogComponent } from "./components/catalog/catalog.component";
 
 const routes: Routes = [
   // TODO Home page
@@ -17,6 +18,7 @@ const routes: Routes = [
   {path: 'books/view/:id', component: ViewBookComponent},
   {path: 'books/edit/:id', component: AddEditBookFormComponent},
   {path: 'book_genres', component: ListBookGenreComponent},
+  {path: 'catalog', component: CatalogComponent},
   {path: 'countries', component: ListCountryComponent},
   {path: 'countries/add', component: AddCountryComponent},
   {path: 'countries/details/:name', component: DetailCountryComponent},

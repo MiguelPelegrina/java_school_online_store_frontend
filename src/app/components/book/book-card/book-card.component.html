@@ -1,0 +1,10 @@
+<div class="card" style="width: 14rem;">
+  <!-- TODO Fix image -->
+  <img class="card-img-top" [src]="book.image" alt="Cover of {{book.title}}">
+  <div class="card-body">
+    <h2 class="card-title">{{ book.title }}</h2>
+    <p class="card-text">By {{ book.parameters.author}}</p>
+    <p class="card-text">Genre: {{ book.genre.name}}</p>
+    <a href="#" class="btn btn-primary">View more...</a>
+  </div>
+</div>

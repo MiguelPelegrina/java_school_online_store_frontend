@@ -30,6 +30,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ListBookGenreComponent } from './components/book-genres/list-book-genre/list-book-genre.component';
 import { ListBookParametersFormatComponent } from './components/book-parameters-formats/list-book-parameters-format/list-book-parameters-format.component';
+import { AbstractTableComponent } from './shared/components/abstract-table/abstract-table.component';
+import { BookCardComponent } from './components/book/book-card/book-card.component';
+import { CatalogComponent } from './components/catalog/catalog.component';
+import { MatGridListModule } from '@angular/material/grid-list'
 
 @NgModule({
   declarations: [
@@ -37,6 +41,8 @@ import { ListBookParametersFormatComponent } from './components/book-parameters-
     AddBookComponent,
     AddCountryComponent,
     AddEditBookFormComponent,
+    BookCardComponent,
+    CatalogComponent,
     DetailCountryComponent,
     EditBookComponent,
     ImageSelectorComponent,
@@ -46,6 +52,7 @@ import { ListBookParametersFormatComponent } from './components/book-parameters-
     UpdateCountryComponent,
     ViewBookComponent,
     ListBookParametersFormatComponent,
+    AbstractTableComponent,
   ],
   // TODO Only import here when the module is being used in more then one component?
   imports: [
@@ -56,6 +63,7 @@ import { ListBookParametersFormatComponent } from './components/book-parameters-
     HttpClientModule,
     MatButtonModule,
     MatFormFieldModule,
+    MatGridListModule,
     MatIconModule,
     MatInputModule,
     MatPaginatorModule,
