@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BookCardComponent } from '../book/book-card/book-card.component';
+import { BookCardComponent } from './book-card/book-card.component';
 import { Book } from 'src/app/shared/domain/book/book';
 import { BookService } from 'src/app/services/book/book.service';
 

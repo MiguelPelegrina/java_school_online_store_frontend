@@ -18,9 +18,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatPaginatorModule} from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ListBookComponent } from './components/book/list-book/list-book.component';
-import { AddBookComponent } from './components/book/add-book/add-book.component';
 import { ViewBookComponent } from './components/book/view-book/view-book.component';
-import { EditBookComponent } from './components/book/edit-book/edit-book.component';
 import { MatButtonModule } from '@angular/material/button';
 import { ImageSelectorComponent } from './shared/components/image-selector/image-selector.component';
 import { AddEditBookFormComponent } from './components/book/add-edit-book-form/add-edit-book-form.component';
@@ -31,7 +29,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ListBookGenreComponent } from './components/book-genres/list-book-genre/list-book-genre.component';
 import { ListBookParametersFormatComponent } from './components/book-parameters-formats/list-book-parameters-format/list-book-parameters-format.component';
 import { AbstractTableComponent } from './shared/components/abstract-table/abstract-table.component';
-import { BookCardComponent } from './components/book/book-card/book-card.component';
+import { BookCardComponent } from './components/catalog/book-card/book-card.component';
 import { CatalogComponent } from './components/catalog/catalog.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { SearchBarComponent } from './shared/components/search-bar/search-bar.component'
@@ -40,14 +38,12 @@ import { MatCardModule } from '@angular/material/card';
 @NgModule({
   declarations: [
     AbstractTableComponent,
-    AddBookComponent,
     AddCountryComponent,
     AddEditBookFormComponent,
     AppComponent,
     BookCardComponent,
     CatalogComponent,
     DetailCountryComponent,
-    EditBookComponent,
     ImageSelectorComponent,
     ListBookComponent,
     ListBookGenreComponent,

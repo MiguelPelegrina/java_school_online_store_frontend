@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookFormatService } from 'src/app/services/book-format/book-format.service';
 import { BookGenreService } from 'src/app/services/book-genre/book-genre.service';
@@ -9,7 +8,7 @@ import { BookParametersFormat } from '../../../shared/domain/book/parameters/boo
 import { BookGenre } from '../../../shared/domain/book/book-genre/book-genre';
 import { ImageSelectorComponent } from '../../../shared/components/image-selector/image-selector.component';
 import { getBase64 } from 'src/app/shared/utils/utils';
-import { requiredFileType } from 'src/app/shared/utils/required-file-type';
+import Swal from 'sweetalert2';
 
 // TODO Document
 @Component({
@@ -19,7 +18,6 @@ import { requiredFileType } from 'src/app/shared/utils/required-file-type';
 })
 export class AddEditBookFormComponent implements OnInit{
   // Subcomponents
-  // TODO Save image with the book
   // Not sure if right
   @ViewChild(ImageSelectorComponent)
   protected imageSelector!: ImageSelectorComponent;
@@ -37,7 +35,7 @@ export class AddEditBookFormComponent implements OnInit{
 
   protected isAddMode?: boolean;
 
-  protected loading = false;
+  protected loading = true;
 
   protected submitted = false;
 
@@ -63,7 +61,6 @@ export class AddEditBookFormComponent implements OnInit{
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private snackbar: MatSnackBar
   ) {}
 
   // Methods
@@ -76,12 +73,13 @@ export class AddEditBookFormComponent implements OnInit{
     this.id = this.route.snapshot.params['id'];
     this.isAddMode = !this.id;
 
-    this.bookGenreService.getAll().subscribe(bookGenreList => {
-      this.genreTypes = bookGenreList;
-    });
-    this.bookFormatService.getAll().subscribe(bookFormatList => {
-      this.formatTypes = bookFormatList;
-    })
+    if(this.isAddMode){
+      this.loading = false;
+    }
+
+    this.loadGenres();
+
+    this.loadFormats();
 
     // Generate the form
     this.form = this.formBuilder.group({
@@ -103,18 +101,8 @@ export class AddEditBookFormComponent implements OnInit{
       title: ['', Validators.required],
     })
 
-    if(this.id
-      // && !this.isAddMode
-      ){
-      this.bookService.getById(this.id)
-        .subscribe((response) => {
-          this.selectedFormat = response.parameters.format.name;
-          this.selectedGenre = response.genre.name;
-
-          this.image = response.image;
-
-          this.form.patchValue(response)
-        });
+    if(this.id){
+      this.loadBook();
     }
   }
 
@@ -132,6 +120,7 @@ export class AddEditBookFormComponent implements OnInit{
     if (inputElement.files && inputElement.files[0]) {
       const file = event.target.files[0];
 
+      // TODO Check that file is png or jpg
       if(file){
         getBase64(file, (base64String) => {
           this.image = base64String;
@@ -166,14 +155,48 @@ export class AddEditBookFormComponent implements OnInit{
     this.bookService.create(this.form.value)
       .subscribe({
         next: () => {
-          this.snackbar.open('Book successfully created!');
-          this.router.navigate(['../'], { relativeTo: this.route });
+          this.handleSuccessResponse('created');
         },
         error: error => {
-          this.snackbar.open(`Book could not be created. Error: ${error}`);
-          this.loading = false;
-      }
+          this.handleErrorResponse('created',error);
+        }
       })
+  }
+
+  private handleErrorResponse(action: string, error: any) {
+    Swal.fire('Error', `The book could not be ${action}: ${error.message}` , 'warning');
+    this.loading = false;
+  }
+
+  private handleSuccessResponse(action: string){
+    Swal.fire(`Book ${action}!`,`The book ${this.form.value.title} has been ${action} successfully`,`success`);
+    this.router.navigate(['/books']);
+  }
+
+  private loadBook() {
+    this.bookService.getById(this.id!)
+        .subscribe((response) => {
+          this.selectedFormat = response.parameters.format.name;
+          this.selectedGenre = response.genre.name;
+
+          this.image = response.image;
+
+          this.form.patchValue(response)
+
+          this.loading = false;
+        });
+  }
+
+  private loadFormats() {
+    this.bookFormatService.getAll().subscribe(bookFormatList => {
+      this.formatTypes = bookFormatList;
+    })
+  }
+
+  private loadGenres() {
+    this.bookGenreService.getAll().subscribe(bookGenreList => {
+      this.genreTypes = bookGenreList;
+    });
   }
 
   /**
@@ -183,12 +206,10 @@ export class AddEditBookFormComponent implements OnInit{
     this.bookService.update(this.id!, this.form.value)
       .subscribe({
         next: () => {
-          this.snackbar.open('Book updated successfully!');
-          this.router.navigate(['/books']);
+          this.handleSuccessResponse('updated');
         },
         error: error => {
-          this.snackbar.open(`Book could not be updated. Error: ${error}`);
-          this.loading = false;
+          this.handleErrorResponse('updated', error);
         }
       })
   }
