@@ -33,14 +33,17 @@ import { ListBookParametersFormatComponent } from './components/book-parameters-
 import { AbstractTableComponent } from './shared/components/abstract-table/abstract-table.component';
 import { BookCardComponent } from './components/book/book-card/book-card.component';
 import { CatalogComponent } from './components/catalog/catalog.component';
-import { MatGridListModule } from '@angular/material/grid-list'
+import { MatGridListModule } from '@angular/material/grid-list';
+import { SearchBarComponent } from './shared/components/search-bar/search-bar.component'
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AbstractTableComponent,
     AddBookComponent,
     AddCountryComponent,
     AddEditBookFormComponent,
+    AppComponent,
     BookCardComponent,
     CatalogComponent,
     DetailCountryComponent,
@@ -48,11 +51,11 @@ import { MatGridListModule } from '@angular/material/grid-list'
     ImageSelectorComponent,
     ListBookComponent,
     ListBookGenreComponent,
+    ListBookParametersFormatComponent,
     ListCountryComponent,
+    SearchBarComponent,
     UpdateCountryComponent,
     ViewBookComponent,
-    ListBookParametersFormatComponent,
-    AbstractTableComponent,
   ],
   // TODO Only import here when the module is being used in more then one component?
   imports: [
@@ -62,6 +65,7 @@ import { MatGridListModule } from '@angular/material/grid-list'
     FormsModule,
     HttpClientModule,
     MatButtonModule,
+    MatCardModule,
     MatFormFieldModule,
     MatGridListModule,
     MatIconModule,

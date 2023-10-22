@@ -1,13 +1,11 @@
 <div class="container">
-  <form>
-    <input type="text" placeholder="Filter by title">
-    <button class="btn btn-primary" type="button">Search</button>
+  <form class="text-center">
+    <input type="text" placeholder="Filter by title" #filter>
+    <button class="btn btn-primary" (click)="filterResults(filter.value)" type="button">Search</button>
   </form>
 
-  <mat-grid-list cols="2" rowHeight="1:1">
-    <mat-grid-tile>
-      <app-book-card *ngFor="let book of bookList" [book]="book"></app-book-card>
-    </mat-grid-tile>
-  </mat-grid-list>
+  <div class="d-flex flex-row justify-content-between">
+    <app-book-card *ngFor="let book of filteredBookList" [book]="book"></app-book-card>
+  </div>
 </div>
 

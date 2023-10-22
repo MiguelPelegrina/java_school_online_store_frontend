@@ -11,15 +11,29 @@ import { BookService } from 'src/app/services/book/book.service';
 export class CatalogComponent implements OnInit{
   protected bookList: Book[] = [];
 
+  protected filteredBookList: Book [] = [];
+
   constructor(private service: BookService){}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.service.getAll().subscribe(response => {
       response.map(book => {
         if(book.active){
           this.bookList.push(book);
         }
       });
-    })
+    });
+
+    this.filteredBookList = this.bookList;
+  }
+
+  protected filterResults(filter: string){
+    if(!filter){
+      this.filteredBookList = this.bookList;
+    }
+
+    this.filteredBookList = this.bookList.filter(
+      book => book.title.toLowerCase().includes(filter.toLowerCase())
+    )
   }
 }
