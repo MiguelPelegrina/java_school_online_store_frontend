@@ -1,0 +1,22 @@
+<mat-form-field style="width:100%">
+  <!-- LABEL -->
+  <mat-label>Search...</mat-label>
+  <!-- /LABEL -->
+
+  <!-- INPUT -->
+  <input #input (keyup.enter)="searchItem(input.value)" matInput placeholder={{placeholder}} type="text" [(ngModel)]="value">
+  <!-- /INPUT -->
+
+  <!-- SEARCH BUTTON -->
+  <button matSuffix mat-icon-button aria-label="Search" (click)="searchItem(input.value)">
+    <mat-icon>search</mat-icon>
+  </button>
+  <!-- /SEARCH BUTTON -->
+
+  <!-- CLEAR BUTTON -->
+  <button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+    <mat-icon>close</mat-icon>
+  </button>
+  <!-- /CLEAR BUTTON -->
+
+</mat-form-field>

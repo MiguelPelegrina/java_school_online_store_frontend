@@ -37,10 +37,7 @@
   <!-- /FLOATING ACTIONS BUTTONS -->
 
   <!-- SEARCHBAR -->
-  <mat-form-field class="mat-elevation-z8" style="width:100%">
-    <mat-label>Search books by title or author</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Search books" #input>
-  </mat-form-field>
+  <app-search-bar [placeholder]="'by title and author'" (searchEvent)="applyFilter($event)"></app-search-bar>
   <!-- /SEARCHBAR -->
 
     <!-- TABLE -->

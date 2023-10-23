@@ -7,7 +7,6 @@ import { BookGenre } from 'src/app/shared/domain/book/book-genre/book-genre';
 import Swal from 'sweetalert2';
 
 // TODO Document
-// TODO Try to abstract and use with book parameters format
 @Component({
   selector: 'app-list-book-genre',
   templateUrl: './list-book-genre.component.html',
@@ -67,13 +66,11 @@ export class ListBookGenreComponent implements OnInit{
   }
 
   /**
-   * Runs on every keyup inside the searchbar. Obtains the inserted value and filters the table by it.
-   * If the value is 'the' all books with the title or author containg 'the' are shown.
+   * Filters the data of the table with the value of the input of the search bar.
+   * @param filter - Value of the input field
    */
-  protected applyFilter(event: Event){
-    const filterValue = (event.target as HTMLInputElement).value;
-
-    this.bookGenreDatasource.filter = filterValue.trim().toLowerCase();
+  protected applyFilter(filter: string){
+    this.bookGenreDatasource.filter = filter.trim().toLowerCase();
   }
 
   protected deleteBookGenre(name: string){

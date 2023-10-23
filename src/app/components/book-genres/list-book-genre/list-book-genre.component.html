@@ -3,7 +3,7 @@
 <!-- /PROGRESS BAR -->
 
 <!-- TITLE -->
-<h1 class="text-center mt-3">List of books</h1>
+<h1 class="text-center mt-3">List of genres</h1>
 <!-- /TITLE -->
 
 <div class="container">
@@ -18,10 +18,7 @@
   <!-- /FLOATING ACTIONS BUTTONS -->
 
   <!-- SEARCHBAR -->
-  <mat-form-field class="mat-elevation-z8" style="width:100%">
-    <mat-label>Search genres</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Search genres" #input>
-  </mat-form-field>
+  <app-search-bar [placeholder]="'by genre'" (searchEvent)="applyFilter($event)"></app-search-bar>
   <!-- /SEARCHBAR -->
 
   <!-- TABLE -->

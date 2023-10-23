@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { BookCardComponent } from './book-card/book-card.component';
 import { Book } from 'src/app/shared/domain/book/book';
 import { BookService } from 'src/app/services/book/book.service';
 
@@ -27,7 +26,11 @@ export class CatalogComponent implements OnInit{
     this.filteredBookList = this.bookList;
   }
 
-  protected filterResults(filter: string){
+  /**
+   * Filters the data of the table with the value of the input of the search bar.
+   * @param filter - Value of the input field
+   */
+  protected applyFilter(filter: string){
     if(!filter){
       this.filteredBookList = this.bookList;
     }

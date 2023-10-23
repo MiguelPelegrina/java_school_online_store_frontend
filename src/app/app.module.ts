@@ -28,7 +28,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ListBookGenreComponent } from './components/book-genres/list-book-genre/list-book-genre.component';
 import { ListBookParametersFormatComponent } from './components/book-parameters-formats/list-book-parameters-format/list-book-parameters-format.component';
-import { AbstractTableComponent } from './shared/components/abstract-table/abstract-table.component';
 import { BookCardComponent } from './components/catalog/book-card/book-card.component';
 import { CatalogComponent } from './components/catalog/catalog.component';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -37,7 +36,6 @@ import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
-    AbstractTableComponent,
     AddCountryComponent,
     AddEditBookFormComponent,
     AppComponent,

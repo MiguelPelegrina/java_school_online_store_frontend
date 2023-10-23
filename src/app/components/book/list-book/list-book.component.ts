@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { BookService } from 'src/app/services/book/book.service';
 import { Book } from 'src/app/shared/domain/book/book';
 
-// TODO Should try to abstract table component
 @Component({
   selector: 'app-list-book',
   templateUrl: './list-book.component.html',
@@ -75,13 +74,11 @@ export class ListBookComponent implements OnInit {
   }
 
   /**
-   * Runs on every keyup inside the searchbar. Obtains the inserted value and filters the table by it.
-   * If the value is 'the' all books with the title or author containg 'the' are shown.
+   * Filters the data of the table with the value of the input of the search bar.
+   * @param filter - Value of the input field
    */
-  protected applyFilter(event: Event){
-    const filterValue = (event.target as HTMLInputElement).value;
-
-    this.bookDatasource.filter = filterValue.trim().toLowerCase();
+  protected applyFilter(filter: string){
+    this.bookDatasource.filter = filter.trim().toLowerCase();
   }
 
   /**

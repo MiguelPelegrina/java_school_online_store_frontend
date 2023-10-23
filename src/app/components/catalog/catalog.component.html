@@ -1,8 +1,9 @@
+<!-- TITLE -->
+<h1 class="text-center mt-3">Catalog</h1>
+<!-- /TITLE -->
+
 <div class="container">
-  <form class="text-center">
-    <input type="text" placeholder="Filter by title" #filter>
-    <button class="btn btn-primary" (click)="filterResults(filter.value)" type="button">Search</button>
-  </form>
+  <app-search-bar [placeholder]="'by title or author'" (searchEvent)="applyFilter($event)"></app-search-bar>
 
   <div class="d-flex flex-row justify-content-between">
     <app-book-card *ngFor="let book of filteredBookList" [book]="book"></app-book-card>
