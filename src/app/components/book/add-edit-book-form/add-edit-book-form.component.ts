@@ -17,11 +17,6 @@ import Swal from 'sweetalert2';
   styleUrls: ['./add-edit-book-form.component.css']
 })
 export class AddEditBookFormComponent implements OnInit{
-  // Subcomponents
-  // Not sure if right
-  @ViewChild(ImageSelectorComponent)
-  protected imageSelector!: ImageSelectorComponent;
-
   // Fields
   protected image: string | ArrayBuffer | null = '';
 
@@ -87,7 +82,6 @@ export class AddEditBookFormComponent implements OnInit{
       active: [false, Validators.required],
       id: [''],
       image: ['', Validators.required],
-      // TODO Validators.required does not work with image
       isbn: ['', Validators.required],
       genre: ['', Validators.required],
       parameters: this.formBuilder.group({

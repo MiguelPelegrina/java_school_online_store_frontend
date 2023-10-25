@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { ListCountryComponent } from './components/country/list-country/list-country.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing-module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddCountryComponent } from './components/country/add-country/add-country.component';
@@ -33,6 +33,10 @@ import { CatalogComponent } from './components/catalog/catalog.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { SearchBarComponent } from './shared/components/search-bar/search-bar.component'
 import { MatCardModule } from '@angular/material/card';
+import { ShoopingCartComponent } from './components/shopping-cart/shopping-cart.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { AuthInterceptor } from './components/auth/auth-interceptor';
 
 @NgModule({
   declarations: [
@@ -50,6 +54,9 @@ import { MatCardModule } from '@angular/material/card';
     SearchBarComponent,
     UpdateCountryComponent,
     ViewBookComponent,
+    ShoopingCartComponent,
+    LoginComponent,
+    RegisterComponent,
   ],
   // TODO Only import here when the module is being used in more then one component?
   imports: [
@@ -75,7 +82,8 @@ import { MatCardModule } from '@angular/material/card';
     RouterModule,
   ],
   providers: [
-    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 5000}}
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 5000} },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

@@ -1,3 +1,4 @@
+<!-- TODO Sticky -->
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <ul class="navbar-nav">
     <!-- TODO Route it -->
@@ -11,7 +12,6 @@
       <a routerLink="books" routerLinkActive="active" class="nav-link">Books</a>
     </li>
 
-    <!-- TODO Route it -->
     <li class="nav-item">
       <a routerLink="book_genres" routerLinkActive="active" class="nav-link">Genres</a>
     </li>
@@ -25,7 +25,22 @@
     <li class="nav-item">
       <a routerLink="orders" routerLinkActive="active" class="nav-link">Orders</a>
     </li>
+
+    <!-- TODO Only if no session was created -->
+    <li class="nav-item">
+      <a routerLink="auth/login" routerLinkActive="active" class="nav-link">Login</a>
+    </li>
+
+    <!-- TODO Only if no session was created -->
+    <li class="nav-item">
+      <a routerLink="auth/register" routerLinkActive="active" class="nav-link">Register</a>
+    </li>
+
+    <!-- TODO Drop down menu with account information, only if a session was created -->
+
   </ul>
+
+  <app-shopping-cart></app-shopping-cart>
 </nav>
 <div>
   <router-outlet></router-outlet>

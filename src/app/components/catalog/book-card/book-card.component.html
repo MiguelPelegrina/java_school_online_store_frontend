@@ -12,6 +12,10 @@
   </mat-card-content>
   <mat-card-actions>
     <button mat-button>Add to shopping cart</button>
-    <button mat-button>View more...</button>
+    <button mat-button>
+      <a [routerLink]="['/books/view/', book.id]">
+        View more
+      </a>
+    </button>
   </mat-card-actions>
 </mat-card>

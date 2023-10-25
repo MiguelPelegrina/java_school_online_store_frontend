@@ -8,10 +8,15 @@ import { BookService } from 'src/app/services/book/book.service';
   styleUrls: ['./catalog.component.css']
 })
 export class CatalogComponent implements OnInit{
+  // Fields
   protected bookList: Book[] = [];
 
   protected filteredBookList: Book [] = [];
 
+  /**
+   * Constructor
+   * @param service - Book service
+   */
   constructor(private service: BookService){}
 
   public ngOnInit(): void {

@@ -118,7 +118,6 @@ export class ListBookComponent implements OnInit {
   private getAllBooks(){
     this.bookService.getAll().subscribe(bookList => {
       this.sortBookListByActivityName(bookList);
-
       this.books = bookList;
 
       this.bookDatasource.data = this.books;

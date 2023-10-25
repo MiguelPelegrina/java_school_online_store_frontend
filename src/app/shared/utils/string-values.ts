@@ -1,5 +1,14 @@
 export class StringValues{
-  public static BASE_URL:string = 'http://localhost:8081'
+  public static BASE_URL: string = 'http://localhost:8081'
+
+  /////////////////////////////////////////////////////
+  // Authentication
+  /////////////////////////////////////////////////////
+  private static AUTH_URL: string = '/auth';
+  private static LOGIN_URL: string = '/login'
+  private static REGISTER_URL: string = '/register'
+  public static BASE_LOGIN_URL: string = `${this.BASE_URL}${this.AUTH_URL}${this.LOGIN_URL}`
+  public static BASE_REGISTER_URL: string = `${this.BASE_URL}${this.AUTH_URL}${this.REGISTER_URL}`
 
   /////////////////////////////////////////////////////
   // Books

@@ -9,10 +9,13 @@ import { ViewBookComponent } from "./components/book/view-book/view-book.compone
 import { AddEditBookFormComponent } from "./components/book/add-edit-book-form/add-edit-book-form.component";
 import { ListBookGenreComponent } from "./components/book-genres/list-book-genre/list-book-genre.component";
 import { CatalogComponent } from "./components/catalog/catalog.component";
+import { LoginComponent } from "./components/login/login.component";
+import { RegisterComponent } from "./components/register/register.component";
 
 const routes: Routes = [
-  // TODO Home page
   {path: '', redirectTo:'books', pathMatch:'full'},
+  {path: 'auth/login', component: LoginComponent},
+  {path: 'auth/register', component: RegisterComponent},
   {path: 'books', component: ListBookComponent},
   {path: 'books/add', component: AddEditBookFormComponent},
   {path: 'books/view/:id', component: ViewBookComponent},
