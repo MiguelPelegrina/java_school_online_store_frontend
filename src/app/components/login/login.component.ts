@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,7 @@ export class LoginComponent {
 
   protected form!: FormGroup;
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder){
+  constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router){
     this.form = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
@@ -20,7 +21,20 @@ export class LoginComponent {
 
 
   protected onSubmit(){
-    this.authService.login(this.form.controls['email'].value, this.form.controls['password'].value);
+
+    this.authService.login(this.form.controls['email'].value, this.form.controls['password'].value).subscribe({
+      next: (response: any) => {
+        const token = response.accessToken;
+
+        localStorage.setItem('authToken', token);
+
+        this.router.navigate(['../']);
+      },
+      // TODO Error handling
+      error: (error: any) => {
+        console.log(`An error ocurred: ${error.message}`);
+      }
+    });
   }
 
   protected getErrorMessage(){

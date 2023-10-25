@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { BookService } from 'src/app/services/book/book.service';
 import { Book } from 'src/app/shared/domain/book/book';
+import { handleErrorStatusResponse } from 'src/app/shared/utils/utils';
 
 @Component({
   selector: 'app-list-book',
@@ -116,13 +117,19 @@ export class ListBookComponent implements OnInit {
    * Retrieves all books from the database and sorts them by 'active' first and then alphabetically by book 'title' (A-Z). Hides the progress bar when the data is loaded.
    */
   private getAllBooks(){
-    this.bookService.getAll().subscribe(bookList => {
-      this.sortBookListByActivityName(bookList);
-      this.books = bookList;
+    this.bookService.getAll().subscribe({
+      next: (bookList: Book[]) => {
+        this.sortBookListByActivityName(bookList);
+        this.books = bookList;
 
-      this.bookDatasource.data = this.books;
+        this.bookDatasource.data = this.books;
 
-      this.isLoading = false;
+        this.isLoading = false;
+      },
+      // TODO Error handling
+      error: (error: any) => {
+        handleErrorStatusResponse(error, this.router);
+      }
     });
   }
 

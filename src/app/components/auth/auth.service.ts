@@ -18,14 +18,9 @@ export class AuthService {
     const body = JSON.stringify({email, password});
 
     return this.httpClient.post(
-      StringValues.BASE_LOGIN_URL, body,
+      StringValues.BASE_LOGIN_URL,
+      body,
       {headers: this.httpOptions.headers}
-    ).subscribe((response: any) => {
-        const token = response.accessToken;
-
-        localStorage.setItem('authToken', token);
-
-        return response;
-      });
+    );
   }
 }
