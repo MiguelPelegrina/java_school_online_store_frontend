@@ -1,0 +1,32 @@
+<mat-card
+  *ngIf="book"
+  [ngClass]="{'text-center': !fullWidthMode}"
+>
+  <div [ngClass]="{'d-flex': fullWidthMode}">
+    <img class="mb-1 mx-auto smallImage"
+      [ngClass]="{'smallImage': !fullWidthMode, 'largeImage': fullWidthMode}"
+      [src]="book.image"
+    >
+
+    <div class="w-100" [ngClass]="{'p-3 d-flex flex-column justify-content-between': fullWidthMode}">
+      <div>
+        <h5>{{book.title}}</h5>
+        <!-- TODO
+          - Truncate does not seem to work
+          - Would be nice if it shows whole text on hover
+        -->
+        <p class="d-inline-block text-truncate w-100">By {{book.parameters.author}}</p>
+        <p *ngIf="fullWidthMode">Genre: {{book.genre.name}}</p>
+        <p *ngIf="fullWidthMode">Format: {{book.parameters.format.name}}</p>
+        <p *ngIf="fullWidthMode">ISBN: {{book.isbn}}</p>
+      </div>
+
+      <div [ngClass]="{'d-flex flex-column': !fullWidthMode, 'd-flex justify-content-between': fullWidthMode}">
+        <span class="text-info"> {{ book.price | currency}}</span>
+        <button (click)="onAddToCart()" class="btn icon">
+          <mat-icon color="accent">add_shopping_cart</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</mat-card>

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -19,9 +19,7 @@ export class LoginComponent {
     });
   }
 
-
   protected onSubmit(){
-
     this.authService.login(this.form.controls['email'].value, this.form.controls['password'].value).subscribe({
       next: (response: any) => {
         const token = response.accessToken;

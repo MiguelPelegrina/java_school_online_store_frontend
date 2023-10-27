@@ -1,0 +1,11 @@
+<mat-expansion-panel *ngIf="genres">
+  <mat-expansion-panel-header>
+    <mat-panel-title>Genres</mat-panel-title>
+  </mat-expansion-panel-header>
+  <mat-selection-list [multiple]="false">
+    <!-- <mat-list-option *ngFor="let genre of genres" [value]="genre.name"> -->
+    <mat-list-item *ngFor="let genre of genres">
+      <button class="btn btn-default" (click)="onShowGenre(genre.name)" >{{genre.name}}</button>
+    </mat-list-item>
+  </mat-selection-list>
+</mat-expansion-panel>

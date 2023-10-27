@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subscription } from 'rxjs';
 import { BookGenreService } from 'src/app/services/book-genre/book-genre.service';
 import { BookGenre } from 'src/app/shared/domain/book/book-genre/book-genre';
 import Swal from 'sweetalert2';
@@ -12,7 +13,7 @@ import Swal from 'sweetalert2';
   templateUrl: './list-book-genre.component.html',
   styleUrls: ['./list-book-genre.component.css']
 })
-export class ListBookGenreComponent implements OnInit{
+export class ListBookGenreComponent implements OnInit, OnDestroy{
   // Subcomponents
   @ViewChild(MatPaginator)
   protected paginator!: MatPaginator;
@@ -24,6 +25,8 @@ export class ListBookGenreComponent implements OnInit{
   protected bookGenres: BookGenre[] = [];
 
   protected bookGenreDatasource = new MatTableDataSource<BookGenre>(this.bookGenres);
+
+  protected bookGenreSubscription?: Subscription;
 
   protected displayedColumnsOfBookGenres: string[] = ['genre', 'actions'];
 
@@ -38,15 +41,23 @@ export class ListBookGenreComponent implements OnInit{
     private bookGenreService: BookGenreService,
   ){}
 
+
   // Methods
   // Public methods
   /**
    * A lifecycle hook that is called after Angular has fully initialized a component's view.
    * Assigns the Paginator and the Sort components to the respective properties of the book genres datasource to handle pages and sorting of the table.
-   */
+  */
   public ngAfterViewInit(){
-    this.bookGenreDatasource.paginator = this.paginator;
+   this.bookGenreDatasource.paginator = this.paginator;
     this.bookGenreDatasource.sort = this.sort;
+  }
+
+  /**
+   * A lifecycle hook that is called when a directive, pipe, or service is destroyed. Use for any custom cleanup that needs to occur when the instance is destroyed.
+   */
+  public ngOnDestroy(): void {
+    this.bookGenreSubscription?.unsubscribe();
   }
 
   /**
@@ -90,10 +101,7 @@ export class ListBookGenreComponent implements OnInit{
             this.getAllBookGenres();
             Swal.fire('Delete successful', '', 'success');
           },
-          // TODO When an employee tries to delete a genre if it is used by any book. Not sure how to handle :
-          // - Simply don't allow it.
-          // - Add Id as identifier and allow to change names -> requires changing database
-          error: () => Swal.fire('An error ocurred, contact your support', '', 'warning')
+          error: () => Swal.fire('An error ocurred. You cannot delete a format that is used by a book.', '', 'warning')
         });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire('Changes are not saved', '', 'info');
@@ -102,7 +110,6 @@ export class ListBookGenreComponent implements OnInit{
   }
 
   // Private methods
-  // TODO Refactor into smaller methods
   private createAddBookGenreDialog(){
     Swal.fire({
       title: 'Add a new genre',
@@ -114,18 +121,7 @@ export class ListBookGenreComponent implements OnInit{
 
         const bookGenre = {name: bookGenreName}
 
-        // TODO Check if the genre already exists
-        if (!bookGenre.name) {
-          Swal.showValidationMessage(`Please enter a valid name`)
-        }
-
-        const bookGenreNames = this.bookGenres.map(genre => {
-          return genre.name;
-        })
-
-        if(bookGenreNames.includes(bookGenreName)){
-          Swal.showValidationMessage(`${bookGenreName} already exists.`)
-        }
+        this.checkValidGenre(bookGenre);
 
         return bookGenre;
       }
@@ -144,11 +140,25 @@ export class ListBookGenreComponent implements OnInit{
     })
   }
 
+  private checkValidGenre(bookGenre: BookGenre){
+    if (!bookGenre.name) {
+      Swal.showValidationMessage(`Please enter a valid genre`)
+    }
+
+    const bookGenreNames = this.bookGenres.map(genre => {
+      return genre.name;
+    })
+
+    if(bookGenreNames.includes(bookGenre.name)){
+      Swal.showValidationMessage(`${bookGenre.name} already exists.`)
+    }
+  }
+
   /**
    * Retrieves all books from the database and sorts them by 'active' first and then alphabetically by book 'title' (A-Z). Hides the progress bar when the data is loaded.
    */
   private getAllBookGenres(){
-    this.bookGenreService.getAll().subscribe(bookGenreList => {
+    this.bookGenreSubscription = this.bookGenreService.getAll().subscribe(bookGenreList => {
       this.sortBookGenreListByName(bookGenreList);
 
       this.bookGenres = bookGenreList;

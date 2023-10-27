@@ -1,0 +1,58 @@
+<!-- TODO Make it sticky -->
+<mat-toolbar class="d-flex justify-content-between sticky-top">
+  <a routerLink="catalog" routerLinkActive="active" class="nav-link" >
+    <mat-icon class="icon-display" fontIcon="home"></mat-icon>
+  </a>
+  <!-- TODO Add other navigation elements -->
+  <div>
+    <button mat-icon-button [matMenuTriggerFor]="menuCart">
+      <mat-icon
+      [matBadge]="booksQuantity"
+      [matBadgeHidden]="!booksQuantity"
+      matBadgeColor="warn"
+      >shopping_cart</mat-icon>
+    </button>
+    <button mat-icon-button [matMenuTriggerFor]="menuProfile">
+      <mat-icon>person</mat-icon>
+    </button>
+  </div>
+
+  <!-- SHOPPING CART MENU -->
+  <mat-menu #menuCart="matMenu">
+    <div class="p-3">
+      <div class="border-bottom d-flex pb-3 justify-content-between">
+        <span class="mr-5">{{ booksQuantity }} Items</span>
+        <a routerLink="/cart">View Cart</a>
+      </div>
+
+      <div *ngIf="cart.boughtBooks.length" class="py-3">
+        <div *ngFor="let boughtBook of cart.boughtBooks" class="d-flex font justify-content-between mb-2">
+          <span class="mr-5">{{boughtBook.title}} x {{boughtBook.quantity}}</span>
+          <span class="font-weight-bold">{{ boughtBook.price | currency }}</span>
+        </div>
+      </div>
+
+      <div class="border-top d-flex justify-content-between">
+        <span>Total: </span>
+        <span class="font-weight-bold"> {{ getTotal(cart.boughtBooks) | currency}}</span>
+      </div>
+
+      <!--  -->
+      <div class="d-flex justify-content-around mt-3 pt-3">
+        <button (click)="onClearCart()" color="warn" mat-mini-fab matTooltip="Clear your shopping cart">
+          <mat-icon>remove_shopping_cart</mat-icon>
+        </button>
+        <button color="accent" mat-mini-fab matTooltip="Go to checkout">
+          <mat-icon>check_circle_outline</mat-icon>
+        </button>
+      </div>
+      <!--  -->
+    </div>
+  </mat-menu>
+  <!-- /SHOPPING CART MENU -->
+
+  <!-- TODO Profile -->
+  <mat-menu #menuProfile="matMenu">
+
+  </mat-menu>
+</mat-toolbar>

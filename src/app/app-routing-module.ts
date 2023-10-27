@@ -1,4 +1,4 @@
-import { RouterModule, Routes } from "@angular/router";
+
 import { ListCountryComponent } from "./components/country/list-country/list-country.component";
 import { NgModule } from "@angular/core";
 import { AddCountryComponent } from "./components/country/add-country/add-country.component";
@@ -11,16 +11,21 @@ import { ListBookGenreComponent } from "./components/book-genres/list-book-genre
 import { CatalogComponent } from "./components/catalog/catalog.component";
 import { LoginComponent } from "./components/login/login.component";
 import { RegisterComponent } from "./components/register/register.component";
+import { ListBookParametersFormatComponent } from "./components/book-parameters-formats/list-book-parameters-format/list-book-parameters-format.component";
+import { RouterModule, Routes } from "@angular/router";
+import { CartComponent } from "./components/cart/cart.component";
 
 const routes: Routes = [
-  {path: '', redirectTo:'books', pathMatch:'full'},
+  {path: '', redirectTo:'catalog', pathMatch:'full'},
   {path: 'auth/login', component: LoginComponent},
   {path: 'auth/register', component: RegisterComponent},
+  {path: 'book_formats', component: ListBookParametersFormatComponent},
+  {path: 'book_genres', component: ListBookGenreComponent},
   {path: 'books', component: ListBookComponent},
   {path: 'books/add', component: AddEditBookFormComponent},
   {path: 'books/view/:id', component: ViewBookComponent},
   {path: 'books/edit/:id', component: AddEditBookFormComponent},
-  {path: 'book_genres', component: ListBookGenreComponent},
+  {path: 'cart', component: CartComponent},
   {path: 'catalog', component: CatalogComponent},
   {path: 'countries', component: ListCountryComponent},
   {path: 'countries/add', component: AddCountryComponent},

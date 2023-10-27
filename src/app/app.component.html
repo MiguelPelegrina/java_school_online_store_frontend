@@ -1,7 +1,7 @@
-<!-- TODO Sticky -->
+<app-header [cart]="cart"></app-header>
+<!-- TODO Move navigation elements to header component -->
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <ul class="navbar-nav">
-    <!-- TODO Route it -->
     <li class="nav-item">
       <a routerLink="catalog" routerLinkActive="active" class="nav-link" >
         <mat-icon class="icon-display" fontIcon="home">{{title}}</mat-icon>
@@ -18,7 +18,7 @@
 
     <!-- TODO Route it -->
     <li class="nav-item">
-      <a routerLink="formats" routerLinkActive="active" class="nav-link">Formats</a>
+      <a routerLink="book_formats" routerLinkActive="active" class="nav-link">Formats</a>
     </li>
 
     <!-- TODO Route it -->
@@ -35,12 +35,7 @@
     <li class="nav-item">
       <a routerLink="auth/register" routerLinkActive="active" class="nav-link">Register</a>
     </li>
-
-    <!-- TODO Drop down menu with account information, only if a session was created -->
-
   </ul>
-
-  <app-shopping-cart></app-shopping-cart>
 </nav>
 <div>
   <router-outlet></router-outlet>

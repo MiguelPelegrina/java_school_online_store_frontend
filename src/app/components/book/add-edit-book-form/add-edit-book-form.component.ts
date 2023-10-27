@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BookFormatService } from 'src/app/services/book-format/book-format.service';
 import { BookGenreService } from 'src/app/services/book-genre/book-genre.service';
 import { BookService } from 'src/app/services/book/book.service';
-import { BookParametersFormat } from '../../../shared/domain/book/parameters/book-parameters-format/book-parameters-format';
+import { BookFormat } from '../../../shared/domain/book/parameters/book-parameters-format/book-parameters-format';
 import { BookGenre } from '../../../shared/domain/book/book-genre/book-genre';
 import { ImageSelectorComponent } from '../../../shared/components/image-selector/image-selector.component';
 import { getBase64 } from 'src/app/shared/utils/utils';
@@ -22,7 +22,7 @@ export class AddEditBookFormComponent implements OnInit{
 
   protected form!: FormGroup;
 
-  protected formatTypes: BookParametersFormat[] = []
+  protected formatTypes: BookFormat[] = []
 
   protected genreTypes: BookGenre[] = []
 
@@ -173,7 +173,9 @@ export class AddEditBookFormComponent implements OnInit{
           this.selectedFormat = response.parameters.format.name;
           this.selectedGenre = response.genre.name;
 
-          this.image = response.image;
+          if(response.image){
+            this.image = response.image;
+          }
 
           this.form.patchValue(response)
 

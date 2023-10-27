@@ -1,0 +1,113 @@
+<h1 class="text-center">Cart</h1>
+
+<!-- CART WITH CONTENT -->
+<mat-card class="card-container mat-elevation-z8 mx-auto" *ngIf="cart.boughtBooks.length">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 w-100">
+    <!-- IMAGE -->
+    <ng-container matColumnDef="book">
+      <th mat-header-cell *matHeaderCellDef>Book</th>
+      <td mat-cell *matCellDef="let element">
+        <img src="{{element.image}}" alt="book" class="small-image my-5">
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <button color="primary" mat-raised-button routerLink="/catalog">Continue shopping</button>
+      </td>
+    </ng-container>
+    <!-- /IMAGE -->
+
+    <!-- TITLE -->
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef>Title</th>
+      <td mat-cell *matCellDef="let element">
+        <span class="text-truncate d-block w-100">{{element.title}}</span>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+      </td>
+    </ng-container>
+    <!-- /TITLE -->
+
+    <!-- PRICE -->
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef>Price</th>
+      <td mat-cell *matCellDef="let element">
+        {{element.price | currency}}
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+      </td>
+    </ng-container>
+    <!-- /PRICE -->
+
+    <!-- QUANTITY -->
+    <ng-container matColumnDef="quantity">
+      <th mat-header-cell *matHeaderCellDef>Quantity</th>
+      <td mat-cell *matCellDef="let element">
+        <button (click)="onAddQuantity(element)" mat-icon-button>
+          <mat-icon>add</mat-icon>
+        </button>
+
+        <!-- TODO Looks iffy, not in the same row as the buttons -->
+        <span>
+          {{element.quantity}}
+        </span>
+
+        <button (click)="onRemoveQuantity(element)" mat-icon-button>
+          <mat-icon>remove</mat-icon>
+        </button>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+      </td>
+    </ng-container>
+    <!-- /QUANTITY -->
+
+    <!-- TOTAL -->
+    <ng-container matColumnDef="total">
+      <th mat-header-cell *matHeaderCellDef>Total
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ (element.quantity * element.price) | currency}}
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <span class="d-block font-weight-bold py-5 ">
+          {{getTotal(cart.boughtBooks) | currency}}
+        </span>
+      </td>
+    </ng-container>
+    <!-- /TOTAL -->
+
+    <!-- ACTIONS -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>
+        <button (click)="onClearCart()" mat-raised-button class="float-right" color="warn">
+          Clear All
+        </button>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <button (click)="onRemoveFromCart(element)" mat-mini-fab color="warn" class="float-right">
+          <mat-icon>close</mat-icon>
+        </button>
+      </td>
+      <td mat-footer-cell *matFooterCellDef>
+        <button mat-raised-button class="float-right" color="accent">
+          Proceed to checkout
+        </button>
+      </td>
+    </ng-container>
+    <!-- /ACTIONS -->
+
+    <!-- ROWS -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+    <!-- /ROWS -->
+  </table>
+</mat-card>
+<!-- /CART WITH CONTENT -->
+
+<!-- EMPTY CART -->
+<mat-card class="card-container mx-auto p-3 m-3" *ngIf="!cart.boughtBooks.length">
+  <span class="text-white">
+    Your cart is empty
+    <button color="primary" mat-raised-button routerLink="/catalog">Start shopping</button>
+  </span>
+</mat-card>
+<!-- /EMPTY CART -->

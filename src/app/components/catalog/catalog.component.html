@@ -1,6 +1,48 @@
 <!-- TITLE -->
-<h1 class="text-center mt-3">Catalog</h1>
+<h1 class="text-center text-white bg-dark p-3">Catalog</h1>
 <!-- /TITLE -->
+
+<!-- TODO Add search bar component -->
+<!-- CONTAINER -->
+<mat-drawer-container [autosize]="true" class="drawer-container">
+  <!-- DRAWER -->
+  <mat-drawer class="p-3" mode="side" opened>
+    <app-filters (showGenre)="onShowGenre($event)"></app-filters>
+  </mat-drawer>
+  <!-- /DRAWER -->
+
+  <!-- CONTENT -->
+  <mat-drawer-content class="p-3">
+    <app-books-header
+      (columnsCountChange)="onColumnsCountChanges($event)"
+    >
+    </app-books-header>
+    <mat-grid-list
+      gutterSize="16"
+      [cols]="cols"
+      [rowHeight]="rowHeight"
+    >
+      <mat-grid-tile *ngFor="let book of bookList">
+        <!-- TODO Decide which one looks better -->
+        <!-- <app-book-box [ngClass]="{'w-100': cols === 1}" [fullWidthMode]="cols === 1"></app-book-box> -->
+        <app-book-box
+          (addToCart)="onAddToCart($event)"
+          [book]="book"
+          class="w-100"
+          [fullWidthMode]="cols === 1"
+        ></app-book-box>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <app-book-box [ngClass]="{'w-100': cols === 1}" [fullWidthMode]="cols === 1"></app-book-box>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-drawer-content>
+  <!-- /CONTENT -->
+</mat-drawer-container>
+<!-- /CONTAINER -->
+
+
+
 
 <div class="container">
   <app-search-bar [placeholder]="'by title or author'" (searchEvent)="applyFilter($event)"></app-search-bar>

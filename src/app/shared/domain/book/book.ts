@@ -10,6 +10,5 @@ export interface Book {
   parameters: BookParameters;
   stock: number;
   active: boolean;
-  // TODO Correct data type?
   image: string;
 }

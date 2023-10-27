@@ -1,8 +1,9 @@
-input[type="text"] {
-  border: solid 1px var(--primary-color);
-  padding: 10px;
-  border-radius: 8px;
-  margin-right: 4px;
-  display: inline-block;
-  width: 30%;
+/* TODO Might need to change */
+.drawer-container {
+  min-height: 600px;
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  border-left-width: 1px;
+  border-right-width: 1px;
 }

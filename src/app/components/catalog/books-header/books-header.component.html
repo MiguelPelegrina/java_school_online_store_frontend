@@ -1,0 +1,49 @@
+<mat-card class="mb-4">
+  <div class="d-flex justify-content-between">
+    <!-- SORT MENU -->
+    <div>
+      <button mat-button [matMenuTriggerFor]="sortByMenu">
+        Sort by {{sort}}
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+      <mat-menu #sortByMenu="matMenu">
+        <button (click)="onSortUpdated('descending')" mat-menu-item>
+          <mat-icon>arrow_downward</mat-icon>
+          <span>Descending</span>
+        </button>
+        <button (click)="onSortUpdated('ascending')" mat-menu-item>
+          <mat-icon>arrow_upward</mat-icon>
+          <span>Ascending</span>
+        </button>
+      </mat-menu>
+    </div>
+    <!-- /SORT MENU -->
+
+    <!-- SHOW ITEMS MENU -->
+    <div class="d-flex align-items-center">
+      <div>
+        <button mat-button [matMenuTriggerFor]="menu">
+          Show {{ itemsShowCount }}
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button (click)="onItemsUpdated(12)" mat-menu-item>12</button>
+          <button (click)="onItemsUpdated(24)" mat-menu-item>24</button>
+          <button (click)="onItemsUpdated(36)" mat-menu-item>36</button>
+        </mat-menu>
+      </div>
+      <button class="btn btn-default icon" (click)="onColumnsUpdated(1)">
+        <mat-icon color="accent">view_list</mat-icon>
+      </button>
+
+      <button class="btn btn-default icon"  (click)="onColumnsUpdated(3)">
+        <mat-icon color="accent">view_module</mat-icon>
+      </button>
+
+      <button class="btn btn-default icon"  (click)="onColumnsUpdated(4)">
+        <mat-icon color="accent">view_comfy</mat-icon>
+      </button>
+    </div>
+    <!-- /SHOW ITEMS MENU -->
+  </div>
+</mat-card>

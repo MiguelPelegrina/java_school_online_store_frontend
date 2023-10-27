@@ -1,0 +1,16 @@
+p {
+  color: white;
+}
+
+th {
+  text-align: center;
+}
+
+.card-container {
+  max-width: 80rem;
+}
+
+.small-image{
+  width: 200px;
+  height: 250px;
+}

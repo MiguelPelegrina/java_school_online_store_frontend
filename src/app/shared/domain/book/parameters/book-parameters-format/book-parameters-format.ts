@@ -1,3 +1,3 @@
-export interface BookParametersFormat{
+export interface BookFormat{
   name: string,
 }

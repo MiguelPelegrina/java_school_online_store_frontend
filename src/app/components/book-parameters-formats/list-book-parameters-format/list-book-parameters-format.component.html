@@ -1,1 +1,59 @@
-<p>list-book-parameters-format works!</p>
+<!-- PROGRESS BAR -->
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+<!-- /PROGRESS BAR -->
+
+<!-- TITLE -->
+<h1 class="text-center mt-3">List of formats</h1>
+<!-- /TITLE -->
+
+<div class="container mat-elevation-z8">
+  <!-- FLOATING ACTIONS BUTTONS -->
+  <div class="text-right m-2 p-2">
+    <!-- ADD ICON -->
+    <button (click)="addFormat()" mat-mini-fab matTooltip="Add a new format to the list">
+      <mat-icon>add</mat-icon>
+    </button>
+    <!-- /ADD ICON -->
+  </div>
+  <!-- /FLOATING ACTIONS BUTTONS -->
+
+  <!-- SEARCHBAR -->
+  <app-search-bar [placeholder]="'by format'" (searchEvent)="applyFilter($event)"></app-search-bar>
+  <!-- /SEARCHBAR -->
+
+  <!-- TABLE -->
+  <table class="container mat-elevation-z8 table-responsive-sm" mat-table [dataSource]="bookFormatDatasource" matSort>
+    <!-- GENRE -->
+    <ng-container matColumnDef="format">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Title of the book" sortActionDescription="Sort by format name"> Format </th>
+      <td mat-cell *matCellDef="let format"> {{format.name}}</td>
+    </ng-container>
+    <!-- /GENRE -->
+
+    <!-- ACTIONS -->
+    <ng-container matColumnDef="actions">
+      <th class="text-right" mat-header-cell *matHeaderCellDef matTooltip="Delete format"> Actions </th>
+      <td class="text-right" mat-cell *matCellDef="let bookFormat">
+        <mat-icon
+        aria-hidden="false"
+          (click)="deleteBookFormat(bookFormat.name)"
+          color="warn"
+          fontIcon="delete"
+          matTooltip="Delete format"
+          >
+        </mat-icon>
+      </td>
+    </ng-container>
+    <!-- /ACTIONS -->
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsOfBookFormats; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsOfBookFormats;"></tr>
+  </table>
+  <!-- /TABLE -->
+
+  <!-- PAGINATOR -->
+  <mat-paginator class="mat-elevation-z8" [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons>
+  </mat-paginator>
+  <!-- /PAGINATOR -->
+</div>
