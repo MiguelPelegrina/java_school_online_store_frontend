@@ -1,8 +1,12 @@
 <!-- TITLE -->
-<h1 class="text-center text-white bg-dark p-3">Catalog</h1>
+<h1 class="text-center p-3">Catalog</h1>
 <!-- /TITLE -->
 
-<!-- TODO Add search bar component -->
+<!-- TODO Add funcionality -->
+<div class="container">
+  <app-search-bar [placeholder]="'by title or author'" (searchEvent)="applyFilter($event)"></app-search-bar>
+</div>
+
 <!-- CONTAINER -->
 <mat-drawer-container [autosize]="true" class="drawer-container">
   <!-- DRAWER -->
@@ -22,7 +26,7 @@
       [cols]="cols"
       [rowHeight]="rowHeight"
     >
-      <mat-grid-tile *ngFor="let book of bookList">
+      <mat-grid-tile *ngFor="let book of filteredBookList">
         <!-- TODO Decide which one looks better -->
         <!-- <app-book-box [ngClass]="{'w-100': cols === 1}" [fullWidthMode]="cols === 1"></app-book-box> -->
         <app-book-box
@@ -40,15 +44,3 @@
   <!-- /CONTENT -->
 </mat-drawer-container>
 <!-- /CONTAINER -->
-
-
-
-
-<div class="container">
-  <app-search-bar [placeholder]="'by title or author'" (searchEvent)="applyFilter($event)"></app-search-bar>
-
-  <div class="d-flex flex-row justify-content-between">
-    <app-book-card *ngFor="let book of filteredBookList" [book]="book"></app-book-card>
-  </div>
-</div>
-

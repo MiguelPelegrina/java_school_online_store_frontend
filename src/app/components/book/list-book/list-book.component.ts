@@ -6,7 +6,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { BookService } from 'src/app/services/book/book.service';
 import { Book } from 'src/app/shared/domain/book/book';
-import { handleErrorStatusResponse } from 'src/app/shared/utils/utils';
 
 @Component({
   selector: 'app-list-book',
@@ -125,10 +124,6 @@ export class ListBookComponent implements OnInit {
         this.bookDatasource.data = this.books;
 
         this.isLoading = false;
-      },
-      // TODO Error handling
-      error: (error: any) => {
-        handleErrorStatusResponse(error, this.router);
       }
     });
   }

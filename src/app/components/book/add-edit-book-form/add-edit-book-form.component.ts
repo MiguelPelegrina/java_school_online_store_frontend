@@ -18,8 +18,6 @@ import Swal from 'sweetalert2';
 })
 export class AddEditBookFormComponent implements OnInit{
   // Fields
-  protected image: string | ArrayBuffer | null = '';
-
   protected form!: FormGroup;
 
   protected formatTypes: BookFormat[] = []
@@ -27,6 +25,8 @@ export class AddEditBookFormComponent implements OnInit{
   protected genreTypes: BookGenre[] = []
 
   protected id?: number;
+
+  protected image: string | ArrayBuffer | null = '';
 
   protected isAddMode?: boolean;
 
@@ -108,6 +108,14 @@ export class AddEditBookFormComponent implements OnInit{
     return this.form.controls;
   }
 
+  protected getErrorMessage(value: string){
+    if(this.form.controls[value].hasError('required')){
+      return "You must enter a valid value";
+    }
+
+    return this.form.controls[value].hasError(value) ? 'Not a valid value' : '';
+  }
+
   protected onFileSelected(event: any): void{
     const inputElement: HTMLInputElement = event.target;
 
@@ -122,6 +130,11 @@ export class AddEditBookFormComponent implements OnInit{
         });
       }
     }
+  }
+
+  protected resetImage(){
+    this.image = '';
+    this.form.get('image')?.setValue('');
   }
 
   /**

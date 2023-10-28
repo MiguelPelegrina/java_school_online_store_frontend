@@ -1,7 +1,7 @@
 <!-- TODO
   - Validation of author and format with f['parameters'] does not seem right
   - Implement image selector
-  - Implement material form?
+  - Fix color of container
 -->
 
 <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
@@ -9,10 +9,10 @@
 <h2 class="text-center" *ngIf="isAddMode">Add a new book</h2>
 <h2 class="text-center" *ngIf="!isAddMode">Edit book</h2>
 
-<div class="container">
+<div class="container form-container mat-elevation-z8">
   <form [formGroup]="form" (ngSubmit)="onSubmit()" #bookForm="ngForm">
     <div class="form-row" [hidden]="true">
-      <!-- TODO Not what to do with this, need to exist for edit, but dont need to be visible? -->
+      <!-- TODO Not sure what to do with this, need to exist for edit, but dont need to be visible? -->
       <input class="formControlName" formControlName="id"  type="text">
       <div formGroupName="parameters">
         <input class="formControlName" formControlName="id" type="text">
@@ -24,63 +24,54 @@
       <!-- COLUMN -->
       <div class="form-group col-sm">
         <!-- TITLE -->
-        <label>Title</label>
-        <input
-        class="form-control"
-        formControlName="title"
-        [ngClass]="{'is-invalid': submitted && f['title'].errors}"
-        placeholder="Enter the title"
-        type="text"
-        >
+        <mat-form-field appearance="fill">
+          <mat-label>Title</mat-label>
+          <input
+            formControlName="title"
+            matInput
+            placeholder="Enter the title"
+            required
+            type="text"
+          >
+          <mat-error *ngIf="f['title'].invalid">{{getErrorMessage('title')}}</mat-error>
+        </mat-form-field>
         <!-- /TITLE -->
-
-        <!-- REQUIRED -->
-        <div *ngIf="submitted && f['title'].errors" class="invalid-feedback">
-          <div *ngIf="f['title'].errors['required']">Title is required</div>
-        </div>
-        <!-- /REQUIRED -->
       </div>
       <!-- /COLUMN -->
 
       <!-- COLUMN -->
       <div class="form-group col-sm" formGroupName="parameters">
         <!-- AUTHOR -->
-        <label>Author</label>
-        <input
-          class="form-control"
-          formControlName="author"
-          [ngClass]="{'is-invalid': submitted && f['parameters'].errors}"
-          placeholder="Enter the author"
-          type="text"
-        >
+        <mat-form-field appearance="fill">
+          <mat-label>Author</mat-label>
+          <input
+            formControlName="author"
+            matInput
+            placeholder="Enter the author"
+            required
+            type="text"
+          >
+          <mat-error *ngIf="f['parameters'].invalid">{{getErrorMessage('parameters')}}</mat-error>
+        </mat-form-field>
         <!-- /AUTHOR -->
-
-        <!-- REQUIRED -->
-        <div *ngIf="submitted && f['parameters'].errors" class="invalid-feedback">
-          <div *ngIf="f['parameters'].errors['required']">Author is required</div>
-        </div>
-        <!-- /REQUIRED -->
       </div>
       <!-- /COLUMN -->
 
       <!-- COLUMN -->
       <div class="form-group col-sm">
         <!-- ISBN -->
-        <label>ISBN</label>
-        <input
-        class="form-control"
-        formControlName="isbn"
-        [ngClass]="{'is-invalid': submitted && f['isbn'].errors}"
-        placeholder="Enter the ISBN"
-        type="text"
-        >
+        <mat-form-field appearance="fill">
+          <mat-label>ISBN</mat-label>
+          <input
+            formControlName="isbn"
+            matInput
+            placeholder="Enter the ISBN"
+            required
+            type="text"
+          >
+          <mat-error *ngIf="f['isbn'].invalid">{{getErrorMessage('isbn')}}</mat-error>
+        </mat-form-field>
         <!-- /ISBN -->
-
-        <!-- REQUIRED -->
-        <div *ngIf="submitted && f['isbn'].errors" class="invalid-feedback">
-          <div *ngIf="f['isbn'].errors['required']">ISBN is required</div>
-        </div>
-        <!-- /REQUIRED -->
       </div>
       <!-- /COLUMN -->
 
@@ -141,7 +132,6 @@
     <div class="form-row">
       <!-- COLUMN -->
       <div class="form-group col-sm">
-        <!-- TODO Limit input to two decimal -> .00 -->
         <!-- TODO Table for different prices depending on currencies
             Option 1: Create a auto incremental table -> one row with empty fields for price and currency.
             If the fields of the row are set, generate a new row with empty. <-- I favor this option
@@ -152,44 +142,36 @@
             the setted one to the others?
           -->
           <!-- PRICE -->
-          <div>
-            <label>Price</label>
-          </div>
-          <input
-          class="form-control"
-          formControlName="price"
-          [ngClass]="{ 'is-invalid': submitted && f['price'].errors }"
-          placeholder="Enter the price"
-          type="number"
-          >
-          <!-- /PRICE -->
+          <mat-form-field floatLabel="always">
+              <mat-label>Price</mat-label>
+            <input
+              appTwoDigitDecimalNumber
+              formControlName="price"
+              matInput
+              placeholder="0.00"
+              required
+            >
+            <!-- TODO Fix color -->
+            <span class="text-white" matTextSuffix>€&nbsp;</span>
+            <!-- /PRICE -->
 
-          <!-- REQUIRED -->
-          <div *ngIf="submitted && f['price'].errors" class="invalid-feedback">
-            <div *ngIf="f['price'].errors['required']">Price is required</div>
-          </div>
-          <!-- /REQUIRED -->
+            <mat-error *ngIf="f['price'].invalid">{{getErrorMessage('price')}}</mat-error>
+          </mat-form-field>
         </div>
         <!-- /COLUMN -->
 
         <!-- COLUMN -->
         <div class="form-group col-sm">
-          <div>
-            <label>Stock</label>
-          </div>
-          <input
-          class="form-control"
-          formControlName="stock"
-          [ngClass]="{ 'is-invalid': submitted && f['stock'].errors }"
-          placeholder="Enter the stock"
-          type="number"
-          >
-
-          <!-- REQUIRED -->
-          <div *ngIf="submitted && f['stock'].errors" class="invalid-feedback">
-            <div *ngIf="f['stock'].errors['required']">Stock is required</div>
-          </div>
-          <!-- /REQUIRED -->
+          <mat-form-field>
+            <mat-label>Stock</mat-label>
+            <input
+              formControlName="stock"
+              matInput
+              placeholder="Enter the stock"
+              type="number"
+            >
+            <mat-error *ngIf="form.controls['stock'].invalid">{{getErrorMessage('stock')}}</mat-error>
+          </mat-form-field>
         </div>
         <!-- /COLUMN -->
       </div>
@@ -202,11 +184,16 @@
           <div>
             <label>Book cover</label>
           </div>
-          <input type="file" class="file-input" (change)="onFileSelected($event)">
+          <button (click)="fileInput.click()" mat-raised-button type="button">Choose a book cover</button>
+          <input hidden type="file" (change)="onFileSelected($event)" #fileInput id="file">
+
           <div class="m-3" >
             <img class="w-25 h-25" *ngIf="this.image" [src]="this.image" alt="Uploaded File">
           </div>
-          <!-- TODO Add a remove image button -->
+
+          <div>
+            <button mat-raised-button (click)="resetImage()">Remove image</button>
+          </div>
         </div>
       </div>
     <!-- /ROW-->
@@ -214,15 +201,15 @@
     <!-- ROW-->
     <div class="d-flex justify-content-around form-group col-sm">
       <div>
-        <label class="mr-3">Active</label>
+        <span class="p-3 text-white">Available for sale</span>
         <mat-slide-toggle formControlName="active"></mat-slide-toggle>
       </div>
 
       <div>
-        <button class="btn btn-success" [disabled]="form.invalid">
+        <button mat-raised-button color="primary" type="submit">
           Save
         </button>
-        <a routerLink="/books" class="btn btn-link">Cancel</a>
+        <a mat-raised-button color="warn" routerLink="/books">Cancel</a>
       </div>
     </div>
     <!-- /ROW-->

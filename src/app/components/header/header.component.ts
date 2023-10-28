@@ -10,9 +10,12 @@ import { Cart } from 'src/app/shared/domain/cart/cart';
 })
 export class HeaderComponent implements OnInit{
   // Fields
-  private _cart: Cart = { boughtBooks: [] };
+  @Input()
+  pageTitle: string = '';
 
   protected booksQuantity = 0;
+
+  private _cart: Cart = { boughtBooks: [] };
 
   constructor(private cartService: CartService){}
 

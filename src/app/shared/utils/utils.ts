@@ -1,4 +1,5 @@
 import { Router } from "@angular/router";
+import Swal from "sweetalert2";
 
 /**
  * Converts an image file to a Base64-encoded string.
@@ -21,4 +22,6 @@ export function handleErrorStatusResponse(error: any, router: Router){
       alert("You need to login to continue");
       break;
   }
+
+  Swal.fire('An error ocurred, contact with your support', '', 'info')
 }

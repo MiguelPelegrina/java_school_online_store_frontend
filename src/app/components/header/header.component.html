@@ -4,20 +4,26 @@
   - Optional: If large width -> filled navbar with menu items
 -->
 <mat-toolbar class="d-flex justify-content-between sticky-top">
-    <div class="d-flex">
-      <!-- TODO Only for employees and admin -->
-      <!-- NAVIGATION -->
-      <button mat-icon-button [matMenuTriggerFor]="menuNavigation">
-        <mat-icon>menu</mat-icon>
-      </button>
-      <!-- /NAVIGATION -->
+  <div class="d-flex">
+    <!-- TODO Only for employees and admin -->
+    <!-- NAVIGATION -->
+    <button mat-icon-button [matMenuTriggerFor]="menuNavigation">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <!-- /NAVIGATION -->
 
-      <!-- HOME -->
-      <a mat-icon-button routerLink="catalog" routerLinkActive="active" class="nav-link" >
-        <mat-icon class="icon icon-display" fontIcon="home"></mat-icon>
-      </a>
-      <!-- /HOME -->
-    </div>
+    <!-- HOME -->
+    <a mat-icon-button routerLink="catalog" routerLinkActive="active" class="nav-link" >
+      <mat-icon class="icon icon-display" fontIcon="home"></mat-icon>
+    </a>
+    <!-- /HOME -->
+  </div>
+
+  <div>
+    <h1>
+      {{pageTitle}}
+    </h1>
+  </div>
 
   <!-- TODO Add other navigation elements -->
   <div>

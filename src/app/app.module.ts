@@ -46,7 +46,9 @@ import { AddCountryComponent } from './components/country/add-country/add-countr
 import { FiltersComponent } from './components/catalog/filters/filters.component';
 import { BookBoxComponent } from './components/catalog/book-box/book-box.component';
 import { CartComponent } from './components/cart/cart.component';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatOptionModule } from '@angular/material/core';
+import { TwoDigitDecimalNumberDirective } from './shared/utils/twoDigitDecimalNumber'
 
 @NgModule({
   declarations: [
@@ -54,8 +56,13 @@ import { CartComponent } from './components/cart/cart.component';
     AddEditBookFormComponent,
     AppComponent,
     BookCardComponent,
+    BookBoxComponent,
+    BooksHeaderComponent,
+    CartComponent,
     CatalogComponent,
     DetailCountryComponent,
+    FiltersComponent,
+    HeaderComponent,
     ImageSelectorComponent,
     ListBookComponent,
     ListBookGenreComponent,
@@ -64,13 +71,9 @@ import { CartComponent } from './components/cart/cart.component';
     LoginComponent,
     RegisterComponent,
     SearchBarComponent,
+    TwoDigitDecimalNumberDirective,
     UpdateCountryComponent,
     ViewBookComponent,
-    HeaderComponent,
-    BooksHeaderComponent,
-    FiltersComponent,
-    BookBoxComponent,
-    CartComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -87,9 +90,10 @@ import { CartComponent } from './components/cart/cart.component';
     MatIconModule,
     MatInputModule,
     MatListModule,
+    MatOptionModule,
     MatPaginatorModule,
     MatProgressBarModule,
-    MatGridListModule,
+    MatProgressSpinnerModule,
     MatMenuModule,
     MatSidenavModule,
     MatSlideToggleModule,

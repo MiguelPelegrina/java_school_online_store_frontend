@@ -9,8 +9,9 @@ import { CartService } from './services/cart/cart.service';
 })
 export class AppComponent implements OnInit{
   // Fields
+  cart: Cart = {boughtBooks: []};
+
   title = 'Online Bookstore';
-  cart: Cart = {boughtBooks: []}
 
   constructor(private cartService: CartService) {}
 

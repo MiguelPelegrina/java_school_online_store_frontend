@@ -6,7 +6,13 @@
         <div class="container">
           <mat-form-field appearance="fill">
             <mat-label>Enter your email</mat-label>
-            <input formControlName="email" matInput placeholder="E.g user@example.com"  required type="text">
+            <input
+              formControlName="email"
+              matInput
+              placeholder="E.g user@example.com"
+              required
+              type="text"
+            >
             <mat-error *ngIf="form.controls['email'].invalid">{{getErrorMessage()}}</mat-error>
           </mat-form-field>
 

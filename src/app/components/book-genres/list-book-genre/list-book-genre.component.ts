@@ -54,7 +54,7 @@ export class ListBookGenreComponent implements OnInit, OnDestroy{
   }
 
   /**
-   * A lifecycle hook that is called when a directive, pipe, or service is destroyed. Use for any custom cleanup that needs to occur when the instance is destroyed.
+   * A lifecycle hook that is called when a directive, pipe, or service is destroyed. Used for any custom cleanup that needs to occur when the instance is destroyed.
    */
   public ngOnDestroy(): void {
     this.bookGenreSubscription?.unsubscribe();

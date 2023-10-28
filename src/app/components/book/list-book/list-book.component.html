@@ -19,7 +19,7 @@
 <h1 class="text-center mt-3">List of books</h1>
 <!-- /TITLE -->
 
-<div class="container mat-elevation-z8">
+<div class="container mat-elevation-z8 pb-3">
   <!-- FLOATING ACTIONS BUTTONS -->
   <div class="text-right m-2">
     <!-- ADD BOOK ICON -->
@@ -41,7 +41,12 @@
   <!-- /SEARCHBAR -->
 
     <!-- TABLE -->
-  <table class="container mat-elevation-z8 table-responsive-sm" mat-table [dataSource]="bookDatasource" matSort>
+  <table class="container mat-elevation-z8 table-responsive-sm"
+    [dataSource]="bookDatasource"
+    matSort
+    mat-table
+    *ngIf="!isLoading"
+  >
     <!-- TITLE -->
     <ng-container matColumnDef="title">
       <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Title of the book" sortActionDescription="Sort by title"> Title </th>
