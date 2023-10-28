@@ -1,10 +1,27 @@
-<!-- TODO Make it sticky -->
+<!-- TODO
+  - Login and register in profile
+  - if small width -> mat sidenav with menu
+  - Optional: If large width -> filled navbar with menu items
+-->
 <mat-toolbar class="d-flex justify-content-between sticky-top">
-  <a routerLink="catalog" routerLinkActive="active" class="nav-link" >
-    <mat-icon class="icon-display" fontIcon="home"></mat-icon>
-  </a>
+    <div class="d-flex">
+      <!-- TODO Only for employees and admin -->
+      <!-- NAVIGATION -->
+      <button mat-icon-button [matMenuTriggerFor]="menuNavigation">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <!-- /NAVIGATION -->
+
+      <!-- HOME -->
+      <a mat-icon-button routerLink="catalog" routerLinkActive="active" class="nav-link" >
+        <mat-icon class="icon icon-display" fontIcon="home"></mat-icon>
+      </a>
+      <!-- /HOME -->
+    </div>
+
   <!-- TODO Add other navigation elements -->
   <div>
+    <!-- CART MENU -->
     <button mat-icon-button [matMenuTriggerFor]="menuCart">
       <mat-icon
       [matBadge]="booksQuantity"
@@ -12,10 +29,37 @@
       matBadgeColor="warn"
       >shopping_cart</mat-icon>
     </button>
+    <!-- /CART MENU -->
+
+    <!-- PROFILE MENU -->
     <button mat-icon-button [matMenuTriggerFor]="menuProfile">
       <mat-icon>person</mat-icon>
     </button>
+    <!-- /PROFILE MENU -->
   </div>
+
+  <!-- NAVIGATION MENU -->
+  <mat-menu #menuNavigation="matMenu">
+    <div class="d-flex flex-column">
+      <button mat-menu-item [matMenuTriggerFor]="menuProducts">Products</button>
+      <button mat-menu-item>Orders</button>
+    </div>
+  </mat-menu>
+  <!-- /NAVIGATION MENU -->
+
+  <!-- PRODUCTS MENU ITEM -->
+  <mat-menu #menuProducts="matMenu">
+    <button mat-menu-item>
+      <a routerLink="books" routerLinkActive="active" class="text-white nav-link">Books</a>
+    </button>
+    <button mat-menu-item>
+      <a routerLink="book_genres" routerLinkActive="active" class="text-white nav-link">Genres</a>
+    </button>
+    <button mat-menu-item>
+      <a routerLink="book_formats" routerLinkActive="active" class="text-white nav-link">Formats</a>
+    </button>
+  </mat-menu>
+  <!-- /PRODUCTS MENU ITEM -->
 
   <!-- SHOPPING CART MENU -->
   <mat-menu #menuCart="matMenu">
@@ -53,6 +97,47 @@
 
   <!-- TODO Profile -->
   <mat-menu #menuProfile="matMenu">
+    <!-- TODO Only if not logged in -->
+    <div class="d-flex flex-column m-1 p-1">
+      <!-- LOGIN -->
+      <button mat-button>
+        <a routerLink="auth/login" routerLinkActive="active" class="text-white nav-link">
+          Login
+        </a>
+      </button>
+      <!-- /LOGIN -->
 
+      <!-- REGISTER -->
+      <button mat-button>
+        <a routerLink="auth/register" routerLinkActive="active" class="text-white nav-link">
+          Register
+        </a>
+      </button>
+      <!-- /REGISTER -->
+
+      <!-- TODO Only if logged in-->
+      <!-- ORDERS -->
+      <button mat-button>
+        <a routerLink="" routerLinkActive="active" class="text-white nav-link">
+          My orders
+        </a>
+      </button>
+      <!-- /ORDERS -->
+
+      <!-- PROFILE -->
+      <button mat-button>
+        <a routerLink="" routerLinkActive="active" class="text-white nav-link">
+          My profile
+        </a>
+      </button>
+      <!-- /PROFILE -->
+
+      <!-- TODO Only if logged in -->
+      <!-- LOGOUT -->
+      <button mat-button>
+        Logout
+      </button>
+      <!-- /LOGOUT -->
+    </div>
   </mat-menu>
 </mat-toolbar>
