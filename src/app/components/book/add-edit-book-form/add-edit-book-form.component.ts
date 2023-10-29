@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild, forwardRef } from '@angular/core';
+import { FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookFormatService } from 'src/app/services/book-format/book-format.service';
 import { BookGenreService } from 'src/app/services/book-genre/book-genre.service';
@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-add-edit-book-form',
   templateUrl: './add-edit-book-form.component.html',
-  styleUrls: ['./add-edit-book-form.component.css']
+  styleUrls: ['./add-edit-book-form.component.css'],
 })
 export class AddEditBookFormComponent implements OnInit{
   // Fields

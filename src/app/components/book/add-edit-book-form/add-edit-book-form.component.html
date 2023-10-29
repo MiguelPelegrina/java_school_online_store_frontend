@@ -83,46 +83,32 @@
       <!-- COLUMN -->
       <div class="form-group col-sm">
         <!-- GENRE -->
-        <div>
-          <label>Genre</label>
-        </div>
-        <!-- TODO Select current value -->
-        <select class="form-control" formControlName="genre" [ngClass]="{ 'is-invalid': submitted && f['genre'].errors}">
-          <option disabled *ngIf="isAddMode" value="">Select a genre</option>
-          <option *ngFor="let genre of genreTypes" [selected]="genre.name == this.selectedGenre" [value]="genre.name">
-            {{genre.name}}
-          </option>
-        </select>
+        <mat-form-field>
+          <mat-label>Genre</mat-label>
+          <mat-select formControlName="genre" [(value)]="selectedGenre">
+            <mat-option *ngFor="let genre of genreTypes" [value]="genre.name">
+              {{genre.name}}
+            </mat-option>
+            <mat-error *ngIf="f['genre'].invalid">{{getErrorMessage('genre')}}</mat-error>
+          </mat-select>
+        </mat-form-field>
         <!-- /GENRE -->
-
-        <!-- REQUIRED -->
-        <div *ngIf="submitted && f['genre'].errors" class="invalid-feedback">
-          <div *ngIf="f['genre'].errors['required']">Genre is required</div>
-        </div>
-        <!-- /REQUIRED -->
       </div>
       <!-- /COLUMN -->
 
       <!-- COLUMN -->
       <div class="form-group col-sm" formGroupName="parameters">
         <!-- FORMAT -->
-        <div>
-          <label>Format</label>
-        </div>
-        <!-- TODO Select current value -->
-        <select class="form-control" formControlName="format" [ngClass]="{ 'is-invalid': submitted && f['parameters'].errors}">
-          <option disabled *ngIf="isAddMode" value="">Select a format</option>
-          <option *ngFor="let format of formatTypes" [selected]="format.name == this.selectedFormat" [value]="format.name">
-            {{format.name}}
-          </option>
-        </select>
+        <mat-form-field>
+          <mat-label>Format</mat-label>
+          <mat-select formControlName="format" [(value)]="selectedFormat">
+            <mat-option *ngFor="let format of formatTypes" [value]="format.name">
+              {{format.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="f['parameters'].invalid">{{getErrorMessage('parameters')}}</mat-error>
+        </mat-form-field>
         <!-- /FORMAT -->
-
-        <!-- REQUIRED -->
-        <div *ngIf="submitted && f['parameters'].errors" class="invalid-feedback">
-          <div *ngIf="f['parameters'].errors['required']">Format is required</div>
-        </div>
-        <!-- /REQUIRED -->
       </div>
       <!-- /COLUMN -->
     </div>
@@ -177,7 +163,6 @@
       </div>
       <!-- /ROW -->
 
-      <!-- TODO Save image with the book -->
       <!-- ROW-->
       <div class="row">
         <div class="form-group col-sm">

@@ -49,6 +49,7 @@ import { CartComponent } from './components/cart/cart.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatOptionModule } from '@angular/material/core';
 import { TwoDigitDecimalNumberDirective } from './shared/utils/twoDigitDecimalNumber'
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -95,6 +96,7 @@ import { TwoDigitDecimalNumberDirective } from './shared/utils/twoDigitDecimalNu
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatMenuModule,
+    MatSelectModule,
     MatSidenavModule,
     MatSlideToggleModule,
     MatSnackBarModule,
