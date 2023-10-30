@@ -20,8 +20,7 @@ export class BooksHeaderComponent{
 
   protected itemsShowCount = 12;
 
-  // Public methods
-
+  //Methods
   // Protected methods
   protected onColumnsUpdated(colsNum: number): void{
     this.columnsCountChange.emit(colsNum);

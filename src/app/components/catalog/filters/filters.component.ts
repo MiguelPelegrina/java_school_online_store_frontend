@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { BookGenreService } from 'src/app/services/book-genre/book-genre.service';
+import { BookGenreService } from 'src/app/services/book/genre/book-genre.service';
 import { BookGenre } from 'src/app/shared/domain/book/book-genre/book-genre';
 
 @Component({

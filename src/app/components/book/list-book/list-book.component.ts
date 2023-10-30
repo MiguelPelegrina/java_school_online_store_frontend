@@ -118,7 +118,9 @@ export class ListBookComponent implements OnInit {
   private getAllBooks(){
     this.bookService.getAll().subscribe({
       next: (bookList: Book[]) => {
+        // TODO Remove
         this.sortBookListByActivityName(bookList);
+
         this.books = bookList;
 
         this.bookDatasource.data = this.books;

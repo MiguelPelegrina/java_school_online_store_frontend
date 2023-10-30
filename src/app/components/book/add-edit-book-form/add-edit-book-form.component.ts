@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, forwardRef } from '@angular/core';
 import { FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BookFormatService } from 'src/app/services/book-format/book-format.service';
-import { BookGenreService } from 'src/app/services/book-genre/book-genre.service';
+import { BookFormatService } from 'src/app/services/book/format/book-format.service';
+import { BookGenreService } from 'src/app/services/book/genre/book-genre.service';
 import { BookService } from 'src/app/services/book/book.service';
 import { BookFormat } from '../../../shared/domain/book/parameters/book-parameters-format/book-parameters-format';
 import { BookGenre } from '../../../shared/domain/book/book-genre/book-genre';

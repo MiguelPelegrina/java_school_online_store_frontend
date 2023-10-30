@@ -19,11 +19,15 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   protected cols = 3;
 
-  protected filteredBookList: Book [] = [];
+  protected count = '12';
+
+  protected filter = '';
 
   protected genre?: string;
 
   protected rowHeight = ROWS_HEIGHT[this.cols];
+
+  protected sort = 'desc';
 
   /**
    * Constructor
@@ -40,8 +44,6 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.getBooks();
-
-    this.filteredBookList = this.bookList;
   }
 
   /**
@@ -49,37 +51,39 @@ export class CatalogComponent implements OnInit, OnDestroy {
    * @param filter - Value of the input field
    */
   protected applyFilter(filter: string){
-    if(!filter){
-      this.filteredBookList = this.bookList;
-    }
-
-    this.filteredBookList = this.bookList.filter(
-      book => book.title.toLowerCase().includes(filter.toLowerCase())
-    )
+    this.filter = filter;
+    this.getBooks();
   }
 
   protected onAddToCart(book: Book): void {
     this.cartService.addToCart({...book, quantity: 1});
   }
 
-  protected onColumnsCountChanges(colsNumber: number): void{
+  protected onColumnsCountChange(colsNumber: number): void{
     this.cols = colsNumber;
     this.rowHeight = ROWS_HEIGHT[this.cols];
+  }
+
+  protected onItemsCountChange(newCount: number): void{
+    this.count = newCount.toString();
+    this.getBooks();
   }
 
   protected onShowGenre(genre: string): void{
     this.genre = genre;
   }
 
+  protected onSortChange(newSort: string) {
+    this.sort = newSort;
+    this.getBooks();
+  }
+
+  // TODO Add parameters
   private getBooks(): void{
-    this.bookSubscription = this.bookService.getAll()
-      .subscribe((books) => {
-      // TODO Create endpoints to only receive active ones?
-        books.map(book => {
-          if(book.active){
-            this.bookList.push(book);
-          }
-        });
-      });
+    this.bookSubscription = this.bookService.getAll(true, this.filter).subscribe({
+      next: (bookList: Book[]) => {
+        this.bookList = bookList;
+      }
+    });
   }
 }

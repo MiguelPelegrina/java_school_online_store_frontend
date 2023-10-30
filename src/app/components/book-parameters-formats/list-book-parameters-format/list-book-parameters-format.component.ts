@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
-import { BookFormatService } from 'src/app/services/book-format/book-format.service';
+import { BookFormatService } from 'src/app/services/book/format/book-format.service';
 import { BookFormat } from 'src/app/shared/domain/book/parameters/book-parameters-format/book-parameters-format';
 import Swal from 'sweetalert2';
 

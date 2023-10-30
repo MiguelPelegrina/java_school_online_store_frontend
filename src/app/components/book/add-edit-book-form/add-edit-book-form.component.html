@@ -3,14 +3,16 @@
   - Implement image selector
   - Fix color of container
 -->
-
+<!-- LOADING -->
 <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+<!-- /LOADING -->
 
 <h2 class="text-center" *ngIf="isAddMode">Add a new book</h2>
 <h2 class="text-center" *ngIf="!isAddMode">Edit book</h2>
 
 <div class="container form-container mat-elevation-z8">
   <form [formGroup]="form" (ngSubmit)="onSubmit()" #bookForm="ngForm">
+    <!-- IDENTIFIER -->
     <div class="form-row" [hidden]="true">
       <!-- TODO Not sure what to do with this, need to exist for edit, but dont need to be visible? -->
       <input class="formControlName" formControlName="id"  type="text">
@@ -19,6 +21,8 @@
         <input class="formControlName" formControlName="active" type="text">
       </div>
     </div>
+    <!-- /IDENTIFIER -->
+
     <!-- ROW -->
     <div class="form-row">
       <!-- COLUMN -->
