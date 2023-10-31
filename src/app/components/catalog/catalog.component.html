@@ -2,13 +2,8 @@
 <h1 class="text-center p-3">Catalog</h1>
 <!-- /TITLE -->
 
-<!-- TODO Add funcionality -->
-<div class="container">
-  <app-search-bar [placeholder]="'by title or author'" (searchEvent)="applyFilter($event)"></app-search-bar>
-</div>
-
 <!-- CONTAINER -->
-<mat-drawer-container [autosize]="true" class="drawer-container">
+<mat-drawer-container [autosize]="true" class="drawer-container mat-elevation-z8">
   <!-- DRAWER -->
   <mat-drawer class="p-3" mode="side" opened>
     <app-filters (showGenre)="onShowGenre($event)"></app-filters>
@@ -17,12 +12,24 @@
 
   <!-- CONTENT -->
   <mat-drawer-content class="p-3">
+    <app-search-bar [placeholder]="'by title or author'" (searchEvent)="applyFilter($event)"></app-search-bar>
+
     <app-books-header
       (columnsCountChange)="onColumnsCountChange($event)"
-      (itemsCountChange)="onItemsCountChange($event)"
       (sortChange)="onSortChange($event)"
     >
     </app-books-header>
+
+    <mat-paginator
+      [length]="totalPages"
+      [pageIndex]="currentPage"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="onPageChange($event)"
+      [showFirstLastButtons]="true"
+    >
+    </mat-paginator>
+
     <mat-grid-list
       gutterSize="16"
       [cols]="cols"
@@ -42,6 +49,14 @@
         <app-book-box [ngClass]="{'w-100': cols === 1}" [fullWidthMode]="cols === 1"></app-book-box>
       </mat-grid-tile>
     </mat-grid-list>
+
+    <mat-paginator
+      [length]="totalPages"
+      [pageIndex]="currentPage"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="onPageChange($event)">
+    </mat-paginator>
   </mat-drawer-content>
   <!-- /CONTENT -->
 </mat-drawer-container>

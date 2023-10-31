@@ -10,15 +10,15 @@ export class BooksHeaderComponent{
   @Output()
   columnsCountChange = new EventEmitter<number>();
 
-  @Output()
-  itemsCountChange = new EventEmitter<number>();
+  // @Output()
+  // itemsCountChange = new EventEmitter<number>();
 
   @Output()
   sortChange = new EventEmitter<string>();
 
-  protected sort = 'descending';
+  protected sort = 'desc';
 
-  protected itemsShowCount = 12;
+  // protected itemsShowCount = 12;
 
   //Methods
   // Protected methods
@@ -26,10 +26,10 @@ export class BooksHeaderComponent{
     this.columnsCountChange.emit(colsNum);
   }
 
-  protected onItemsUpdated(count: number): void{
-    this.itemsShowCount = count;
-    this.itemsCountChange.emit(count)
-  }
+  // protected onItemsUpdated(count: number): void{
+  //   this.itemsShowCount = count;
+  //   this.itemsCountChange.emit(count)
+  // }
 
   protected onSortUpdated(newSort: string): void{
     this.sort = newSort;

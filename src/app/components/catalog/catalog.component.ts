@@ -3,6 +3,7 @@ import { Book } from 'src/app/shared/domain/book/book';
 import { BookService } from 'src/app/services/book/book.service';
 import { CartService } from 'src/app/services/cart/cart.service';
 import { Subscription } from 'rxjs';
+import { PageEvent } from '@angular/material/paginator';
 
 const ROWS_HEIGHT: { [id: number]: number} = { 1: 400, 3: 335, 4: 350 };
 
@@ -15,19 +16,27 @@ export class CatalogComponent implements OnInit, OnDestroy {
   // Fields
   protected bookList: Book[] = [];
 
-  protected bookSubscription?: Subscription ;
+  protected bookSubscription?: Subscription;
 
   protected cols = 3;
 
-  protected count = '12';
+  protected currentPage = 0;
 
   protected filter = '';
 
   protected genre?: string;
 
+  protected pageEvent?: PageEvent;
+
+  protected pageSize = 12;
+
+  protected pageSizeOptions: number[] = [3, 6, 9, 12, 24, 36];
+
   protected rowHeight = ROWS_HEIGHT[this.cols];
 
-  protected sort = 'desc';
+  protected sort = 'asc';
+
+  protected totalPages: number = 0;
 
   /**
    * Constructor
@@ -43,6 +52,10 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+
+  }
+
+  public ngAfterViewInit(): void{
     this.getBooks();
   }
 
@@ -64,8 +77,10 @@ export class CatalogComponent implements OnInit, OnDestroy {
     this.rowHeight = ROWS_HEIGHT[this.cols];
   }
 
-  protected onItemsCountChange(newCount: number): void{
-    this.count = newCount.toString();
+  protected onPageChange(event: PageEvent): void {
+    this.pageEvent = event;
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
     this.getBooks();
   }
 
@@ -80,9 +95,13 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   // TODO Add parameters
   private getBooks(): void{
-    this.bookSubscription = this.bookService.getAll(true, this.filter).subscribe({
-      next: (bookList: Book[]) => {
-        this.bookList = bookList;
+    this.bookSubscription = this.bookService.getAll(true, this.filter, this.sort, 'title', this.currentPage, this.pageSize).subscribe({
+      next: (response) => {
+        this.currentPage = response.pageable.pageNumber;
+
+        this.totalPages = response.totalElements;
+
+        this.bookList = response.content;
       }
     });
   }

@@ -13,15 +13,24 @@ export class BookService extends AbstractService<Book, number>{
     super(StringValues.BASE_BOOK_URL, httpClient);
   }
 
-  public override getAll(active?: boolean, filter?: string): Observable<Book[]> {
+  public override getAll(active?: boolean, filter?: string, sortType?: string, sortProperty?: string, page?: number, size?: number, genre?: string): Observable<any> {
     // TODO
     // - Add missing parameters
+    // - Create Request body
+
     // - Create some kind of RequestBuilder
     // - '&' should not appear if only one parameter is passed
     // - Add "?" only if at least one parameters is introduced -> create type with Request Params?
     // - "/search" is only temporally necessary
-    console.log(`${this.baseUrl}${active != null ? `/search?active=${active}` : ''}${filter != null ? `&name=${filter}` : ''}`);
-    return this.httpClient.get<Book[]>(`${this.baseUrl}${active != null ? `/search?active=${active}` : ''}${filter != null ? `&name=${filter}` : ''}`).pipe(
+    const _active = active != null ? `/search?active=${active}` : '/search?';
+    const _filter = filter != null ? `&name=${filter}` : '';
+    const _sortType = sortType != null ? `&sortType=${sortType}` : '&sortType=asc';
+    const _sortProperty = sortProperty != null ? `&sortProperty=${sortProperty}` : '&sortProperty=title';
+    const _page = page != null || undefined ? `&page=${page}` : '&page=0';
+    const _size = size != null || undefined ? `&size=${size}` : '&size=20';
+
+    console.log(`${this.baseUrl}${_active}${_filter}${_sortType}${_sortProperty}${_page}${_size}`);
+    return this.httpClient.get<any>(`${this.baseUrl}${_active}${_filter}${_sortType}${_sortProperty}${_page}${_size}`).pipe(
       // catchError(this.handleError)
     );
   }
