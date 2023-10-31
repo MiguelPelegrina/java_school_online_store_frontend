@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { BookService } from 'src/app/services/book/book.service';
 import { Book } from 'src/app/shared/domain/book/book';
+import { IIndexable } from 'src/app/shared/utils/i-indexable';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -28,7 +29,7 @@ export class ListBookComponent implements OnInit {
 
   protected datasource = new MatTableDataSource<Book>(this.books);
 
-  protected displayedColumnsOfBooks: string [] = ['title', 'author', 'active', 'price', 'stock', 'actions'];
+  protected displayedColumnsOfBooks: string [] = ['title', 'parameters.author', 'active', 'price', 'stock', 'actions'];
 
   protected isLoading: boolean = true;
 
@@ -54,6 +55,12 @@ export class ListBookComponent implements OnInit {
   public ngAfterViewInit(){
     this.datasource.paginator = this.paginator;
     this.datasource.sort = this.sort;
+    this.datasource.sortingDataAccessor = (item, property) => {
+      switch(property) {
+        case 'parameters.author': return item.parameters.author;
+        default: return (item as IIndexable<Book>)[property];
+      }
+    }
   }
 
   /**

@@ -1,7 +1,5 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { MatOption } from '@angular/material/core';
 import { MatListOption, MatSelectionList } from '@angular/material/list';
-import { MatSelect } from '@angular/material/select';
 import { Subscription } from 'rxjs';
 import { BookGenreService } from 'src/app/services/book/genre/book-genre.service';
 import { BookGenre } from 'src/app/shared/domain/book/book-genre/book-genre';
@@ -13,7 +11,7 @@ import { BookGenre } from 'src/app/shared/domain/book/book-genre/book-genre';
 })
 export class FiltersComponent implements OnInit, OnDestroy {
   // Subcomponents
-  @ViewChild('selection')
+  @ViewChild(MatSelectionList)
   protected matSelect!: MatSelectionList;
 
   // Fields
