@@ -26,6 +26,8 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   protected genre?: string;
 
+  protected isLoading: boolean = true;
+
   protected pageEvent?: PageEvent;
 
   protected pageSize = 12;
@@ -99,6 +101,8 @@ export class CatalogComponent implements OnInit, OnDestroy {
         this.totalElements = response.totalElements;
 
         this.bookList = response.content;
+
+        this.isLoading = false;
       }
     });
   }
