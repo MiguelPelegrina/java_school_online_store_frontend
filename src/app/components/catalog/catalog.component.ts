@@ -36,7 +36,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   protected sort = 'asc';
 
-  protected totalPages: number = 0;
+  protected totalElements: number = 0;
 
   /**
    * Constructor
@@ -52,10 +52,6 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-
-  }
-
-  public ngAfterViewInit(): void{
     this.getBooks();
   }
 
@@ -86,6 +82,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   protected onShowGenre(genre: string): void{
     this.genre = genre;
+    this.getBooks();
   }
 
   protected onSortChange(newSort: string) {
@@ -95,11 +92,11 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   // TODO Add parameters
   private getBooks(): void{
-    this.bookSubscription = this.bookService.getAll(true, this.filter, this.sort, 'title', this.currentPage, this.pageSize).subscribe({
+    this.bookSubscription = this.bookService.getAll(true, this.filter, this.sort, 'title', this.currentPage, this.pageSize, this.genre).subscribe({
       next: (response) => {
         this.currentPage = response.pageable.pageNumber;
 
-        this.totalPages = response.totalElements;
+        this.totalElements = response.totalElements;
 
         this.bookList = response.content;
       }

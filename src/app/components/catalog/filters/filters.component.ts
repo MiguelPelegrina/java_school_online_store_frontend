@@ -1,4 +1,7 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { MatOption } from '@angular/material/core';
+import { MatListOption, MatSelectionList } from '@angular/material/list';
+import { MatSelect } from '@angular/material/select';
 import { Subscription } from 'rxjs';
 import { BookGenreService } from 'src/app/services/book/genre/book-genre.service';
 import { BookGenre } from 'src/app/shared/domain/book/book-genre/book-genre';
@@ -9,6 +12,10 @@ import { BookGenre } from 'src/app/shared/domain/book/book-genre/book-genre';
   styleUrls: ['./filters.component.css']
 })
 export class FiltersComponent implements OnInit, OnDestroy {
+  // Subcomponents
+  @ViewChild('selection')
+  protected matSelect!: MatSelectionList;
+
   // Fields
   @Output()
   protected showGenre = new EventEmitter<string>();
@@ -16,6 +23,8 @@ export class FiltersComponent implements OnInit, OnDestroy {
   protected bookGenreSubscription?: Subscription;
 
   protected genres: BookGenre [] = [];
+
+  private genre: string = '';
 
   constructor(private service: BookGenreService) {}
 
@@ -37,6 +46,19 @@ export class FiltersComponent implements OnInit, OnDestroy {
   }
 
   protected onShowGenre(genre: string): void {
-    this.showGenre.emit(genre);
+    if(this.genre === genre){
+      this.genre = '';
+      this.matSelect._items.forEach((data: MatListOption) => data._setSelected(false));
+    } else {
+      this.genre = genre
+    }
+
+    this.showGenre.next(this.genre);
+  }
+
+  protected resetGenre(){
+    this.matSelect._items.forEach((data: MatListOption) => data._setSelected(false));
+    // TODO Not sure about this
+    this.showGenre.next('');
   }
 }

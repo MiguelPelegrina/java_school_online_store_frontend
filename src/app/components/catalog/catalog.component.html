@@ -21,7 +21,7 @@
     </app-books-header>
 
     <mat-paginator
-      [length]="totalPages"
+      [length]="totalElements"
       [pageIndex]="currentPage"
       [pageSize]="pageSize"
       [pageSizeOptions]="pageSizeOptions"
@@ -51,11 +51,13 @@
     </mat-grid-list>
 
     <mat-paginator
-      [length]="totalPages"
+      [length]="totalElements"
       [pageIndex]="currentPage"
       [pageSize]="pageSize"
       [pageSizeOptions]="pageSizeOptions"
-      (page)="onPageChange($event)">
+      (page)="onPageChange($event)"
+      [showFirstLastButtons]="true"
+    >
     </mat-paginator>
   </mat-drawer-content>
   <!-- /CONTENT -->

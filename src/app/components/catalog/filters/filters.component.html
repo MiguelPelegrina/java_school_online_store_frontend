@@ -2,10 +2,13 @@
   <mat-expansion-panel-header>
     <mat-panel-title>Genres</mat-panel-title>
   </mat-expansion-panel-header>
-  <mat-selection-list [multiple]="false">
+
+  <mat-selection-list #selection [multiple]="false">
+    <!-- <mat-list-item *ngFor="let genre of genres" [value]="genre.name"> -->
     <!-- <mat-list-option *ngFor="let genre of genres" [value]="genre.name"> -->
-    <mat-list-item *ngFor="let genre of genres">
-      <button class="btn btn-default" (click)="onShowGenre(genre.name)" >{{genre.name}}</button>
-    </mat-list-item>
+    <mat-list-option (click)="onShowGenre(genre.name)" *ngFor="let genre of genres" [value]="genre.name">
+      <button class="btn btn-default" >{{genre.name}}</button>
+    </mat-list-option>
   </mat-selection-list>
+  <button (click)="resetGenre()" mat-button >Clear selection</button>
 </mat-expansion-panel>

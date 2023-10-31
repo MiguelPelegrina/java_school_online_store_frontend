@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { BookService } from 'src/app/services/book/book.service';
 import { Book } from 'src/app/shared/domain/book/book';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-list-book',
@@ -25,7 +26,7 @@ export class ListBookComponent implements OnInit {
 
   protected books: Book[] = [];
 
-  protected bookDatasource = new MatTableDataSource<Book>(this.books);
+  protected datasource = new MatTableDataSource<Book>(this.books);
 
   protected displayedColumnsOfBooks: string [] = ['title', 'author', 'active', 'price', 'stock', 'actions'];
 
@@ -51,8 +52,8 @@ export class ListBookComponent implements OnInit {
    * Assigns the Paginator and the Sort components to the respective properties of the book datasource to handle pages and sorting of the table.
    */
   public ngAfterViewInit(){
-    this.bookDatasource.paginator = this.paginator;
-    this.bookDatasource.sort = this.sort;
+    this.datasource.paginator = this.paginator;
+    this.datasource.sort = this.sort;
   }
 
   /**
@@ -78,7 +79,7 @@ export class ListBookComponent implements OnInit {
    * @param filter - Value of the input field
    */
   protected applyFilter(filter: string){
-    this.bookDatasource.filter = filter.trim().toLowerCase();
+    this.datasource.filter = filter.trim().toLowerCase();
   }
 
   /**
@@ -97,7 +98,6 @@ export class ListBookComponent implements OnInit {
     this.allowActivityUpdates = false;
     this.isLoading = true;
     this.bookService.update(book.id, book).subscribe({
-      // TODO Possible implementation of multi-language support.
       complete: () => this.handleUpdateSuccessResponse(`Activity of ${book.title} updated successfully!`),
       error: () => this.handleUpdateErrorResponse(book, `Activity of ${book.title} could not be changed.`)
     })
@@ -117,13 +117,10 @@ export class ListBookComponent implements OnInit {
    */
   private getAllBooks(){
     this.bookService.getAll().subscribe({
-      next: (bookList: Book[]) => {
-        // TODO Remove
-        this.sortBookListByActivityName(bookList);
+      next: (response) => {
+        this.books = response.content;
 
-        this.books = bookList;
-
-        this.bookDatasource.data = this.books;
+        this.datasource.data = response.content;
 
         this.isLoading = false;
       }
@@ -170,7 +167,7 @@ export class ListBookComponent implements OnInit {
    * Sets the filter of the book datasource. The datasource will only consist of those elements whose title or author contain the filter.
    */
   private setFilterToSearchByTitleOrAuthor() {
-    this.bookDatasource.filterPredicate = function (record, filter){
+    this.datasource.filterPredicate = function (record, filter){
       let found = false;
 
       if(record.parameters.author.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ||
@@ -188,6 +185,7 @@ export class ListBookComponent implements OnInit {
    *The book list is sorted by the activity first and then by the title of the book
    * @param bookList - Book list that will be sorted.
    * @returns The sorted book list.
+   * @deprecated
    */
   private sortBookListByActivityName(bookList: Book[]): Book[] {
     return bookList.sort((a, b) => {
@@ -209,7 +207,7 @@ export class ListBookComponent implements OnInit {
    * @param book
    * @deprecated
    */
-  /*protected deleteBook(book: Book){
+  protected deleteBook(book: Book){
     Swal.fire({
       title: `Do you really want to delete ${book.title}?`,
       icon: 'warning',
@@ -220,7 +218,7 @@ export class ListBookComponent implements OnInit {
       cancelButtonText: 'No, keep it',
     }).then((result) => {
       if(result.isConfirmed){
-        this.service.delete(book.id).subscribe(response =>{
+        this.bookService.delete(book.id).subscribe(response =>{
           this.getAllBooks();
           Swal.fire('Delete successful', '', 'success');
           error: Swal.fire('An error ocurred, contact your support', '', 'warning');
@@ -229,5 +227,5 @@ export class ListBookComponent implements OnInit {
         Swal.fire('Changes are not saved', '', 'info')
       }
     })
-  }*/
+  }
 }
