@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-add-edit-book-form',
   templateUrl: './add-edit-book-form.component.html',
-  styleUrls: ['./add-edit-book-form.component.css'],
+  styleUrls: ['./add-edit-book-form.component.css', '../../../app.component.css'],
 })
 export class AddEditBookFormComponent implements OnDestroy, OnInit {
   // Fields
@@ -46,7 +46,7 @@ export class AddEditBookFormComponent implements OnDestroy, OnInit {
 
   // Constructor
   /**
-   *
+   * Default constructor
    * @param bookService
    * @param bookFormatService
    * @param bookGenreService

@@ -55,6 +55,12 @@ export class StringValues{
   /////////////////////////////////////////////////////
   // User address
   /////////////////////////////////////////////////////
+  public static USERS_URL: string = '/users';
+  public static BASE_USER_URL: string = `${this.BASE_URL}${this.USERS_URL}`;
+
+  /////////////////////////////////////////////////////
+  // User address
+  /////////////////////////////////////////////////////
   public static USER_ADDRESSES_URL: string = '/user_addresses';
   public static BASE_USER_ADDRESSES_URL: string = `${this.BASE_URL}${this.USER_ADDRESSES_URL}`;
 

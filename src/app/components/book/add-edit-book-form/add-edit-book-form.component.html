@@ -11,7 +11,7 @@
 <div class="container form-container mat-elevation-z8">
   <form [formGroup]="form" (ngSubmit)="onSubmit()" #bookForm="ngForm">
     <!-- IDENTIFIER -->
-    <div class="form-row" [hidden]="true">
+    <div [hidden]="true">
       <!-- TODO Not sure what to do with this, need to exist for edit, but dont need to be visible? -->
       <input class="formControlName" formControlName="id"  type="text">
       <div formGroupName="parameters">
@@ -21,23 +21,19 @@
     </div>
     <!-- /IDENTIFIER -->
 
-    <!-- ROW -->
-    <div>
-      <!-- TITLE -->
-      <mat-form-field class="form-group" appearance="fill">
-        <mat-label>Title</mat-label>
-        <input
-        formControlName="title"
-        matInput
-        placeholder="Enter the title"
-        required
-        type="text"
-        >
-        <mat-error *ngIf="f['title'].invalid">{{getErrorMessage('title')}}</mat-error>
-      </mat-form-field>
-      <!-- /TITLE -->
-    </div>
-    <!-- /ROW -->
+    <!-- TITLE -->
+    <mat-form-field class="form-group" appearance="fill">
+      <mat-label>Title</mat-label>
+      <input
+      formControlName="title"
+      matInput
+      placeholder="Enter the title"
+      required
+      type="text"
+      >
+      <mat-error *ngIf="f['title'].invalid">{{getErrorMessage('title')}}</mat-error>
+    </mat-form-field>
+    <!-- /TITLE -->
 
     <!-- ROW -->
     <mat-form-field class="form-group" appearance="fill" formGroupName="parameters">
@@ -72,35 +68,41 @@
     <!-- /ROW -->
 
     <!-- ROW -->
-    <div class="form-row">
-      <!-- GENRE -->
-      <mat-form-field class="small-form-group">
-        <mat-label>Genre</mat-label>
-        <mat-select formControlName="genre" [(value)]="selectedGenre">
-          <mat-option *ngFor="let genre of genreTypes" [value]="genre.name">
-            {{genre.name}}
-          </mat-option>
-          <mat-error *ngIf="f['genre'].invalid">{{getErrorMessage('genre')}}</mat-error>
-        </mat-select>
-      </mat-form-field>
-      <!-- /GENRE -->
+    <div class="row">
+      <div class="col-sm">
 
-      <!-- FORMAT -->
-      <mat-form-field class="small-form-group" formGroupName="parameters">
-        <mat-label>Format</mat-label>
-        <mat-select formControlName="format" [(value)]="selectedFormat">
-          <mat-option *ngFor="let format of formatTypes" [value]="format.name">
-            {{format.name}}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="f['parameters'].invalid">{{getErrorMessage('parameters')}}</mat-error>
-      </mat-form-field>
-      <!-- /FORMAT -->
+        <!-- GENRE -->
+        <mat-form-field class="form-group w-100">
+          <mat-label>Genre</mat-label>
+          <mat-select formControlName="genre" [(value)]="selectedGenre">
+            <mat-option *ngFor="let genre of genreTypes" [value]="genre.name">
+              {{genre.name}}
+            </mat-option>
+            <mat-error *ngIf="f['genre'].invalid">{{getErrorMessage('genre')}}</mat-error>
+          </mat-select>
+        </mat-form-field>
+        <!-- /GENRE -->
+      </div>
+
+      <div class="col-sm">
+        <!-- FORMAT -->
+        <mat-form-field class="form-group w-100" formGroupName="parameters">
+          <mat-label>Format</mat-label>
+          <mat-select formControlName="format" [(value)]="selectedFormat">
+            <mat-option *ngFor="let format of formatTypes" [value]="format.name">
+              {{format.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="f['parameters'].invalid">{{getErrorMessage('parameters')}}</mat-error>
+        </mat-form-field>
+        <!-- /FORMAT -->
+      </div>
     </div>
     <!-- /ROW -->
 
     <!-- ROW -->
-    <div class="form-row">
+    <div class="row">
+      <div class="col-sm">
       <!-- COLUMN -->
         <!-- KILLER FEATURE: Table for different prices depending on currencies
             Option 1: Create a auto incremental table -> one row with empty fields for price and currency.
@@ -112,7 +114,7 @@
             the setted one to the others?
           -->
           <!-- PRICE -->
-        <mat-form-field class="small-form-group" floatLabel="always">
+        <mat-form-field class="form-group w-100" floatLabel="always">
             <mat-label>Price</mat-label>
           <input
             appTwoDigitDecimalNumber
@@ -128,9 +130,11 @@
           <mat-error *ngIf="f['price'].invalid">{{getErrorMessage('price')}}</mat-error>
         </mat-form-field>
         <!-- /COLUMN -->
+      </div>
 
+      <div class="col-sm">
         <!-- COLUMN -->
-        <mat-form-field class="small-form-group">
+        <mat-form-field class="form-group w-100">
           <!-- STOCK -->
           <mat-label>Stock</mat-label>
           <input
@@ -143,11 +147,12 @@
           <!-- /STOCK -->
         </mat-form-field>
         <!-- /COLUMN -->
+        </div>
       </div>
       <!-- /ROW -->
 
       <!-- ROW-->
-      <div class="row">
+      <div class="row justify-content-center">
         <div class="form-group">
           <div class="d-flex justify-content-center">
             <button (click)="fileInput.click()" mat-raised-button type="button">Choose a book cover</button>
@@ -155,7 +160,7 @@
           </div>
 
           <div class="d-flex justify-content-center m-3 ">
-            <img class="w-25 h-25" *ngIf="this.image" [src]="this.image" alt="Uploaded File">
+            <img *ngIf="this.image" [src]="this.image" alt="Uploaded File">
           </div>
 
           <div class="d-flex justify-content-center">
@@ -166,19 +171,22 @@
     <!-- /ROW-->
 
     <!-- ROW-->
-    <div class="d-flex justify-content-around">
-      <div class="d-flex justify-content-center">
-        <div>
-          <span class="p-3 text-white">Available for sale</span>
-          <mat-slide-toggle formControlName="active"></mat-slide-toggle>
-        </div>
-      </div>
+    <div class="row d-flex justify-content-center">
+      <div>
 
-      <div class="d-flex justify-content-between w-35">
-          <button mat-raised-button color="primary" type="submit">
-            Save
-          </button>
-          <a mat-raised-button color="warn" routerLink="/books">Cancel</a>
+        <span class="p-3 text-white">Available for sale</span>
+        <mat-slide-toggle formControlName="active"></mat-slide-toggle>
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-around m-2 p-2">
+      <div class="col-sm d-flex justify-content-center m-2 p-2">
+        <button mat-raised-button color="primary" type="submit">
+          Save
+        </button>
+      </div>
+      <div class="col-sm d-flex justify-content-center m-2 p-2">
+        <a mat-raised-button color="warn" routerLink="/books">Cancel</a>
       </div>
     </div>
     <!-- /ROW-->

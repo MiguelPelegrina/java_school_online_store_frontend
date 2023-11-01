@@ -47,11 +47,13 @@ import { FiltersComponent } from './components/catalog/filters/filters.component
 import { BookBoxComponent } from './components/catalog/book-box/book-box.component';
 import { CartComponent } from './components/cart/cart.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatOptionModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { TwoDigitDecimalNumberDirective } from './shared/utils/twoDigitDecimalNumber'
 import { MatSelectModule } from '@angular/material/select';
-import { AddressSelectorComponent } from './shared/components/address-selector/address-selector.component';
 import { ProfileComponent } from './components/user/profile/profile.component';
+import { AddEditAddressForm } from './components/user/forms/address/add-edit-address-form.component';
+import { AddEditUserForm } from './components/user/forms/user/add-edit-user-form.component';
+import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 
 @NgModule({
   declarations: [
@@ -77,8 +79,9 @@ import { ProfileComponent } from './components/user/profile/profile.component';
     TwoDigitDecimalNumberDirective,
     UpdateCountryComponent,
     ViewBookComponent,
-    AddressSelectorComponent,
+    AddEditAddressForm,
     ProfileComponent,
+    AddEditUserForm,
   ],
   imports: [
     AppRoutingModule,
@@ -89,6 +92,7 @@ import { ProfileComponent } from './components/user/profile/profile.component';
     MatBadgeModule,
     MatButtonModule,
     MatCardModule,
+    MatDatepickerModule,
     MatExpansionModule,
     MatFormFieldModule,
     MatGridListModule,
@@ -100,6 +104,7 @@ import { ProfileComponent } from './components/user/profile/profile.component';
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatMenuModule,
+    MatNativeDateModule,
     MatSelectModule,
     MatSidenavModule,
     MatSlideToggleModule,

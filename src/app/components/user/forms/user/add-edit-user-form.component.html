@@ -1,0 +1,98 @@
+<div>
+  <h3 class="text-white">Personal data</h3>
+</div>
+
+<form class="d-flex flex-column" [formGroup]="form">
+  <!-- IDENTIFIER -->
+  <div class="form-row" [hidden]="true">
+    <!-- TODO Not sure what to do with this, need to exist for edit, but dont need to be visible? -->
+    <input class="formControlName" formControlName="id"  type="text">
+    <input class="formControlName" formControlName="active" type="text">
+  </div>
+  <!-- /IDENTIFIER -->
+
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field class="form-group w-100" appearance="fill">
+        <mat-label>Name</mat-label>
+        <input
+        formControlName="name"
+        matInput
+        placeholder="Enter your name"
+        required
+        type="text"
+        >
+        <mat-error *ngIf="f['name'].invalid">{{getErrorMessage('name')}}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-sm">
+      <mat-form-field class="form-group w-100" appearance="fill">
+        <mat-label>Surname</mat-label>
+        <input
+        formControlName="surname"
+        matInput
+        placeholder="Enter your surname"
+        required
+        type="text"
+        >
+        <mat-error *ngIf="f['surname'].invalid">{{getErrorMessage('surname')}}</mat-error>
+      </mat-form-field>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field class="form-group w-100" appearance="fill">
+        <mat-label>Email</mat-label>
+        <input
+        formControlName="email"
+        matInput
+        placeholder="Enter your email"
+        required
+        type="text"
+        >
+        <mat-error *ngIf="f['email'].invalid">{{getErrorMessage('email')}}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-sm">
+      <mat-form-field class="form-group w-100" appearance="fill">
+        <mat-label>Password</mat-label>
+        <input
+        formControlName="password"
+        matInput
+        placeholder="Enter your password"
+        required
+        type="password"
+        >
+        <mat-error *ngIf="f['password'].invalid">{{getErrorMessage('password')}}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm">
+
+      <mat-form-field class="form-group w-100">
+        <mat-label>Your date of birth </mat-label>
+        <input formControlName="dateOfBirth" matInput [matDatepicker]="picker">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="col-sm">
+      <mat-form-field class="form-group w-100">
+        <mat-label>Phone number</mat-label>
+        <!-- TODO Needs a directive to limit input to numbers -->
+        <input formControlName="phone" matInput required>
+        <mat-icon matSuffix>phone</mat-icon>
+        <mat-hint>Include area code</mat-hint>
+      </mat-form-field>
+    </div>
+  </div>
+
+</form>

@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddressSelectorComponent } from './address-selector.component';
+import { AddEditAddressForm } from './add-edit-address-form.component';
 
 describe('AddressSelectorComponent', () => {
-  let component: AddressSelectorComponent;
-  let fixture: ComponentFixture<AddressSelectorComponent>;
+  let component: AddEditAddressForm;
+  let fixture: ComponentFixture<AddEditAddressForm>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [AddressSelectorComponent]
+      declarations: [AddEditAddressForm]
     });
-    fixture = TestBed.createComponent(AddressSelectorComponent);
+    fixture = TestBed.createComponent(AddEditAddressForm);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

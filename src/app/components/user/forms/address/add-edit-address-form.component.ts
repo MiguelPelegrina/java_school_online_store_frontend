@@ -1,30 +1,33 @@
-import { Component, OnDestroy, OnInit, forwardRef } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import { Component, Input, OnInit, forwardRef } from '@angular/core';
+import { FormBuilder, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CityService } from 'src/app/services/city/city.service';
 import { CountryService } from 'src/app/services/country/country.service';
 import { PostalCodeService } from 'src/app/services/postal-code/postal-code.service';
-import { Country } from '../../domain/country/country';
-import { City } from '../../domain/user/address/postal-code/city/city';
-import { PostalCode } from '../../domain/user/address/postal-code/postal-code';
+import { Country } from '../../../../shared/domain/country/country';
+import { City } from '../../../../shared/domain/user/address/postal-code/city/city';
+import { PostalCode } from '../../../../shared/domain/user/address/postal-code/postal-code';
 import { ActivatedRoute } from '@angular/router';
 import { AddressService } from 'src/app/services/address/address.service';
-import { Subform } from '../sub-form';
+import { Subform } from '../../../../shared/components/sub-form';
 
 @Component({
-  selector: 'app-address-selector',
-  templateUrl: './address-selector.component.html',
-  styleUrls: ['./address-selector.component.css'],
+  selector: 'app-add-edit-address-form',
+  templateUrl: './add-edit-address-form.component.html',
+  styleUrls: ['./add-edit-address-form.component.css' , '../../../../app.component.css'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AddressSelectorComponent),
+      useExisting: forwardRef(() => AddEditAddressForm),
       multi: true,
     }
   ]
 })
-export class AddressSelectorComponent extends Subform implements ControlValueAccessor, OnInit {
+export class AddEditAddressForm extends Subform implements OnInit {
   // Fields
+  @Input()
+  isAddMode?: boolean;
+
   protected addressSubscription?: Subscription;
 
   protected cities: City[] = [];
@@ -36,8 +39,6 @@ export class AddressSelectorComponent extends Subform implements ControlValueAcc
   protected countries: Country[] = [];
 
   protected id?: number;
-
-  protected isAddMode = false;
 
   protected isCountrySelected = false;
 
@@ -68,7 +69,9 @@ export class AddressSelectorComponent extends Subform implements ControlValueAcc
   public override ngOnDestroy(): void {
     super.ngOnDestroy();
     this.addressSubscription?.unsubscribe();
+    this.citySubscription?.unsubscribe();
     this.countrySubscription?.unsubscribe();
+    this.postalCodeSubscription?.unsubscribe();
   }
 
   public ngOnInit(): void {
@@ -81,7 +84,9 @@ export class AddressSelectorComponent extends Subform implements ControlValueAcc
     this.form = this.formBuilder.group({
       country: ['', Validators.required],
       city: ['', Validators.required],
-      postalCode: ['', Validators.required]
+      number: ['', Validators.required],
+      postalCode: ['', Validators.required],
+      street: ['', Validators.required]
     })
 
     if(this.id){

@@ -1,3 +1,20 @@
+.form-container {
+  background: var(--mat-toolbar-container-background-color);
+  border-radius: 25px;
+  padding: 30px;
+}
+
+.form-group {
+  display: block;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-clip: padding-box;
+  border-radius: .25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
 .mat-mini-fab {
   margin: 10px;
 }
@@ -5,4 +22,28 @@
 .page-title {
   color: white;
   background-color: #212121;
+}
+
+.w-30 {
+  width: 30% !important;
+}
+
+.one-third {
+  width: 33% !important;
+}
+
+.w-35 {
+  width: 35% !important;
+}
+
+.w-45 {
+  width: 45% !important;
+}
+
+.w-50 {
+  width: 50% !important;
+}
+
+.w-100 {
+  width: 100% !important;
 }
