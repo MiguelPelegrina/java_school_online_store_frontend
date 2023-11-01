@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, catchError, retry, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -10,6 +10,16 @@ import Swal from 'sweetalert2';
  * @param ID - The type of the entity's identifier
  */
 export abstract class AbstractService<Entity, ID> {
+  // Setting request headers to JSON
+  // TODO Set headers?
+  /*headers = new HttpHeaders()
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+  httpOptions = {
+    headers: this.headers
+  };*/
+
   /**
    * All arguments constructor for child classes.
    * @param baseUrl - The base URL for the service's API endpoint.
@@ -17,6 +27,30 @@ export abstract class AbstractService<Entity, ID> {
    * @param router - A Router instance for navigation.
    */
   constructor(protected baseUrl: string, protected httpClient: HttpClient) {}
+
+  /**
+   * Creates a new entity in the API.
+   *
+   * @param instance - The Entity object to be created.
+   * @returns An Observable of the created Entity object.
+   */
+  public create(instance: Entity): Observable<Entity> {
+    return this.httpClient.post<Entity>(this.baseUrl, instance).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Deletes an entity from the API.
+   *
+   * @param id - The identifier of the entity to delete.
+   * @returns An Observable representing the result of the deletion operation.
+   */
+  public delete(id: ID): Observable<Object> {
+    return this.httpClient.delete(`${this.baseUrl}/${id}`).pipe(
+      catchError(this.handleError)
+    );
+  }
 
   /**
    * Retrieves all entities from the API.
@@ -42,18 +76,6 @@ export abstract class AbstractService<Entity, ID> {
   }
 
   /**
-   * Creates a new entity in the API.
-   *
-   * @param instance - The Entity object to be created.
-   * @returns An Observable of the created Entity object.
-   */
-  public create(instance: Entity): Observable<Entity> {
-    return this.httpClient.post<Entity>(this.baseUrl, instance).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  /**
    * Updates an existing entity in the API.
    *
    * @param id - The identifier of the entity to update.
@@ -66,18 +88,7 @@ export abstract class AbstractService<Entity, ID> {
     );
   }
 
-  /**
-   * Deletes an entity from the API.
-   *
-   * @param id - The identifier of the entity to delete.
-   * @returns An Observable representing the result of the deletion operation.
-   */
-  public delete(id: ID): Observable<Object> {
-    return this.httpClient.delete(`${this.baseUrl}/${id}`).pipe(
-      catchError(this.handleError)
-    );
-  }
-
+  // Private methods
   /**
    * Handles HTTP request errors, providing error handling and navigation.
    *
@@ -90,6 +101,7 @@ export abstract class AbstractService<Entity, ID> {
       console.error('An error occurred:', error.error);
       Swal.fire('An network error ocurred', '', 'info')
     } else {
+      // TODO Controls more erros
       switch(error.status){
         case 401:
         case 403:

@@ -2,14 +2,14 @@ import { Address } from "./address/address";
 import { UserRole } from "./user-role/user-role";
 
 export interface User {
-  id: number;
-  name: string;
-  surname: string;
+  addresses: Address[];
   dateOfBirth: Date;
   email: string;
-  password: string;
+  id: number;
   isActive: boolean;
+  name: string;
+  password: string;
   phone: string;
-  address: Address;
   roles: UserRole[];
+  surname: string;
 }

@@ -15,8 +15,6 @@ export class BookService extends AbstractService<Book, number>{
 
   public override getAll(active?: boolean, filter?: string, sortType?: string, sortProperty?: string, page?: number, size?: number, genre?: string): Observable<any> {
     // TODO
-    // - Add missing parameters
-    //  - Sorting by active
     // - Create Request body
 
     // - Create some kind of RequestBuilder

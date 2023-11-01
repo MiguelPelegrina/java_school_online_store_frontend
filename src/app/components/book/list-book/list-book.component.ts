@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort, Sort } from '@angular/material/sort';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { BookService } from 'src/app/services/book/book.service';
 import { Book } from 'src/app/shared/domain/book/book';
 import { IIndexable } from 'src/app/shared/utils/i-indexable';
@@ -14,7 +15,7 @@ import Swal from 'sweetalert2';
   templateUrl: './list-book.component.html',
   styleUrls: ['./list-book.component.css']
 })
-export class ListBookComponent implements OnInit {
+export class ListBookComponent implements OnInit, OnDestroy {
   // Subcomponents
   @ViewChild(MatPaginator)
   protected paginator!: MatPaginator;
@@ -33,6 +34,8 @@ export class ListBookComponent implements OnInit {
 
   protected isLoading: boolean = true;
 
+  private booksSubsrciption?: Subscription;
+
   // Constructor
   /**
    * Constructor of the component.
@@ -46,6 +49,13 @@ export class ListBookComponent implements OnInit {
     private router: Router,
   ){}
 
+  /**
+   * A lifecycle hook that is called when a directive, pipe, or service is destroyed. Used for any custom cleanup that needs to occur when the instance is destroyed.
+   */
+  public ngOnDestroy(): void {
+    this.booksSubsrciption?.unsubscribe();
+  }
+
   // Methods
   // Public methods
   /**
@@ -55,6 +65,8 @@ export class ListBookComponent implements OnInit {
   public ngAfterViewInit(){
     this.datasource.paginator = this.paginator;
     this.datasource.sort = this.sort;
+
+    // TODO Might need to assign it after every data change
     this.datasource.sortingDataAccessor = (item, property) => {
       switch(property) {
         case 'parameters.author': return item.parameters.author;
@@ -123,7 +135,8 @@ export class ListBookComponent implements OnInit {
    * Retrieves all books from the database and sorts them by 'active' first and then alphabetically by book 'title' (A-Z). Hides the progress bar when the data is loaded.
    */
   private getAllBooks(){
-    this.bookService.getAll().subscribe({
+    // TODO Add parameters to search
+    this.booksSubsrciption = this.bookService.getAll().subscribe({
       next: (response) => {
         this.books = response.content;
 
@@ -162,7 +175,7 @@ export class ListBookComponent implements OnInit {
   /**
    * Handles the error when trying to update the state of a book from 'active' to 'inactive' or viceversa. Hides the progress bar,
    * allows further changes and informs the user that the modification could not be done.
-   * @param message
+   * @param message Message to the user.
    */
   private handleUpdateSuccessResponse(message: string){
     this.getAllBooks();
@@ -187,7 +200,6 @@ export class ListBookComponent implements OnInit {
     }
   }
 
-  // TODO Abstract it? Don't overuse it?
   /**
    *The book list is sorted by the activity first and then by the title of the book
    * @param bookList - Book list that will be sorted.
@@ -214,7 +226,7 @@ export class ListBookComponent implements OnInit {
    * @param book
    * @deprecated
    */
-  protected deleteBook(book: Book){
+  private deleteBook(book: Book){
     Swal.fire({
       title: `Do you really want to delete ${book.title}?`,
       icon: 'warning',

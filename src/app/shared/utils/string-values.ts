@@ -29,6 +29,12 @@ export class StringValues{
   public static BASE_BOOK_GENRE_URL: string = `${this.BASE_URL}${this.BOOK_GENRE_URL}`;
 
   //////////////////////////////////////////////////////
+  // Cities
+  //////////////////////////////////////////////////////
+  public static CITIES_URL: string = '/cities';
+  public static BASE_CITY_URL: string = `${this.BASE_URL}${this.CITIES_URL}`;
+
+  //////////////////////////////////////////////////////
   // Countries
   //////////////////////////////////////////////////////
   public static COUNTRY_URL: string = '/countries';
@@ -39,4 +45,18 @@ export class StringValues{
   /////////////////////////////////////////////////////
   public static ORDER_URL: string = '/orders';
   public static BASE_ORDER_URL: string = `${this.BASE_URL}${this.ORDER_URL}`;
+
+  /////////////////////////////////////////////////////
+  // Postal codes
+  /////////////////////////////////////////////////////
+  public static POSTAL_CODE_URL: string = '/postal_codes';
+  public static BASE_POSTAL_CODE_URL: string = `${this.BASE_URL}${this.POSTAL_CODE_URL}`;
+
+  /////////////////////////////////////////////////////
+  // User address
+  /////////////////////////////////////////////////////
+  public static USER_ADDRESSES_URL: string = '/user_addresses';
+  public static BASE_USER_ADDRESSES_URL: string = `${this.BASE_URL}${this.USER_ADDRESSES_URL}`;
+
+
 }

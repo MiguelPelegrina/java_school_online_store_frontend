@@ -36,8 +36,8 @@ import { DetailCountryComponent } from './components/country/detail-country/deta
 import { ListCountryComponent } from './components/country/list-country/list-country.component';
 import { UpdateCountryComponent } from './components/country/update-country/update-country.component';
 import { HeaderComponent } from './components/header/header.component';
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/user/login/login.component';
+import { RegisterComponent } from './components/user/register/register.component';
 import { ImageSelectorComponent } from './shared/components/image-selector/image-selector.component';
 import { SearchBarComponent } from './shared/components/search-bar/search-bar.component';
 import { BrowserModule } from '@angular/platform-browser';
@@ -50,6 +50,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatOptionModule } from '@angular/material/core';
 import { TwoDigitDecimalNumberDirective } from './shared/utils/twoDigitDecimalNumber'
 import { MatSelectModule } from '@angular/material/select';
+import { AddressSelectorComponent } from './shared/components/address-selector/address-selector.component';
+import { ProfileComponent } from './components/user/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +77,8 @@ import { MatSelectModule } from '@angular/material/select';
     TwoDigitDecimalNumberDirective,
     UpdateCountryComponent,
     ViewBookComponent,
+    AddressSelectorComponent,
+    ProfileComponent,
   ],
   imports: [
     AppRoutingModule,

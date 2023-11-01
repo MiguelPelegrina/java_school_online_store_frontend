@@ -1,14 +1,14 @@
-import { Component, OnInit, ViewChild, forwardRef } from '@angular/core';
-import { FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookFormatService } from 'src/app/services/book/format/book-format.service';
 import { BookGenreService } from 'src/app/services/book/genre/book-genre.service';
 import { BookService } from 'src/app/services/book/book.service';
 import { BookFormat } from '../../../shared/domain/book/parameters/book-parameters-format/book-parameters-format';
 import { BookGenre } from '../../../shared/domain/book/book-genre/book-genre';
-import { ImageSelectorComponent } from '../../../shared/components/image-selector/image-selector.component';
 import { getBase64 } from 'src/app/shared/utils/utils';
 import Swal from 'sweetalert2';
+import { Subscription } from 'rxjs';
 
 // TODO Document
 @Component({
@@ -16,8 +16,14 @@ import Swal from 'sweetalert2';
   templateUrl: './add-edit-book-form.component.html',
   styleUrls: ['./add-edit-book-form.component.css'],
 })
-export class AddEditBookFormComponent implements OnInit{
+export class AddEditBookFormComponent implements OnDestroy, OnInit {
   // Fields
+  protected booksSubscription?: Subscription;
+
+  protected bookFormatsSubscription?: Subscription;
+
+  protected bookGenresSubscription?: Subscription;
+
   protected form!: FormGroup;
 
   protected formatTypes: BookFormat[] = []
@@ -58,8 +64,14 @@ export class AddEditBookFormComponent implements OnInit{
     private router: Router,
   ) {}
 
+
   // Methods
   // Public methods
+  public ngOnDestroy(): void {
+    this.bookFormatsSubscription?.unsubscribe();
+    this.bookGenresSubscription?.unsubscribe()
+  }
+
   /**
    *
    */
@@ -159,7 +171,7 @@ export class AddEditBookFormComponent implements OnInit{
    *
    */
   private createBook(){
-    this.bookService.create(this.form.value)
+    this.booksSubscription = this.bookService.create(this.form.value)
       .subscribe({
         next: () => {
           this.handleSuccessResponse('created');
@@ -181,7 +193,7 @@ export class AddEditBookFormComponent implements OnInit{
   }
 
   private loadBook() {
-    this.bookService.getById(this.id!)
+    this.booksSubscription = this.bookService.getById(this.id!)
         .subscribe((response) => {
           this.selectedFormat = response.parameters.format.name;
           this.selectedGenre = response.genre.name;
@@ -190,20 +202,20 @@ export class AddEditBookFormComponent implements OnInit{
             this.image = response.image;
           }
 
-          this.form.patchValue(response)
+          this.form.patchValue(response);
 
           this.loading = false;
         });
   }
 
   private loadFormats() {
-    this.bookFormatService.getAll().subscribe(bookFormatList => {
+    this.bookGenresSubscription = this.bookFormatService.getAll().subscribe(bookFormatList => {
       this.formatTypes = bookFormatList;
     })
   }
 
   private loadGenres() {
-    this.bookGenreService.getAll().subscribe(bookGenreList => {
+    this.bookFormatsSubscription = this.bookGenreService.getAll().subscribe(bookGenreList => {
       this.genreTypes = bookGenreList;
     });
   }
@@ -212,7 +224,7 @@ export class AddEditBookFormComponent implements OnInit{
    *
    */
   private updateBook(){
-    this.bookService.update(this.id!, this.form.value)
+    this.booksSubscription = this.bookService.update(this.id!, this.form.value)
       .subscribe({
         next: () => {
           this.handleSuccessResponse('updated');
