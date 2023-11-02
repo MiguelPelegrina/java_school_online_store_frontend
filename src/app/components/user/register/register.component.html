@@ -1,1 +1,21 @@
+<!-- LOADING -->
+<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+<!-- /LOADING -->
 
+<h2 class="text-center p-3">Register</h2>
+
+<div class="container form-container mat-elevation-z8 p-3">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <app-add-edit-user-form formGroupName="personalData"></app-add-edit-user-form>
+    <div class="row d-flex justify-content-around m-2 p-2">
+      <div class="col-sm d-flex justify-content-center m-2 p-2">
+        <button mat-raised-button color="primary" type="submit">
+          Register
+        </button>
+      </div>
+      <div class="col-sm d-flex justify-content-center m-2 p-2">
+        <a mat-raised-button color="warn" routerLink="/catalog">Cancel</a>
+      </div>
+    </div>
+  </form>
+</div>

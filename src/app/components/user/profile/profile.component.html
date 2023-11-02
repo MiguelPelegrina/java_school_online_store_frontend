@@ -1,6 +1,14 @@
 <h2 class="text-center">Edit your profile</h2>
 
+<pre style="margin-top:50px; border: 1px solid red; width: fit-content">
+  {{form.value | json}}
+</pre>
+
 <div class="container form-container mat-elevation-z8">
-  <app-add-edit-user-form></app-add-edit-user-form>
-  <app-add-edit-address-form></app-add-edit-address-form>
+  <ng-container [formGroup]="form">
+    <app-add-edit-user-form formGroupName="personalData"></app-add-edit-user-form>
+
+    <app-add-edit-address-form formGroupName="address"></app-add-edit-address-form>
+  </ng-container>
 </div>
+

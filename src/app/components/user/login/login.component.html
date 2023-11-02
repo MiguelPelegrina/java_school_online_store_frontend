@@ -13,13 +13,13 @@
               required
               type="text"
             >
-            <mat-error *ngIf="form.controls['email'].invalid">{{getErrorMessage()}}</mat-error>
+            <mat-error *ngIf="form.controls['email'].invalid">{{getErrorMessage('email')}}</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="fill">
             <mat-label>Enter your password</mat-label>
             <input formControlName="password" matInput placeholder="Password" required type="password">
-            <mat-error *ngIf="form.controls['password'].invalid">{{getErrorMessage()}}</mat-error>
+            <mat-error *ngIf="form.controls['password'].invalid">{{getErrorMessage('password')}}</mat-error>
           </mat-form-field>
           </div>
 

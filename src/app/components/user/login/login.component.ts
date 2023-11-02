@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth/auth.service';
 import { Router } from '@angular/router';
+import { AbstractForm } from 'src/app/shared/components/abstract-form';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
-
-  protected form!: FormGroup;
+export class LoginComponent extends AbstractForm {
 
   constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router){
+    super();
     this.form = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
@@ -20,7 +20,7 @@ export class LoginComponent {
   }
 
   protected onSubmit(){
-    this.authService.login(this.form.controls['email'].value, this.form.controls['password'].value).subscribe({
+    this.authService.login(this.f['email'].value, this.f['password'].value).subscribe({
       next: (response: any) => {
         const token = response.accessToken;
 
@@ -33,13 +33,5 @@ export class LoginComponent {
         console.log(`An error ocurred: ${error.message}`);
       }
     });
-  }
-
-  protected getErrorMessage(){
-    if(this.form.controls['email'].hasError('required')){
-      return "You must enter a valid value";
-    }
-
-    return this.form.controls['email'].hasError('email') ? 'Not a valid value' : '';
   }
 }

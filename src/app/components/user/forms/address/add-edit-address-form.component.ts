@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, forwardRef } from '@angular/core';
-import { FormBuilder, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormGroupDirective } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CityService } from 'src/app/services/city/city.service';
 import { CountryService } from 'src/app/services/country/country.service';
@@ -9,22 +9,17 @@ import { City } from '../../../../shared/domain/user/address/postal-code/city/ci
 import { PostalCode } from '../../../../shared/domain/user/address/postal-code/postal-code';
 import { ActivatedRoute } from '@angular/router';
 import { AddressService } from 'src/app/services/address/address.service';
-import { Subform } from '../../../../shared/components/sub-form';
 
 @Component({
   selector: 'app-add-edit-address-form',
   templateUrl: './add-edit-address-form.component.html',
   styleUrls: ['./add-edit-address-form.component.css' , '../../../../app.component.css'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AddEditAddressForm),
-      multi: true,
-    }
-  ]
 })
-export class AddEditAddressForm extends Subform implements OnInit {
+export class AddEditAddressForm implements OnDestroy, OnInit {
   // Fields
+  @Input()
+  formGroupName!: string;
+
   @Input()
   isAddMode?: boolean;
 
@@ -37,6 +32,8 @@ export class AddEditAddressForm extends Subform implements OnInit {
   protected countrySubscription?: Subscription;
 
   protected countries: Country[] = [];
+
+  protected form!: FormGroup;
 
   protected id?: number;
 
@@ -59,15 +56,14 @@ export class AddEditAddressForm extends Subform implements OnInit {
     private countryService: CountryService,
     private formBuilder: FormBuilder,
     private postalCodeService: PostalCodeService,
+    private rootFormGroup: FormGroupDirective,
     private route: ActivatedRoute,
     ){
-    super();
   }
 
   // Methods
   // Public methods
-  public override ngOnDestroy(): void {
-    super.ngOnDestroy();
+  public ngOnDestroy(): void {
     this.addressSubscription?.unsubscribe();
     this.citySubscription?.unsubscribe();
     this.countrySubscription?.unsubscribe();
@@ -81,13 +77,7 @@ export class AddEditAddressForm extends Subform implements OnInit {
 
     this.loadCountries();
 
-    this.form = this.formBuilder.group({
-      country: ['', Validators.required],
-      city: ['', Validators.required],
-      number: ['', Validators.required],
-      postalCode: ['', Validators.required],
-      street: ['', Validators.required]
-    })
+    this.form = this.rootFormGroup.control.get(this.formGroupName) as FormGroup;
 
     if(this.id){
       this.loadAddress();

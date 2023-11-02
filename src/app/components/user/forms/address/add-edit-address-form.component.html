@@ -1,8 +1,8 @@
 <!-- TODO Inform the user to select in order country > city > postal code -->
-<form class="d-flex flex-column" [formGroup]="form">
-  <div>
-    <h3 class="text-white">Address</h3>
-  </div>
+<ng-container [formGroup]="form">
+
+<mat-card class="d-flex flex-column form-container">
+  <mat-card-title class="text-white">Address</mat-card-title>
   <div class="row">
     <div class="col-sm">
       <!-- COUNTRY -->
@@ -60,11 +60,12 @@
         >
         <mat-error *ngIf="f['street'].invalid">{{getErrorMessage('street')}}</mat-error>
       </mat-form-field>
-  </div>
+    </div>
 
+    <!-- TODO Not that good when small device, need to be full row then -->
     <div class="col-4">
       <mat-form-field class="form-group" appearance="fill">
-        <mat-label>Street number</mat-label>
+        <mat-label>Number</mat-label>
         <input
         formControlName="number"
         matInput
@@ -74,7 +75,8 @@
         >
         <mat-error *ngIf="f['number'].invalid">{{getErrorMessage('number')}}</mat-error>
       </mat-form-field>
-      </div>
+    </div>
   </div>
-</form>
+</mat-card>
 
+</ng-container>
