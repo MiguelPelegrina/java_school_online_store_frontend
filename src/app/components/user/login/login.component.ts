@@ -22,9 +22,8 @@ export class LoginComponent extends AbstractForm {
   protected onSubmit(){
     this.authService.login(this.f['email'].value, this.f['password'].value).subscribe({
       next: (response: any) => {
-        const token = response.accessToken;
-
-        localStorage.setItem('authToken', token);
+        console.log(response)
+        this.authService.setAuthResultDto(response);
 
         this.router.navigate(['../']);
       },

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -52,8 +52,6 @@ export class RegisterComponent extends AbstractForm {
   }
 
   private createUser(){
-    console.log(this.form.value)
-
     this.usersSubscription = this.service.register(
       this.form.value.personalData.dateOfBirth,
       this.form.value.personalData.email,
@@ -62,22 +60,26 @@ export class RegisterComponent extends AbstractForm {
       this.form.value.personalData.phone,
       this.form.value.personalData.surname
     ).subscribe({
-      next: () => {
-        this.handleSuccessResponse();
+      next: (response: any) => {
+        this.handleSuccessResponse(response);
       },
-      error: error => {
-        this.handleErrorResponse();
+      // TODO Error handling
+      error: (response: any) => {
+        this.handleErrorResponse(response.error);
       }
     })
   }
 
-  private handleErrorResponse() {
-    Swal.fire('Error', `You could not be registered` , 'warning');
+  private handleErrorResponse(error: any) {
+    Swal.fire('Error', `You could not be registered: ${error}` , 'warning');
     this.loading = false;
   }
 
-  private handleSuccessResponse(){
+  private handleSuccessResponse(response: any){
+    this.service.setAuthResultDto(response);
+
     Swal.fire(`Registry successful!`,`You have been registered successfully`,`success`);
-    this.router.navigate(['/catalog']);
+
+    this.router.navigate(['../']);
   }
 }

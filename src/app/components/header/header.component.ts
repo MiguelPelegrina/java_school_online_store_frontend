@@ -47,4 +47,8 @@ export class HeaderComponent implements OnInit{
   protected onClearCart(){
     this.cartService.clearCart();
   }
+
+  protected onLogout(){
+    localStorage.removeItem('auth_token');
+  }
 }

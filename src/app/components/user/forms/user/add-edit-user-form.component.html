@@ -39,7 +39,7 @@
       <div class="col-sm">
         <mat-form-field class="form-group w-100" appearance="fill">
           <mat-label>Password</mat-label>
-          <input formControlName="password" matInput placeholder="Enter your password" required type="password">
+          <input formControlName="password" matInput placeholder="Enter your password" required="" type="password">
           <mat-error *ngIf="f['password'].invalid">{{getErrorMessage('password')}}</mat-error>
         </mat-form-field>
       </div>
@@ -47,23 +47,25 @@
 
     <div class="row">
       <div class="col-sm">
-
         <mat-form-field class="form-group w-100">
           <mat-label>Your date of birth </mat-label>
-          <input formControlName="dateOfBirth" matInput [matDatepicker]="picker">
+          <input formControlName="dateOfBirth" matInput [matDatepicker]="picker" required>
+          <!-- TODO Change format -->
           <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="f['dateOfBirth'].invalid">{{getErrorMessage('dateOfBirth')}}</mat-error>
         </mat-form-field>
       </div>
 
       <div class="col-sm">
         <mat-form-field class="form-group w-100">
           <mat-label>Phone number</mat-label>
-          <!-- TODO Needs a directive to limit input to numbers -->
-          <input formControlName="phone" matInput required>
+          <!-- TODO Might need to establish another mask -->
+          <input formControlName="phone" mask="(00) 000 000 000" matInput required type="text">
           <mat-icon matSuffix>phone</mat-icon>
           <mat-hint>Include area code</mat-hint>
+          <mat-error *ngIf="f['phone'].invalid">{{getErrorMessage('phone')}}</mat-error>
         </mat-form-field>
       </div>
     </div>

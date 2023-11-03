@@ -4,6 +4,11 @@
   padding: 30px;
 }
 
+.form-container-without-border {
+  background: var(--mat-toolbar-container-background-color);
+  padding: 30px;
+}
+
 .form-group {
   display: block;
   padding: .375rem .75rem;

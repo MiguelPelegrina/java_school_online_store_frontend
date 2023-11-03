@@ -20,9 +20,6 @@ export class AddEditAddressForm implements OnDestroy, OnInit {
   @Input()
   formGroupName!: string;
 
-  @Input()
-  isAddMode?: boolean;
-
   protected addressSubscription?: Subscription;
 
   protected cities: City[] = [];
@@ -54,7 +51,6 @@ export class AddEditAddressForm implements OnDestroy, OnInit {
     private addressService: AddressService,
     private cityService: CityService,
     private countryService: CountryService,
-    private formBuilder: FormBuilder,
     private postalCodeService: PostalCodeService,
     private rootFormGroup: FormGroupDirective,
     private route: ActivatedRoute,
@@ -72,8 +68,7 @@ export class AddEditAddressForm implements OnDestroy, OnInit {
 
   public ngOnInit(): void {
     // Get the address id
-    this.id = this.route.snapshot.params['id']
-    this.isAddMode = !this.id;
+    this.id = this.route.snapshot.params['id'];
 
     this.loadCountries();
 

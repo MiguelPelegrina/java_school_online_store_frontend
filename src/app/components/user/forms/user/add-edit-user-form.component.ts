@@ -15,9 +15,6 @@ export class AddEditUserForm extends AbstractForm implements OnDestroy, OnInit {
   @Input()
   formGroupName!: string;
 
-  @Input()
-  isAddMode?: boolean;
-
   protected id?: number;
 
   protected userSubscription?: Subscription;
@@ -39,8 +36,7 @@ export class AddEditUserForm extends AbstractForm implements OnDestroy, OnInit {
 
   public ngOnInit(): void {
     // Get the user id
-    this.id = this.route.snapshot.params['id']
-    this.isAddMode = !this.id;
+    this.id = this.route.snapshot.params['id'];
 
     this.form = this.rootFormGroup.control.get(this.formGroupName) as FormGroup;
 

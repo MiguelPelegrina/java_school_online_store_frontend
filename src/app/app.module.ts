@@ -48,12 +48,13 @@ import { BookBoxComponent } from './components/catalog/book-box/book-box.compone
 import { CartComponent } from './components/cart/cart.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
-import { TwoDigitDecimalNumberDirective } from './shared/utils/twoDigitDecimalNumber'
+import { TwoDigitDecimalNumberDirective } from './shared/utils/directives/twoDigitDecimalNumber'
 import { MatSelectModule } from '@angular/material/select';
 import { ProfileComponent } from './components/user/profile/profile.component';
 import { AddEditAddressForm } from './components/user/forms/address/add-edit-address-form.component';
 import { AddEditUserForm } from './components/user/forms/user/add-edit-user-form.component';
-import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask} from 'ngx-mask'
 
 @NgModule({
   declarations: [
@@ -113,12 +114,15 @@ import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker
     MatTableModule,
     MatToolbarModule,
     MatTooltipModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
     ReactiveFormsModule,
     RouterModule,
   ],
   providers: [
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 5000} },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    provideNgxMask()
   ],
   bootstrap: [AppComponent]
 })

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BookFormatService } from 'src/app/services/book/format/book-format.service';
 import { BookGenreService } from 'src/app/services/book/genre/book-genre.service';
@@ -9,6 +9,7 @@ import { BookGenre } from '../../../shared/domain/book/book-genre/book-genre';
 import { getBase64 } from 'src/app/shared/utils/utils';
 import Swal from 'sweetalert2';
 import { Subscription } from 'rxjs';
+import { AbstractForm } from 'src/app/shared/components/abstract-form';
 
 // TODO Document
 @Component({
@@ -16,15 +17,13 @@ import { Subscription } from 'rxjs';
   templateUrl: './add-edit-book-form.component.html',
   styleUrls: ['./add-edit-book-form.component.css', '../../../app.component.css'],
 })
-export class AddEditBookFormComponent implements OnDestroy, OnInit {
+export class AddEditBookFormComponent extends AbstractForm implements OnDestroy, OnInit {
   // Fields
   protected booksSubscription?: Subscription;
 
   protected bookFormatsSubscription?: Subscription;
 
   protected bookGenresSubscription?: Subscription;
-
-  protected form!: FormGroup;
 
   protected formatTypes: BookFormat[] = []
 
@@ -62,7 +61,9 @@ export class AddEditBookFormComponent implements OnDestroy, OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-  ) {}
+  ) {
+    super();
+  }
 
 
   // Methods
@@ -113,21 +114,6 @@ export class AddEditBookFormComponent implements OnDestroy, OnInit {
   }
 
   // Protected methods
-  /**
-   * Gets access to form fields
-   */
-  protected get f(){
-    return this.form.controls;
-  }
-
-  protected getErrorMessage(value: string){
-    if(this.form.controls[value].hasError('required')){
-      return "You must enter a valid value";
-    }
-
-    return this.form.controls[value].hasError(value) ? 'Not a valid value' : '';
-  }
-
   protected onFileSelected(event: any): void{
     const inputElement: HTMLInputElement = event.target;
 
@@ -177,7 +163,7 @@ export class AddEditBookFormComponent implements OnDestroy, OnInit {
           this.handleSuccessResponse('created');
         },
         error: error => {
-          this.handleErrorResponse('created',error);
+          this.handleErrorResponse('created', error);
         }
       })
   }

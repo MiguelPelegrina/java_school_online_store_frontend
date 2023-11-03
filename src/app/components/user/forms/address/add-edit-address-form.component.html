@@ -55,7 +55,6 @@
         formControlName="street"
         matInput
         placeholder="Enter your street name"
-        required
         type="text"
         >
         <mat-error *ngIf="f['street'].invalid">{{getErrorMessage('street')}}</mat-error>
@@ -70,7 +69,6 @@
         formControlName="number"
         matInput
         placeholder="Enter your number"
-        required
         type="text"
         >
         <mat-error *ngIf="f['number'].invalid">{{getErrorMessage('number')}}</mat-error>

@@ -105,43 +105,35 @@
     <!-- TODO Only if not logged in -->
     <div class="d-flex flex-column m-1 p-1">
       <!-- LOGIN -->
-      <button mat-button>
-        <a routerLink="auth/login" routerLinkActive="active" class="text-white nav-link">
-          Login
-        </a>
-      </button>
+      <a mat-button routerLink="auth/login">
+        Login
+      </a>
       <!-- /LOGIN -->
 
       <!-- REGISTER -->
-      <button mat-button>
-        <a routerLink="auth/register" routerLinkActive="active" class="text-white nav-link">
-          Register
-        </a>
-      </button>
+      <a mat-button routerLink="auth/register">
+        Register
+      </a>
       <!-- /REGISTER -->
 
       <!-- TODO Only if logged in-->
       <!-- ORDERS -->
-      <button mat-button>
-        <a routerLink="" routerLinkActive="active" class="text-white nav-link">
-          My orders
-        </a>
-      </button>
+      <a mat-button routerLink="">
+        My orders
+      </a>
       <!-- /ORDERS -->
 
       <!-- PROFILE -->
-      <button mat-button>
-        <a routerLink="profile" routerLinkActive="active" class="text-white nav-link">
-          My profile
-        </a>
-      </button>
+      <a mat-button routerLink="profile">
+        My profile
+      </a>
       <!-- /PROFILE -->
 
       <!-- TODO Only if logged in -->
       <!-- LOGOUT -->
-      <button mat-button>
+      <a mat-button (click)="onLogout()" routerLink="catalog">
         Logout
-      </button>
+      </a>
       <!-- /LOGOUT -->
     </div>
   </mat-menu>
