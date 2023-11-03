@@ -2,7 +2,8 @@
 <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 <!-- /LOADING -->
 
-<h2 class="text-center">Edit your profile</h2>
+<h2 class="text-center" *ngIf="isAddMode">Add a new book</h2>
+<h2 class="text-center" *ngIf="!isAddMode">Edit your profile</h2>
 
 <pre style="margin-top:50px; border: 1px solid red; width: fit-content">
   {{form.value | json}}
@@ -12,7 +13,7 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <app-add-edit-user-form formGroupName="personalData"></app-add-edit-user-form>
 
-    <app-add-edit-address-form formGroupName="address"></app-add-edit-address-form>
+    <app-add-edit-address-form [selectedCity]="selectedCity" [selectedCountry]="selectedCity" [selectedPostalCode]="selectedPostalCode" formGroupName="address"></app-add-edit-address-form>
 
     <div class="row d-flex justify-content-around m-2 p-2">
       <div class="col-sm d-flex justify-content-center m-2 p-2">

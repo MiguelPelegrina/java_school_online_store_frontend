@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormGroupDirective } from '@angular/forms';
+import { FormGroup, FormGroupDirective } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CityService } from 'src/app/services/city/city.service';
 import { CountryService } from 'src/app/services/country/country.service';
@@ -9,16 +9,26 @@ import { City } from '../../../../shared/domain/user/address/postal-code/city/ci
 import { PostalCode } from '../../../../shared/domain/user/address/postal-code/postal-code';
 import { ActivatedRoute } from '@angular/router';
 import { AddressService } from 'src/app/services/address/address.service';
+import { AbstractForm } from 'src/app/shared/components/abstract-form';
 
 @Component({
   selector: 'app-add-edit-address-form',
   templateUrl: './add-edit-address-form.component.html',
   styleUrls: ['./add-edit-address-form.component.css' , '../../../../app.component.css'],
 })
-export class AddEditAddressForm implements OnDestroy, OnInit {
+export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnInit {
   // Fields
   @Input()
-  formGroupName!: string;
+  public formGroupName!: string;
+
+  @Input()
+  public selectedCountry?: Country;
+
+  @Input()
+  public selectedCity?: City;
+
+  @Input()
+  public selectedPostalCode?: PostalCode;
 
   protected addressSubscription?: Subscription;
 
@@ -30,8 +40,6 @@ export class AddEditAddressForm implements OnDestroy, OnInit {
 
   protected countries: Country[] = [];
 
-  protected form!: FormGroup;
-
   protected id?: number;
 
   protected isCountrySelected = false;
@@ -39,12 +47,6 @@ export class AddEditAddressForm implements OnDestroy, OnInit {
   protected postalCodes: PostalCode[] = [];
 
   protected postalCodeSubscription?: Subscription;
-
-  protected selectedCountry?: string;
-
-  protected selectedCity: string = '';
-
-  protected selectedPostalCode: string = '';
 
   // Constructor
   constructor(
@@ -55,10 +57,24 @@ export class AddEditAddressForm implements OnDestroy, OnInit {
     private rootFormGroup: FormGroupDirective,
     private route: ActivatedRoute,
     ){
+    super();
   }
 
   // Methods
   // Public methods
+  public loadAddress(id: number): void{
+    this.addressSubscription = this.addressService.getById(id)
+    .subscribe((response) => {
+      this.selectedCountry = response.postalCode.city.country;
+
+      this.selectedCity = response.postalCode.city;
+
+      this.selectedPostalCode = response.postalCode;
+
+      this.form.patchValue(response);
+    })
+  }
+
   public ngOnDestroy(): void {
     this.addressSubscription?.unsubscribe();
     this.citySubscription?.unsubscribe();
@@ -75,68 +91,42 @@ export class AddEditAddressForm implements OnDestroy, OnInit {
     this.form = this.rootFormGroup.control.get(this.formGroupName) as FormGroup;
 
     if(this.id){
-      this.loadAddress();
+      this.loadAddress(this.id);
       this.loadCities();
       this.loadPostalCodes();
     }
   }
 
   // Protected methods
-  /**
-   * Gets access to form fields
-   */
-  protected get f(){
-    return this.form.controls;
-  }
-
-  protected getErrorMessage(value: string){
-    if(this.form.controls[value].hasError('required')){
-      return "You must enter a valid value";
-    }
-
-    return this.form.controls[value].hasError(value) ? 'Not a valid value' : '';
-  }
-
-  protected onCitySelected(city: string){
-    this.postalCodeService.getAll(true, city).subscribe((response) => {
+  protected onCitySelected(city: City): void{
+    this.postalCodeService.getAll(true, city.name).subscribe((response) => {
       this.postalCodes = response;
     })
   }
 
-  protected onCountrySelected(country: string){
-    this.cityService.getAll(true, country).subscribe((response) => {
+  protected onCountrySelected(country: Country): void{
+    this.cityService.getAll(true, country.name).subscribe((response) => {
       this.cities = response;
     });
   }
 
   // Private methods
-  private loadAddress(){
-    this.addressSubscription = this.addressService.getById(this.id!)
-    .subscribe((response) => {
-      this.selectedCountry = response.postalCode.city.countryName.name;
 
-      this.selectedCity = response.postalCode.city.name;
 
-      this.selectedPostalCode = response.postalCode.code;
-
-      this.form.patchValue(response);
-    })
-  }
-
-  private loadCities(){
-    this.citySubscription = this.cityService.getAll().subscribe(cityList => {
+  private loadCities(): void{
+    this.citySubscription = this.cityService.getAll(true).subscribe(cityList => {
       this.cities = cityList;
     });
   }
 
-  private loadCountries(){
+  private loadCountries(): void{
     this.countrySubscription = this.countryService.getAll(true).subscribe(countryList => {
       this.countries = countryList;
     });
   }
 
-  private loadPostalCodes(){
-    this.postalCodeSubscription = this.postalCodeService.getAll().subscribe(postalCodeList => {
+  private loadPostalCodes(): void{
+    this.postalCodeSubscription = this.postalCodeService.getAll(true).subscribe(postalCodeList => {
       this.postalCodes = postalCodeList;
     });
   }

@@ -49,7 +49,7 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
    * @param bookService
    * @param bookFormatService
    * @param bookGenreService
-   * @param formBuilder
+   * @param fb
    * @param route
    * @param router
    * @param snackbar
@@ -58,13 +58,12 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
     private bookService: BookService,
     private bookFormatService: BookFormatService,
     private bookGenreService: BookGenreService,
-    private formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
   ) {
     super();
   }
-
 
   // Methods
   // Public methods
@@ -90,14 +89,14 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
     this.loadFormats();
 
     // Generate the form
-    this.form = this.formBuilder.group({
+    this.form = this.fb.group({
       // TODO Not sure if right, should I use form?.value instead of empty values?
       active: [false, Validators.required],
       id: [''],
       image: ['', Validators.required],
       isbn: ['', Validators.required],
       genre: ['', Validators.required],
-      parameters: this.formBuilder.group({
+      parameters: this.fb.group({
         author: ['', Validators.required],
         id:[''],
         format: ['', Validators.required],

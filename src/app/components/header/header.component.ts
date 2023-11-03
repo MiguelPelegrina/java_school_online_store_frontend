@@ -49,6 +49,6 @@ export class HeaderComponent implements OnInit{
   }
 
   protected onLogout(){
-    localStorage.removeItem('auth_token');
+    localStorage.clear();
   }
 }

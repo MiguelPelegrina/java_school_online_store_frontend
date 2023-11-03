@@ -53,12 +53,7 @@ export class RegisterComponent extends AbstractForm {
 
   private createUser(){
     this.usersSubscription = this.service.register(
-      this.form.value.personalData.dateOfBirth,
-      this.form.value.personalData.email,
-      this.form.value.personalData.name,
-      this.form.value.personalData.password,
-      this.form.value.personalData.phone,
-      this.form.value.personalData.surname
+      this.form.controls['personalDate'].value
     ).subscribe({
       next: (response: any) => {
         this.handleSuccessResponse(response);

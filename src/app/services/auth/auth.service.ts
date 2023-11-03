@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { User } from 'src/app/shared/domain/user/user';
 import { StringValues } from 'src/app/shared/utils/string-values';
 
 @Injectable({
@@ -24,8 +25,10 @@ export class AuthService {
     );
   }
 
-  public register(dateOfBirth: string, email: string, name:string, password: string, phone: string, surname: string){
-    const body = JSON.stringify({dateOfBirth, email, name, password, phone, surname});
+  // public register(dateOfBirth: string, email: string, name:string, password: string, phone: string, surname: string){
+  //   const body = JSON.stringify({dateOfBirth, email, name, password, phone, surname});
+  public register(user: User){
+    const body = JSON.stringify(user);
 
     return this.httpClient.post(
       StringValues.BASE_REGISTER_URL,

@@ -9,7 +9,7 @@
       <mat-form-field class="form-group w-100">
         <mat-label>Country</mat-label>
         <mat-select formControlName="country" (selectionChange)="onCountrySelected($event.value)" [(value)]="selectedCountry">
-          <mat-option *ngFor="let country of countries" [value]="country.name">
+          <mat-option *ngFor="let country of countries" [value]="country">
             {{country.name}}
           </mat-option>
           <mat-error *ngIf="f['country'].invalid">{{getErrorMessage('country')}}</mat-error>
@@ -23,7 +23,7 @@
       <mat-form-field class="form-group w-100">
         <mat-label>City</mat-label>
         <mat-select [attr.disabled]="!selectedCountry" formControlName="city" (selectionChange)="onCitySelected($event.value)" [(value)]="selectedCity">
-          <mat-option *ngFor="let city of cities" [value]="city.name">
+          <mat-option *ngFor="let city of cities" [value]="city">
             {{city.name}}
           </mat-option>
           <mat-error *ngIf="f['city'].invalid">{{getErrorMessage('city')}}</mat-error>
@@ -37,7 +37,7 @@
       <mat-form-field class="form-group w-100">
         <mat-label>Postal code</mat-label>
         <mat-select [attr.disabled]="!selectedCity" formControlName="postalCode" [(value)]="selectedPostalCode">
-          <mat-option *ngFor="let postalCode of postalCodes" [value]="postalCode.code">
+          <mat-option *ngFor="let postalCode of postalCodes" [value]="postalCode">
             {{postalCode.code}}
           </mat-option>
           <mat-error *ngIf="f['postalCode'].invalid">{{getErrorMessage('postalCode')}}</mat-error>

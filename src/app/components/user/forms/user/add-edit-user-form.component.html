@@ -39,7 +39,7 @@
       <div class="col-sm">
         <mat-form-field class="form-group w-100" appearance="fill">
           <mat-label>Password</mat-label>
-          <input formControlName="password" matInput placeholder="Enter your password" required="" type="password">
+          <input formControlName="password" matInput placeholder="Enter your password" required type="password">
           <mat-error *ngIf="f['password'].invalid">{{getErrorMessage('password')}}</mat-error>
         </mat-form-field>
       </div>
