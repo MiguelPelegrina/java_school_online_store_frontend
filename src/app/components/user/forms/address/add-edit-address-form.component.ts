@@ -24,10 +24,10 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
   public selectedCountry?: string = '';
 
   @Input()
-  public selectedCity?: string = '';
+  public selectedCity?: string;
 
   @Input()
-  public selectedPostalCode?: string = '';
+  public selectedPostalCode?: string;
 
   protected addressSubscription?: Subscription;
 
@@ -75,8 +75,13 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
     this.selectedCountry = this.form.value.country;
     this.selectedCity = this.form.value.city;
 
-    this.loadCities();
-    this.loadPostalCodes();
+    if(!(this.selectedCountry?.length == 0)){
+      this.loadCities();
+    }
+
+    if(!(this.selectedCity?.length == 0)){
+      this.loadPostalCodes();
+    }
   }
 
   // Protected methods

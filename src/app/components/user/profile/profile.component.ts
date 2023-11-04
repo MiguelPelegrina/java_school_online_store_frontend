@@ -10,7 +10,9 @@ import Swal from 'sweetalert2';
 
 // TODO
 // - Fix select not showing loaded values until a form is clicked
-// - Refator form --> too much duplicated code
+// - Refactor whole component:
+//  - More auxiliar methods
+//  - Reduce form content?
 
 @Component({
   selector: 'app-profile',
@@ -166,8 +168,6 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
   }
 
   private updateUser(): void {
-    console.log('form', this.form.value)
-
     const user: User = {
       ...this.form.controls['personalData'].value,
       address: {
@@ -189,7 +189,6 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
         }
       }
     };
-    console.log('user',user)
 
     this.usersSubscription = this.usersService.update(this.id!, user).subscribe({
       next: () => {
