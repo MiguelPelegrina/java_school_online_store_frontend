@@ -7,7 +7,6 @@ import { PostalCodeService } from 'src/app/services/postal-code/postal-code.serv
 import { Country } from '../../../../shared/domain/country/country';
 import { City } from '../../../../shared/domain/user/address/postal-code/city/city';
 import { PostalCode } from '../../../../shared/domain/user/address/postal-code/postal-code';
-import { ActivatedRoute } from '@angular/router';
 import { AddressService } from 'src/app/services/address/address.service';
 import { AbstractForm } from 'src/app/shared/components/abstract-form';
 
@@ -22,13 +21,13 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
   public formGroupName!: string;
 
   @Input()
-  public selectedCountry?: Country;
+  public selectedCountry?: string = '';
 
   @Input()
-  public selectedCity?: City;
+  public selectedCity?: string = '';
 
   @Input()
-  public selectedPostalCode?: PostalCode;
+  public selectedPostalCode?: string = '';
 
   protected addressSubscription?: Subscription;
 
@@ -50,31 +49,16 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
 
   // Constructor
   constructor(
-    private addressService: AddressService,
     private cityService: CityService,
     private countryService: CountryService,
     private postalCodeService: PostalCodeService,
     private rootFormGroup: FormGroupDirective,
-    private route: ActivatedRoute,
     ){
     super();
   }
 
   // Methods
   // Public methods
-  public loadAddress(id: number): void{
-    this.addressSubscription = this.addressService.getById(id)
-    .subscribe((response) => {
-      this.selectedCountry = response.postalCode.city.country;
-
-      this.selectedCity = response.postalCode.city;
-
-      this.selectedPostalCode = response.postalCode;
-
-      this.form.patchValue(response);
-    })
-  }
-
   public ngOnDestroy(): void {
     this.addressSubscription?.unsubscribe();
     this.citySubscription?.unsubscribe();
@@ -84,37 +68,37 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
 
   public ngOnInit(): void {
     // Get the address id
-    this.id = this.route.snapshot.params['id'];
+    this.form = this.rootFormGroup.control.get(this.formGroupName) as FormGroup;
 
     this.loadCountries();
 
-    this.form = this.rootFormGroup.control.get(this.formGroupName) as FormGroup;
+    this.selectedCountry = this.form.value.country;
+    this.selectedCity = this.form.value.city;
 
-    if(this.id){
-      this.loadAddress(this.id);
-      this.loadCities();
-      this.loadPostalCodes();
-    }
+    this.loadCities();
+    this.loadPostalCodes();
   }
 
   // Protected methods
   protected onCitySelected(city: City): void{
     this.postalCodeService.getAll(true, city.name).subscribe((response) => {
-      this.postalCodes = response;
+      this.selectedPostalCode = '';
+      this.loadPostalCodes();
     })
   }
 
   protected onCountrySelected(country: Country): void{
+    console.log(country)
     this.cityService.getAll(true, country.name).subscribe((response) => {
-      this.cities = response;
+      this.selectedCity = '';
+      this.selectedPostalCode = '';
+      this.loadCities();
     });
   }
 
   // Private methods
-
-
   private loadCities(): void{
-    this.citySubscription = this.cityService.getAll(true).subscribe(cityList => {
+    this.citySubscription = this.cityService.getAll(true,this.selectedCountry).subscribe(cityList => {
       this.cities = cityList;
     });
   }
@@ -126,7 +110,7 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
   }
 
   private loadPostalCodes(): void{
-    this.postalCodeSubscription = this.postalCodeService.getAll(true).subscribe(postalCodeList => {
+    this.postalCodeSubscription = this.postalCodeService.getAll(true, this.selectedCity).subscribe(postalCodeList => {
       this.postalCodes = postalCodeList;
     });
   }

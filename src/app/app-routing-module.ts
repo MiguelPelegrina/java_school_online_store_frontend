@@ -19,7 +19,7 @@ import { ProfileComponent } from "./components/user/profile/profile.component";
 const routes: Routes = [
   {path: '', redirectTo:'catalog', pathMatch:'full'},
   {path: 'auth/login', component: LoginComponent},
-  {path: 'auth/register', component: RegisterComponent},
+  {path: 'auth/register', component: ProfileComponent},
   {path: 'book_formats', component: ListBookParametersFormatComponent},
   {path: 'book_genres', component: ListBookGenreComponent},
   {path: 'books', component: ListBookComponent},

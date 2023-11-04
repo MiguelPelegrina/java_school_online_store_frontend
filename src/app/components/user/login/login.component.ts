@@ -9,6 +9,9 @@ import { AbstractForm } from 'src/app/shared/components/abstract-form';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+/**
+ * @deprecated
+ */
 export class LoginComponent extends AbstractForm {
 
   constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router){

@@ -1,21 +1,22 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { AbstractForm } from 'src/app/shared/components/abstract-form';
-import { Country } from 'src/app/shared/domain/country/country';
-import { City } from 'src/app/shared/domain/user/address/postal-code/city/city';
-import { PostalCode } from 'src/app/shared/domain/user/address/postal-code/postal-code';
 import { User } from 'src/app/shared/domain/user/user';
 import Swal from 'sweetalert2';
-import { AddEditAddressForm } from '../forms/address/add-edit-address-form.component';
+
+// TODO
+// - Fix select not showing loaded values until a form is clicked
+// - Refator form --> too much duplicated code
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css', '../../../app.component.css']
+  styleUrls: ['./profile.component.css', '../../../app.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit {
   // Fields
@@ -25,13 +26,14 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
 
   protected loading = false;
 
-  protected response: any;
+  // TODO This variable to store missing properties (active, id) of user/address or hidden forms?
+  protected response?: User;
 
-  protected selectedCity?: City;
+  protected selectedCity?: string;
 
-  protected selectedCountry?: Country;
+  protected selectedCountry?: string;
 
-  protected selectedPostalCode?: PostalCode;
+  protected selectedPostalCode?: string;
 
   protected submitted = false;
 
@@ -47,20 +49,11 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private usersService: UserService){
+    private usersService: UserService,
+    private cd: ChangeDetectorRef){
     super();
-  }
 
-  public ngOnDestroy(): void {
-    this.usersSubscription?.unsubscribe();
-  }
-
-  // Methods
-  // Public methods
-  public ngOnInit(): void {
-    // Get the user id
-    // TODO Improve this
-    this.id = JSON.parse(localStorage.getItem('id') || '{}');
+    this.id = JSON.parse(localStorage.getItem('id') || '0');
 
     this.isAddMode = !this.id;
 
@@ -68,15 +61,20 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
       this.loading = false;
     }
 
-    this.form = this.fb.group({
+    if(this.id != 0){
+      // TODO Can this be refactored? Even with patch value, the amount of lines is the same
+      this.loadUser();
+    } else {
+      this.form = this.fb.group({
         personalData: this.fb.group({
+          active: [true],
           dateOfBirth: [new Date(), Validators.required],
           email: ['', [Validators.required, Validators.email]],
           id: [''],
-          active: [''],
           name: ['', Validators.required],
           // TODO Not sure about this. Once logged in, it should not be necessary to introduced the password again for changes, or?
-          password: ['', this.isAddMode ? Validators.required : []],
+          // TODO Not showing when invalid
+          password: ['', Validators.required],
           phone: ['', Validators.required],
           surname: ['', Validators.required]
         }),
@@ -87,11 +85,18 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
           postalCode: ['', Validators.required],
           street: ['', Validators.required]
         })
-    })
-
-    if(this.id){
-      this.loadUser();
+      })
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.usersSubscription?.unsubscribe();
+  }
+
+  // Methods
+  // Public methods
+  public ngOnInit(): void {
+
   }
 
   protected onSubmit(){
@@ -129,38 +134,62 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
   private loadUser(): void {
     this.usersService.getById(this.id!).subscribe((response) => {
       this.response = response;
+      console.log('response', this.response)
+      this.form = this.fb.group({
+        personalData: this.fb.group({
+          active: [response.active],
+          dateOfBirth: [response.dateOfBirth, Validators.required],
+          email: [response.email, [Validators.required, Validators.email]],
+          id: [response.id],
+          name: [response.name, Validators.required],
+          // TODO Not sure about this. Once logged in, it should not be necessary to introduced the password again for changes, or?
+          password: ['', Validators.required],
+          phone: [response.phone, Validators.required],
+          surname: [response.surname, Validators.required]
+        }),
+        address: this.fb.group({
+          country: [response.address.postalCode.city.country.name, Validators.required],
+          city: [response.address.postalCode.city.name, Validators.required],
+          number: [response.address.number, Validators.required],
+          postalCode: [response.address.postalCode.code, Validators.required],
+          street: [response.address.street, Validators.required]
+        })
+      })
 
-      // TODO Fix select not selecting loaded value
 
-      this.form.controls['personalData'].patchValue(response);
-      this.form.controls['address'].patchValue(response.address);
+      console.log(this.form.value)
 
       this.loading = false;
+
+      this.cd.detectChanges();
     })
   }
 
   private updateUser(): void {
+    console.log('form', this.form.value)
+
     const user: User = {
       ...this.form.controls['personalData'].value,
       address: {
         id: 1,
-        active: this.form.controls['address'].value.postalCode.active,
+        active: this.response?.address.active,
         number: this.form.controls['address'].value.number,
         street: this.form.controls['address'].value.street,
         postalCode: {
-          active: this.form.controls['address'].value.postalCode.active,
-          code: this.form.controls['address'].value.postalCode.code,
+          active: this.response?.address.postalCode.active,
+          code: this.form.controls['address'].value.postalCode,
           city: {
-            active: this.form.controls['address'].value.city.active,
-            name: this.form.controls['address'].value.city.name,
+            active: this.response?.address.postalCode.city.active,
+            name: this.form.controls['address'].value.city,
             countryName: {
               active: this.form.controls['address'].value.country.active,
-              name: this.form.controls['address'].value.country.name
+              name: this.form.controls['address'].value.country
             }
           }
         }
       }
     };
+    console.log('user',user)
 
     this.usersSubscription = this.usersService.update(this.id!, user).subscribe({
       next: () => {

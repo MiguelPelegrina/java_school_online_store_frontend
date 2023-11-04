@@ -1,80 +1,80 @@
 <!-- TODO Inform the user to select in order country > city > postal code -->
 <ng-container [formGroup]="form">
 
-<mat-card class="d-flex flex-column form-container">
-  <mat-card-title class="text-white">Address</mat-card-title>
-  <div class="row">
-    <div class="col-sm">
-      <!-- COUNTRY -->
-      <mat-form-field class="form-group w-100">
-        <mat-label>Country</mat-label>
-        <mat-select formControlName="country" (selectionChange)="onCountrySelected($event.value)" [(value)]="selectedCountry">
-          <mat-option *ngFor="let country of countries" [value]="country">
-            {{country.name}}
-          </mat-option>
-          <mat-error *ngIf="f['country'].invalid">{{getErrorMessage('country')}}</mat-error>
-        </mat-select>
-      </mat-form-field>
-      <!-- /COUNTRY -->
+  <mat-card class="d-flex flex-column form-container">
+    <mat-card-title class="text-white">Address</mat-card-title>
+    <div class="row">
+      <div class="col-sm">
+        <!-- COUNTRY -->
+        <mat-form-field class="form-group w-100">
+          <mat-label>Country</mat-label>
+          <mat-select formControlName="country" (selectionChange)="onCountrySelected($event.value)" [(value)]="selectedCountry">
+            <mat-option *ngFor="let country of countries" [value]="country.name">
+              {{country.name}}
+            </mat-option>
+            <mat-error *ngIf="f['country'].invalid">{{getErrorMessage('country')}}</mat-error>
+          </mat-select>
+        </mat-form-field>
+        <!-- /COUNTRY -->
+      </div>
+
+      <div class="col-sm">
+        <!-- CITY -->
+        <mat-form-field class="form-group w-100">
+          <mat-label>City</mat-label>
+          <mat-select [attr.disabled]="!selectedCountry" formControlName="city" (selectionChange)="onCitySelected($event.value)" [(value)]="selectedCity">
+            <mat-option *ngFor="let city of cities" [value]="city.name">
+              {{city.name}}
+            </mat-option>
+            <mat-error *ngIf="f['city'].invalid">{{getErrorMessage('city')}}</mat-error>
+          </mat-select>
+        </mat-form-field>
+        <!-- /CITY -->
+      </div>
+
+      <div class="col-sm">
+        <!-- POSTAL CODE -->
+        <mat-form-field class="form-group w-100">
+          <mat-label>Postal code</mat-label>
+          <mat-select [attr.disabled]="!selectedCity" formControlName="postalCode" [(value)]="selectedPostalCode">
+            <mat-option *ngFor="let postalCode of postalCodes" [value]="postalCode.code">
+              {{postalCode.code}}
+            </mat-option>
+            <mat-error *ngIf="f['postalCode'].invalid">{{getErrorMessage('postalCode')}}</mat-error>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- /POSTAL CODE -->
     </div>
 
-    <div class="col-sm">
-      <!-- CITY -->
-      <mat-form-field class="form-group w-100">
-        <mat-label>City</mat-label>
-        <mat-select [attr.disabled]="!selectedCountry" formControlName="city" (selectionChange)="onCitySelected($event.value)" [(value)]="selectedCity">
-          <mat-option *ngFor="let city of cities" [value]="city">
-            {{city.name}}
-          </mat-option>
-          <mat-error *ngIf="f['city'].invalid">{{getErrorMessage('city')}}</mat-error>
-        </mat-select>
-      </mat-form-field>
-      <!-- /CITY -->
-    </div>
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="form-group w-100" appearance="fill">
+          <mat-label>Street</mat-label>
+          <input
+          formControlName="street"
+          matInput
+          placeholder="Enter your street name"
+          type="text"
+          >
+          <mat-error *ngIf="f['street'].invalid">{{getErrorMessage('street')}}</mat-error>
+        </mat-form-field>
+      </div>
 
-    <div class="col-sm">
-      <!-- POSTAL CODE -->
-      <mat-form-field class="form-group w-100">
-        <mat-label>Postal code</mat-label>
-        <mat-select [attr.disabled]="!selectedCity" formControlName="postalCode" [(value)]="selectedPostalCode">
-          <mat-option *ngFor="let postalCode of postalCodes" [value]="postalCode">
-            {{postalCode.code}}
-          </mat-option>
-          <mat-error *ngIf="f['postalCode'].invalid">{{getErrorMessage('postalCode')}}</mat-error>
-        </mat-select>
-      </mat-form-field>
+      <!-- TODO Not that good when small device, need to be full row then -->
+      <div class="col-4">
+        <mat-form-field class="form-group" appearance="fill">
+          <mat-label>Number</mat-label>
+          <input
+          formControlName="number"
+          matInput
+          placeholder="Enter your number"
+          type="text"
+          >
+          <mat-error *ngIf="f['number'].invalid">{{getErrorMessage('number')}}</mat-error>
+        </mat-form-field>
+      </div>
     </div>
-    <!-- /POSTAL CODE -->
-  </div>
-
-  <div class="row">
-    <div class="col">
-      <mat-form-field class="form-group w-100" appearance="fill">
-        <mat-label>Street</mat-label>
-        <input
-        formControlName="street"
-        matInput
-        placeholder="Enter your street name"
-        type="text"
-        >
-        <mat-error *ngIf="f['street'].invalid">{{getErrorMessage('street')}}</mat-error>
-      </mat-form-field>
-    </div>
-
-    <!-- TODO Not that good when small device, need to be full row then -->
-    <div class="col-4">
-      <mat-form-field class="form-group" appearance="fill">
-        <mat-label>Number</mat-label>
-        <input
-        formControlName="number"
-        matInput
-        placeholder="Enter your number"
-        type="text"
-        >
-        <mat-error *ngIf="f['number'].invalid">{{getErrorMessage('number')}}</mat-error>
-      </mat-form-field>
-    </div>
-  </div>
-</mat-card>
+  </mat-card>
 
 </ng-container>

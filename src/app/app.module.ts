@@ -29,7 +29,6 @@ import { ListBookParametersFormatComponent } from './components/book-parameters-
 import { AddEditBookFormComponent } from './components/book/add-edit-book-form/add-edit-book-form.component';
 import { ListBookComponent } from './components/book/list-book/list-book.component';
 import { ViewBookComponent } from './components/book/view-book/view-book.component';
-import { BookCardComponent } from './components/catalog/book-card/book-card.component';
 import { BooksHeaderComponent } from './components/catalog/books-header/books-header.component';
 import { CatalogComponent } from './components/catalog/catalog.component';
 import { DetailCountryComponent } from './components/country/detail-country/detail-country.component';
@@ -54,14 +53,14 @@ import { ProfileComponent } from './components/user/profile/profile.component';
 import { AddEditAddressForm } from './components/user/forms/address/add-edit-address-form.component';
 import { AddEditUserForm } from './components/user/forms/user/add-edit-user-form.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { NgxMaskDirective, NgxMaskPipe, provideNgxMask} from 'ngx-mask'
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask} from 'ngx-mask';
+import { AddEditProfileComponent } from './components/user/add-edit-profile/add-edit-profile.component';
 
 @NgModule({
   declarations: [
     AddCountryComponent,
     AddEditBookFormComponent,
     AppComponent,
-    BookCardComponent,
     BookBoxComponent,
     BooksHeaderComponent,
     CartComponent,
@@ -83,6 +82,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask} from 'ngx-mask'
     AddEditAddressForm,
     ProfileComponent,
     AddEditUserForm,
+    AddEditProfileComponent,
   ],
   imports: [
     AppRoutingModule,
