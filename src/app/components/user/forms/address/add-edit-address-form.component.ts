@@ -86,14 +86,14 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
 
   // Protected methods
   protected onCitySelected(city: City): void{
-    this.postalCodeService.getAll(true, city.name).subscribe((response) => {
+    this.postalCodeService.getAll(true, city.name).subscribe(() => {
       this.selectedPostalCode = '';
       this.loadPostalCodes();
     })
   }
 
   protected onCountrySelected(country: Country): void{
-    this.cityService.getAll(true, country.name).subscribe((response) => {
+    this.cityService.getAll(true, country.name).subscribe(() => {
       this.selectedCity = '';
       this.selectedPostalCode = '';
       this.loadCities();

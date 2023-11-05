@@ -53,6 +53,7 @@ import { AddEditAddressForm } from './components/user/forms/address/add-edit-add
 import { AddEditUserForm } from './components/user/forms/user/add-edit-user-form.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask} from 'ngx-mask';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask} from 'ngx-mask';
     AddEditAddressForm,
     ProfileComponent,
     AddEditUserForm,
+    CheckoutComponent,
   ],
   imports: [
     AppRoutingModule,

@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { AbstractForm } from 'src/app/shared/components/abstract-form';
 import { Address } from 'src/app/shared/domain/user/address/address';
 import { User } from 'src/app/shared/domain/user/user';
+import { AuthResultDto } from 'src/app/shared/utils/authResultDto';
 import Swal from 'sweetalert2';
 
 // TODO
@@ -26,7 +28,7 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
 
   protected isAddMode?: boolean;
 
-  protected loading = false;
+  protected loading = true;
 
   // TODO This variable to store missing properties (active, id) of user/address or hidden forms?
   protected response?: User;
@@ -55,39 +57,21 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
     ){
     super();
 
-    this.id = JSON.parse(localStorage.getItem('id') || '0');
+    // TODO Needs to change?
+    const token = localStorage.getItem('auth_token');
 
-    this.isAddMode = !this.id;
-
-    if(this.isAddMode){
-      this.loading = false;
+    if(token){
+      const tokenInfo: AuthResultDto = jwtDecode(token);
+      this.id = tokenInfo.id;
     }
 
-    if(this.id != 0){
-      // TODO Can this be refactored? Even with patch value, the amount of lines is the same
-      this.loadUser();
+    if(this.id){
+      this.loadFilledUserForm();
     } else {
-      this.form = this.fb.group({
-        personalData: this.fb.group({
-          active: [true],
-          dateOfBirth: [new Date(), Validators.required],
-          email: ['', [Validators.required, Validators.email]],
-          id: [''],
-          name: ['', Validators.required],
-          // TODO Not sure about this. Once logged in, it should not be necessary to introduced the password again for changes, or?
-          // TODO Not showing when invalid
-          password: ['', Validators.required],
-          phone: ['', Validators.required],
-          surname: ['', Validators.required]
-        }),
-        address: this.fb.group({
-          country: ['', Validators.required],
-          city: ['', Validators.required],
-          number: ['', Validators.required],
-          postalCode: ['', Validators.required],
-          street: ['', Validators.required]
-        })
-      })
+      this.isAddMode = !this.id;
+      this.loading = false;
+
+      this.createFormGroup();
     }
   }
 
@@ -115,6 +99,31 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
   }
 
   // Private methods
+  private createFormGroup() {
+    this.form = this.fb.group({
+      personalData: this.fb.group({
+        active: [true],
+        dateOfBirth: [new Date(), Validators.required],
+        email: ['', [Validators.required, Validators.email]],
+        id: [''],
+        name: ['', Validators.required],
+        // TODO Not sure about this. Once logged in, it should not be necessary to introduced the password again for changes, or?
+        // TODO Not showing when invalid
+        password: ['', Validators.required],
+        phone: ['', Validators.required],
+        surname: ['', Validators.required]
+      }),
+      address: this.fb.group({
+        country: ['', Validators.required],
+        city: ['', Validators.required],
+        number: ['', Validators.required],
+        postalCode: ['', Validators.required],
+        street: ['', Validators.required]
+      })
+    })
+  }
+
+
   private createUser(){
     // TODO Assign proper values
     console.log(this.form.value)
@@ -151,7 +160,7 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
     })
   }
 
-  private loadUser(): void {
+  private loadFilledUserForm(): void {
     this.usersService.getById(this.id!).subscribe((response) => {
       this.response = response;
 
