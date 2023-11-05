@@ -10,7 +10,6 @@ import { AddEditBookFormComponent } from "./components/book/add-edit-book-form/a
 import { ListBookGenreComponent } from "./components/book-genres/list-book-genre/list-book-genre.component";
 import { CatalogComponent } from "./components/catalog/catalog.component";
 import { LoginComponent } from "./components/user/login/login.component";
-import { RegisterComponent } from "./components/user/register/register.component";
 import { ListBookParametersFormatComponent } from "./components/book-parameters-formats/list-book-parameters-format/list-book-parameters-format.component";
 import { RouterModule, Routes } from "@angular/router";
 import { CartComponent } from "./components/cart/cart.component";

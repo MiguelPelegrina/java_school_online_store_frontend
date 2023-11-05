@@ -177,29 +177,28 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
     this.router.navigate(['/books']);
   }
 
-  private loadBook() {
-    this.booksSubscription = this.bookService.getById(this.id!)
-        .subscribe((response) => {
-          this.selectedFormat = response.parameters.format.name;
-          this.selectedGenre = response.genre.name;
+  private loadBook(): void {
+    this.booksSubscription = this.bookService.getById(this.id!).subscribe((response) => {
+      this.selectedFormat = response.parameters.format.name;
+      this.selectedGenre = response.genre.name;
 
-          if(response.image){
-            this.image = response.image;
-          }
+      if(response.image){
+        this.image = response.image;
+      }
 
-          this.form.patchValue(response);
+      this.form.patchValue(response);
 
-          this.loading = false;
-        });
+      this.loading = false;
+    });
   }
 
-  private loadFormats() {
+  private loadFormats(): void {
     this.bookGenresSubscription = this.bookFormatService.getAll().subscribe(bookFormatList => {
       this.formatTypes = bookFormatList;
     })
   }
 
-  private loadGenres() {
+  private loadGenres(): void {
     this.bookFormatsSubscription = this.bookGenreService.getAll().subscribe(bookGenreList => {
       this.genreTypes = bookGenreList;
     });
@@ -208,7 +207,7 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
   /**
    *
    */
-  private updateBook(){
+  private updateBook(): void{
     this.booksSubscription = this.bookService.update(this.id!, this.form.value)
       .subscribe({
         next: () => {

@@ -36,7 +36,6 @@ import { ListCountryComponent } from './components/country/list-country/list-cou
 import { UpdateCountryComponent } from './components/country/update-country/update-country.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './components/user/login/login.component';
-import { RegisterComponent } from './components/user/register/register.component';
 import { ImageSelectorComponent } from './shared/components/image-selector/image-selector.component';
 import { SearchBarComponent } from './shared/components/search-bar/search-bar.component';
 import { BrowserModule } from '@angular/platform-browser';
@@ -54,7 +53,6 @@ import { AddEditAddressForm } from './components/user/forms/address/add-edit-add
 import { AddEditUserForm } from './components/user/forms/user/add-edit-user-form.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask} from 'ngx-mask';
-import { AddEditProfileComponent } from './components/user/add-edit-profile/add-edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +72,6 @@ import { AddEditProfileComponent } from './components/user/add-edit-profile/add-
     ListBookParametersFormatComponent,
     ListCountryComponent,
     LoginComponent,
-    RegisterComponent,
     SearchBarComponent,
     TwoDigitDecimalNumberDirective,
     UpdateCountryComponent,
@@ -82,7 +79,6 @@ import { AddEditProfileComponent } from './components/user/add-edit-profile/add-
     AddEditAddressForm,
     ProfileComponent,
     AddEditUserForm,
-    AddEditProfileComponent,
   ],
   imports: [
     AppRoutingModule,

@@ -5,11 +5,12 @@ import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { AbstractForm } from 'src/app/shared/components/abstract-form';
+import { Address } from 'src/app/shared/domain/user/address/address';
 import { User } from 'src/app/shared/domain/user/user';
 import Swal from 'sweetalert2';
 
 // TODO
-// - Fix select not showing loaded values until a form is clicked
+// - Implement user creation
 // - Refactor whole component:
 //  - More auxiliar methods
 //  - Reduce form content?
@@ -18,9 +19,8 @@ import Swal from 'sweetalert2';
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css', '../../../app.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit {
+export class ProfileComponent extends AbstractForm implements OnDestroy {
   // Fields
   protected id?: number;
 
@@ -31,11 +31,11 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
   // TODO This variable to store missing properties (active, id) of user/address or hidden forms?
   protected response?: User;
 
-  protected selectedCity?: string;
+  protected selectedCity: string = '';
 
-  protected selectedCountry?: string;
+  protected selectedCountry: string = '';
 
-  protected selectedPostalCode?: string;
+  protected selectedPostalCode: string = '';
 
   protected submitted = false;
 
@@ -52,7 +52,7 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
     private fb: FormBuilder,
     private router: Router,
     private usersService: UserService,
-    private cd: ChangeDetectorRef){
+    ){
     super();
 
     this.id = JSON.parse(localStorage.getItem('id') || '0');
@@ -97,17 +97,16 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
 
   // Methods
   // Public methods
-  public ngOnInit(): void {
-
-  }
-
   protected onSubmit(){
     this.submitted = true;
+
+    this.form.markAllAsTouched();
 
     if(!this.form.invalid){
       this.loading = true;
 
       if(this.isAddMode){
+        console.log('addmode')
         this.createUser();
       } else {
         this.updateUser();
@@ -117,18 +116,37 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
 
   // Private methods
   private createUser(){
+    // TODO Assign proper values
+    console.log(this.form.value)
+    const address: Address = {
+      active: true,
+      id: 0,
+      number: this.form.value.address.number,
+      postalCode: this.form.value.address.postalCode,
+      street: this.form.value.address.number
+    }
+
     const user: User = {
-      ...this.form.controls['personalDate'].value,
-      address: this.form.controls['address'].value
+      active: true,
+      address: address,
+      dateOfBirth: this.form.value.personalData.dateOfBirth,
+      email: this.form.value.personalData.email,
+      id: 0,
+      name: this.form.value.personalData.name,
+      password: this.form.value.personalData.password,
+      phone: this.form.value.personalData.phone,
+      roles: [],
+      surname: this.form.value.personalData.surname
     };
+    console.log(user);
 
     this.usersSubscription = this.authService.register(user).subscribe({
       next: () => {
-        this.handleSuccessResponse();
+        this.handleSuccessResponse('created');
       },
       // TODO Error handling
-      error: (response: any) => {
-        this.handleErrorResponse(response.error);
+      error: (error: any) => {
+        this.handleErrorResponse('created', error);
       }
     })
   }
@@ -136,7 +154,7 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
   private loadUser(): void {
     this.usersService.getById(this.id!).subscribe((response) => {
       this.response = response;
-      console.log('response', this.response)
+
       this.form = this.fb.group({
         personalData: this.fb.group({
           active: [response.active],
@@ -158,12 +176,11 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
         })
       })
 
-
-      console.log(this.form.value)
+      this.selectedCity = response.address.postalCode.city.name;
+      this.selectedCountry = response.address.postalCode.city.country.name;
+      this.selectedPostalCode = response.address.postalCode.code;
 
       this.loading = false;
-
-      this.cd.detectChanges();
     })
   }
 
@@ -192,23 +209,24 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
 
     this.usersSubscription = this.usersService.update(this.id!, user).subscribe({
       next: () => {
-        this.handleSuccessResponse();
+        this.handleSuccessResponse('updated');
       },
       // TODO Error handling
-      error: (response: any) => {
-        this.handleErrorResponse(response.error);
+      error: (error: any) => {
+        this.handleErrorResponse('updated', error);
       }
     })
   }
 
-  private handleErrorResponse(error: any) {
-    Swal.fire('Error', `You could not change your data: ${error}` , 'warning');
+  private handleErrorResponse(action: string, error: any) {
+    // TODO Chane error message
+    Swal.fire('Error', `The user could not be ${action}: ${error.error}` , 'warning');
 
     this.loading = false;
   }
 
-  private handleSuccessResponse(){
-    Swal.fire(`Your update was successful!`,`You have changed your data successfully`,`success`);
+  private handleSuccessResponse(action: string){
+    Swal.fire(`User ${action}`,`The user ${this.form.value.personalData.name} has been ${action} successfully`,`success`);
 
     this.router.navigate(['../']);
   }
