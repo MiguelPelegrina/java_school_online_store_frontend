@@ -39,8 +39,5 @@ export class AuthService {
 
   public setAuthResultDto(response: any){
     localStorage.setItem('auth_token', response.accessToken);
-
-    // TODO Needs to change?
-    localStorage.setItem('id', response.id);
   }
 }

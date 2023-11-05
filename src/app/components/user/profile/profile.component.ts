@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
@@ -12,7 +12,6 @@ import { AuthResultDto } from 'src/app/shared/utils/authResultDto';
 import Swal from 'sweetalert2';
 
 // TODO
-// - Implement user creation
 // - Refactor whole component:
 //  - More auxiliar methods
 //  - Reduce form content?

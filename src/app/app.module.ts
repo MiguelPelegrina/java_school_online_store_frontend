@@ -54,6 +54,7 @@ import { AddEditUserForm } from './components/user/forms/user/add-edit-user-form
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask} from 'ngx-mask';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { MatStepperModule } from '@angular/material/stepper';
 
 @NgModule({
   declarations: [
@@ -108,6 +109,7 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
     MatSidenavModule,
     MatSlideToggleModule,
     MatSnackBarModule,
+    MatStepperModule,
     MatSortModule,
     MatTableModule,
     MatToolbarModule,

@@ -14,6 +14,7 @@ import { ListBookParametersFormatComponent } from "./components/book-parameters-
 import { RouterModule, Routes } from "@angular/router";
 import { CartComponent } from "./components/cart/cart.component";
 import { ProfileComponent } from "./components/user/profile/profile.component";
+import { CheckoutComponent } from "./components/checkout/checkout.component";
 
 const routes: Routes = [
   {path: '', redirectTo:'catalog', pathMatch:'full'},

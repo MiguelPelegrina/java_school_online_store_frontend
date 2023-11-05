@@ -10,6 +10,7 @@ import { Book } from 'src/app/shared/domain/book/book';
 import { IIndexable } from 'src/app/shared/utils/i-indexable';
 import Swal from 'sweetalert2';
 
+// TODO Optimize to paginate manually like catalog
 @Component({
   selector: 'app-list-book',
   templateUrl: './list-book.component.html',
