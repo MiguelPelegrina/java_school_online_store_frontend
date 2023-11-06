@@ -90,7 +90,7 @@
             </button>
           </td>
           <td mat-footer-cell *matFooterCellDef>
-            <button color="accent" mat-raised-button matStepperNext>Next</button>
+            <button color="accent" mat-raised-button matStepperNext>Confirm address</button>
           </td>
         </ng-container>
         <!-- /ACTIONS -->
@@ -108,18 +108,37 @@
       <!-- LOADING -->
       <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
       <!-- /LOADING -->
-      <form [formGroup]="form" *ngIf="form">
-        <app-add-edit-address-form formGroupName="address"></app-add-edit-address-form>
-      </form>
+      <div class="container form-container mat-elevation-z8">
 
-      <div class="d-flex justify-content-around">
-        <button color="primary" mat-raised-button matStepperPrevious>Back</button>
-        <button color="accent" mat-raised-button matStepperNext>Next</button>
+        <form [formGroup]="form" *ngIf="form" (ngSubmit)="onSubmit()">
+          <app-add-edit-address-form class="m-2 p-2" formGroupName="address"></app-add-edit-address-form>
+
+          <app-order-details-form
+            class="m-2 p-2"
+            formGroupName="orderDetails"
+            [selectedOrderStatus]="selectedOrderStatus"
+            [selectedPaymentStatus]="selectedPaymentStatus"
+          ></app-order-details-form>
+
+          <div class="d-flex justify-content-around mt-2 pt-2">
+            <button color="primary" mat-raised-button matStepperPrevious>Check cart</button>
+            <button color="accent" mat-raised-button type="submit">Confirm order</button>
+          </div>
+        </form>
       </div>
     </mat-step>
 
     <mat-step>
       <ng-template matStepLabel>Order complete</ng-template>
+
+      <!-- LOADING -->
+      <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+      <!-- /LOADING -->
+
+      <div class="d-flex justify-content-around mt-2 pt-2">
+        <a class="text-white" color="primary" mat-raised-button routerLink="/catalog">Check other products</a>
+        <a color="accent" mat-raised-button routerLink="/orders">Check your orders</a>
+      </div>
     </mat-step>
   </mat-step>
 </mat-stepper>

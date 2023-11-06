@@ -41,10 +41,34 @@ export class StringValues{
   public static BASE_COUNTRY_URL: string = `${this.BASE_URL}${this.COUNTRY_URL}`;
 
   /////////////////////////////////////////////////////
+  // Delivery methods
+  /////////////////////////////////////////////////////
+  public static DELIVERY_METHODS_URL: string = '/delivery_methods';
+  public static BASE_DELIVERY_METHODS_URL: string = `${this.BASE_URL}${this.DELIVERY_METHODS_URL}`;
+
+  /////////////////////////////////////////////////////
+  // Delivery statuses
+  /////////////////////////////////////////////////////
+  public static ORDER_STATUSES_URL: string = '/order_statuses';
+  public static BASE_ORDER_STATUSES_URL: string = `${this.BASE_URL}${this.ORDER_STATUSES_URL}`;
+
+  /////////////////////////////////////////////////////
   // Orders
   /////////////////////////////////////////////////////
   public static ORDER_URL: string = '/orders';
   public static BASE_ORDER_URL: string = `${this.BASE_URL}${this.ORDER_URL}`;
+
+  /////////////////////////////////////////////////////
+  // Payment methods
+  /////////////////////////////////////////////////////
+  public static PAYMENT_METHODS_URL: string = '/payment_methods';
+  public static BASE_PAYMENT_METHODS_URL: string = `${this.BASE_URL}${this.PAYMENT_METHODS_URL}`;
+
+  /////////////////////////////////////////////////////
+  // Payment statuses
+  /////////////////////////////////////////////////////
+  public static PAYMENT_STATUS_URL: string = '/payment_statuses';
+  public static BASE_PAYMENT_STATUS_URL: string = `${this.BASE_URL}${this.PAYMENT_STATUS_URL}`;
 
   /////////////////////////////////////////////////////
   // Postal codes

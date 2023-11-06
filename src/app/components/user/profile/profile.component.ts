@@ -8,7 +8,7 @@ import { UserService } from 'src/app/services/user.service';
 import { AbstractForm } from 'src/app/shared/components/abstract-form';
 import { Address } from 'src/app/shared/domain/user/address/address';
 import { User } from 'src/app/shared/domain/user/user';
-import { AuthResultDto } from 'src/app/shared/utils/authResultDto';
+import { AuthResultDto } from 'src/app/shared/utils/interfaces/authResultDto';
 import Swal from 'sweetalert2';
 
 // TODO
@@ -65,7 +65,7 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
     }
 
     if(this.id){
-      this.loadFilledUserForm();
+      this.loadUser();
     } else {
       this.isAddMode = !this.id;
       this.loading = false;
@@ -89,7 +89,6 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
       this.loading = true;
 
       if(this.isAddMode){
-        console.log('addmode')
         this.createUser();
       } else {
         this.updateUser();
@@ -124,8 +123,6 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
 
 
   private createUser(){
-    // TODO Assign proper values
-    console.log(this.form.value)
     const address: Address = {
       active: true,
       id: 0,
@@ -146,7 +143,6 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
       roles: [],
       surname: this.form.value.personalData.surname
     };
-    console.log(user);
 
     this.usersSubscription = this.authService.register(user).subscribe({
       next: () => {
@@ -159,34 +155,38 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
     })
   }
 
-  private loadFilledUserForm(): void {
+  private fillUserForm(response: any){
+    this.form = this.fb.group({
+      personalData: this.fb.group({
+        active: [response.active],
+        dateOfBirth: [response.dateOfBirth, Validators.required],
+        email: [response.email, [Validators.required, Validators.email]],
+        id: [response.id],
+        name: [response.name, Validators.required],
+        // TODO Not sure about this. Once logged in, it should not be necessary to introduced the password again for changes, or?
+        password: ['', Validators.required],
+        phone: [response.phone, Validators.required],
+        surname: [response.surname, Validators.required]
+      }),
+      address: this.fb.group({
+        country: [response.address.postalCode.city.country.name, Validators.required],
+        city: [response.address.postalCode.city.name, Validators.required],
+        number: [response.address.number, Validators.required],
+        postalCode: [response.address.postalCode.code, Validators.required],
+        street: [response.address.street, Validators.required]
+      })
+    })
+
+    this.selectedCity = response.address.postalCode.city.name;
+    this.selectedCountry = response.address.postalCode.city.country.name;
+    this.selectedPostalCode = response.address.postalCode.code;
+  }
+
+  private loadUser(): void {
     this.usersService.getById(this.id!).subscribe((response) => {
       this.response = response;
 
-      this.form = this.fb.group({
-        personalData: this.fb.group({
-          active: [response.active],
-          dateOfBirth: [response.dateOfBirth, Validators.required],
-          email: [response.email, [Validators.required, Validators.email]],
-          id: [response.id],
-          name: [response.name, Validators.required],
-          // TODO Not sure about this. Once logged in, it should not be necessary to introduced the password again for changes, or?
-          password: ['', Validators.required],
-          phone: [response.phone, Validators.required],
-          surname: [response.surname, Validators.required]
-        }),
-        address: this.fb.group({
-          country: [response.address.postalCode.city.country.name, Validators.required],
-          city: [response.address.postalCode.city.name, Validators.required],
-          number: [response.address.number, Validators.required],
-          postalCode: [response.address.postalCode.code, Validators.required],
-          street: [response.address.street, Validators.required]
-        })
-      })
-
-      this.selectedCity = response.address.postalCode.city.name;
-      this.selectedCountry = response.address.postalCode.city.country.name;
-      this.selectedPostalCode = response.address.postalCode.code;
+      this.fillUserForm(response)
 
       this.loading = false;
     })

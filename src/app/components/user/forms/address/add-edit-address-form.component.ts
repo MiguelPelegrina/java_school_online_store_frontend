@@ -7,7 +7,6 @@ import { PostalCodeService } from 'src/app/services/postal-code/postal-code.serv
 import { Country } from '../../../../shared/domain/country/country';
 import { City } from '../../../../shared/domain/user/address/postal-code/city/city';
 import { PostalCode } from '../../../../shared/domain/user/address/postal-code/postal-code';
-import { AddressService } from 'src/app/services/address/address.service';
 import { AbstractForm } from 'src/app/shared/components/abstract-form';
 
 @Component({
@@ -29,13 +28,7 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
   @Input()
   public selectedPostalCode?: string = '';
 
-  protected addressSubscription?: Subscription;
-
   protected cities: City[] = [];
-
-  protected citySubscription?: Subscription;
-
-  protected countrySubscription?: Subscription;
 
   protected countries: Country[] = [];
 
@@ -45,7 +38,13 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
 
   protected postalCodes: PostalCode[] = [];
 
-  protected postalCodeSubscription?: Subscription;
+  private addressSubscription?: Subscription;
+
+  private citySubscription?: Subscription;
+
+  private countrySubscription?: Subscription;
+
+  private postalCodeSubscription?: Subscription;
 
   // Constructor
   constructor(
@@ -67,13 +66,17 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
   }
 
   public ngOnInit(): void {
-    // Get the address id
     this.form = this.rootFormGroup.control.get(this.formGroupName) as FormGroup;
 
     this.loadCountries();
 
+    console.log(this.form.value);
+
     this.selectedCountry = this.form.value.country;
     this.selectedCity = this.form.value.city;
+
+    console.log(this.selectedCountry);
+    console.log(this.selectedCity);
 
     if(!(this.selectedCountry?.length == 0)){
       this.loadCities();

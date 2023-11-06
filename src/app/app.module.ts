@@ -55,6 +55,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask} from 'ngx-mask';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { MatStepperModule } from '@angular/material/stepper';
+import { OrderDetailsFormComponent } from './components/checkout/order-details-form/order-details-form.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { MatStepperModule } from '@angular/material/stepper';
     ProfileComponent,
     AddEditUserForm,
     CheckoutComponent,
+    OrderDetailsFormComponent,
   ],
   imports: [
     AppRoutingModule,

@@ -1,28 +1,34 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatStepper } from '@angular/material/stepper';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { CartService } from 'src/app/services/cart/cart.service';
+import { OrderService } from 'src/app/services/order/order.service';
 import { UserService } from 'src/app/services/user.service';
 import { BoughtBook } from 'src/app/shared/domain/book/bought-book/bought-book';
 import { Cart } from 'src/app/shared/domain/cart/cart';
-import { AuthResultDto } from 'src/app/shared/utils/authResultDto';
+import { Order } from 'src/app/shared/domain/order/order';
+import { User } from 'src/app/shared/domain/user/user';
+import { AuthResultDto } from 'src/app/shared/utils/interfaces/authResultDto';
 import Swal from 'sweetalert2';
 
+// TODO, optional
+// - Delay address data until on checkout, and not just while being on cart
+// - Disable all selects or generate a new address
+// - Disable step selection once order is issued
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit{
+  // Subcomponents
+  @ViewChild('stepper')
+  private stepper!: MatStepper;
+
   // Fields
   protected cart: Cart = { boughtBooks: []};
-
-  protected city = '';
-
-  protected cols = 1;
-
-  protected country = '';
 
   protected dataSource: BoughtBook[] = [];
 
@@ -41,16 +47,16 @@ export class CartComponent implements OnInit{
 
   protected loading = true;
 
-  protected number?: number;
+  protected selectedOrderStatus = 'Pending payment';
 
-  protected postalCode= '';
+  protected selectedPaymentStatus = 'Pending';
 
-  protected rowHeight = 400;
+  protected user?: User;
 
-  protected street = '';
-
-  constructor(private cartService: CartService,
+  constructor(
+    private cartService: CartService,
     private fb: FormBuilder,
+    private orderService: OrderService,
     private router: Router,
     private usersService: UserService){}
 
@@ -68,15 +74,8 @@ export class CartComponent implements OnInit{
       const tokenInfo: AuthResultDto = jwtDecode(token);
       this.id = tokenInfo.id;
 
-      this.usersService.getById(this.id!).subscribe((response) => {
-        this.country = response.address.postalCode.city.country.name;
-        this.city = response.address.postalCode.city.name;
-        this.postalCode = response.address.postalCode.code;
-        this.street = response.address.street;
-        this.number = response.address.number;
+      this.loadUser();
 
-        this.loading = false;
-      })
     } else {
       Swal.fire({
         allowEscapeKey: false,
@@ -91,28 +90,34 @@ export class CartComponent implements OnInit{
         }
       })
     }
-
-    this.loadFilledUserForm();
   }
 
-  private loadFilledUserForm() {
+  private loadUser() {
     this.usersService.getById(this.id!).subscribe((response) => {
+      this.user = response;
 
+      this.fillOrderForm(response);
+
+      this.loading = false;
+    })
+  }
+
+  private fillOrderForm(response: any){
     this.form = this.fb.group({
       address: this.fb.group({
-        country: [response.address.postalCode.city.country.name],
-        city: [response.address.postalCode.city.name],
-        number: [response.address.number],
-        postalCode: [response.address.postalCode.code],
-        street: [response.address.street]
+        country: [{value: response.address.postalCode.city.country.name, disabled: true}, Validators.required],
+        city: [{value:response.address.postalCode.city.name, disabled: true}, Validators.required],
+        number: [{value:response.address.number, disabled: true}, Validators.required],
+        postalCode: [{value:response.address.postalCode.code, disabled: true}, Validators.required],
+        street: [{value:response.address.street, disabled: true}, Validators.required]
+      }),
+      orderDetails: this.fb.group({
+        deliveryMethod: ['', Validators.required],
+        orderStatus: [{value: this.selectedOrderStatus, disabled: true}, Validators.required],
+        paymentMethod: ['', Validators.required],
+        paymentStatus: [{value: this.selectedPaymentStatus, disabled: true}, Validators.required],
       })
     });
-    this.city = response.address.postalCode.city.name;
-    this.country = response.address.postalCode.city.country.name;
-    this.postalCode = response.address.postalCode.code;
-
-    this.loading = false;
-    })
   }
 
   // Protected methods
@@ -120,13 +125,57 @@ export class CartComponent implements OnInit{
     return this.cartService.getTotal(boughtBooks);
   }
 
+  protected onAddQuantity(boughtBook: BoughtBook){
+    this.cartService.addToCart(boughtBook);
+  }
+
   protected onClearCart(): void {
     // TODO Ask user for confirmation
     this.cartService.clearCart();
   }
 
-  protected onAddQuantity(boughtBook: BoughtBook){
-    this.cartService.addToCart(boughtBook);
+  protected onSubmit(){
+    if(!this.form.invalid){
+      Swal.fire({
+        title: 'Confirm your order',
+        icon: 'info',
+        showCancelButton: true,
+        focusConfirm: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if(result.isConfirmed){
+          const order: Order = {
+            orderedBooks: [],
+            date: new Date(),
+            id: 0,
+            deliveryMethod: {name: this.form.value.orderDetails.deliveryMethod},
+            orderStatus: {name: this.selectedOrderStatus},
+            paymentMethod: {name: this.form.value.orderDetails.paymentMethod},
+            paymentStatus: {name: this.selectedPaymentStatus},
+            user: this.user!
+          };
+
+          const orderedBooks = this.cart.boughtBooks.map((book) => {
+            return {
+              book: book,
+              amount: book.quantity,
+              id: 0,
+            };
+          });
+
+          this.orderService.createOrderWithBooks(order, orderedBooks).subscribe({
+            next: () => {
+              this.stepper.next();
+              Swal.fire('Order issued succesfully', '', 'success');
+            },
+            error: () => {
+              Swal.fire('An error ocurred, contact your support', '', 'warning');
+            }
+          });
+        }
+      })
+    }
   }
 
   protected onRemoveFromCart(bookBought: BoughtBook): void {

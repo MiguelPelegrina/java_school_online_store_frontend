@@ -10,7 +10,7 @@
   <form [formGroup]="form" *ngIf="form" (ngSubmit)="onSubmit()">
     <app-add-edit-user-form formGroupName="personalData"></app-add-edit-user-form>
 
-    <app-add-edit-address-form [selectedCity]="selectedCity" [selectedCountry]="selectedCountry" [selectedPostalCode]="selectedPostalCode" formGroupName="address"></app-add-edit-address-form>
+    <app-add-edit-address-form formGroupName="address" [selectedCity]="selectedCity" [selectedCountry]="selectedCountry" [selectedPostalCode]="selectedPostalCode" ></app-add-edit-address-form>
 
     <div class="row d-flex justify-content-around m-2 p-2">
       <div class="col-sm d-flex justify-content-center m-2 p-2">

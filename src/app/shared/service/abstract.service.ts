@@ -95,7 +95,7 @@ export abstract class AbstractService<Entity, ID> {
    * @param error - The HttpErrorResponse object representing the error.
    * @returns An Observable that emits an error message.
    */
-  private handleError(error: HttpErrorResponse) {
+  protected handleError(error: HttpErrorResponse) {
     console.log(error)
     // Check if a client-side or network error occurred.
     if (error.status === 0) {

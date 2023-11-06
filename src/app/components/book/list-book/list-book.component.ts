@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BookService } from 'src/app/services/book/book.service';
 import { Book } from 'src/app/shared/domain/book/book';
-import { IIndexable } from 'src/app/shared/utils/i-indexable';
+import { IIndexable } from 'src/app/shared/utils/interfaces/i-indexable';
 import Swal from 'sweetalert2';
 
 // TODO Optimize to paginate manually like catalog

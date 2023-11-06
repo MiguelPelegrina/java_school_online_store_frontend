@@ -6,7 +6,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Book } from 'src/app/shared/domain/book/book';
 import { BoughtBook } from 'src/app/shared/domain/book/bought-book/bought-book';
 import { Cart } from 'src/app/shared/domain/cart/cart';
-import { AuthResultDto } from 'src/app/shared/utils/authResultDto';
+import { AuthResultDto } from 'src/app/shared/utils/interfaces/authResultDto';
 import Swal from 'sweetalert2';
 
 @Component({
