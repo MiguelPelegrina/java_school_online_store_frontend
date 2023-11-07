@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
@@ -10,13 +11,22 @@ import { Book } from 'src/app/shared/domain/book/book';
 import { IIndexable } from 'src/app/shared/utils/interfaces/i-indexable';
 import Swal from 'sweetalert2';
 
-// TODO Optimize to paginate manually like catalog
+// TODO
+// - Optimize to paginate manually like catalog
+// - Add expandable
 @Component({
   selector: 'app-list-book',
   templateUrl: './list-book.component.html',
-  styleUrls: ['./list-book.component.css']
+  styleUrls: ['./list-book.component.css'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed, void', style({height: '0px', minHeight: '0', display: 'none'})),
+      state('expanded', style({height: '*'})),
+      transition('* <=> *', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
-export class ListBookComponent implements OnInit, OnDestroy {
+export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
   // Subcomponents
   @ViewChild(MatPaginator)
   protected paginator!: MatPaginator;
@@ -25,15 +35,17 @@ export class ListBookComponent implements OnInit, OnDestroy {
   protected sort!: MatSort;
 
   // Fields
-  protected allowActivityUpdates: boolean = true;
+  protected allowActivityUpdates = true;
 
-  protected books: Book[] = [];
+  protected columnsToDisplay: string [] = ['title', 'parameters.author', 'active', 'price', 'stock', 'actions', 'expand'];
 
-  protected datasource = new MatTableDataSource<Book>(this.books);
+  protected data: Book[] = [];
 
-  protected displayedColumnsOfBooks: string [] = ['title', 'parameters.author', 'active', 'price', 'stock', 'actions'];
+  protected dataSource = new MatTableDataSource<Book>(this.data);
 
-  protected isLoading: boolean = true;
+  protected expandedElement?: Book;
+
+  protected isLoading = true;
 
   private booksSubsrciption?: Subscription;
 
@@ -61,14 +73,14 @@ export class ListBookComponent implements OnInit, OnDestroy {
   // Public methods
   /**
    * A lifecycle hook that is called after Angular has fully initialized a component's view.
-   * Assigns the Paginator and the Sort components to the respective properties of the book datasource to handle pages and sorting of the table.
+   * Assigns the Paginator and the Sort components to the respective properties of the datasource to handle pages and sorting of the table.
    */
   public ngAfterViewInit(){
-    this.datasource.paginator = this.paginator;
-    this.datasource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
 
     // TODO Might need to assign it after every data change
-    this.datasource.sortingDataAccessor = (item, property) => {
+    this.dataSource.sortingDataAccessor = (item, property) => {
       switch(property) {
         case 'parameters.author': return item.parameters.author;
         default: return (item as IIndexable<Book>)[property];
@@ -99,7 +111,7 @@ export class ListBookComponent implements OnInit, OnDestroy {
    * @param filter - Value of the input field
    */
   protected applyFilter(filter: string){
-    this.datasource.filter = filter.trim().toLowerCase();
+    this.dataSource.filter = filter.trim().toLowerCase();
   }
 
   /**
@@ -133,15 +145,14 @@ export class ListBookComponent implements OnInit, OnDestroy {
 
   // Private methods
   /**
-   * Retrieves all books from the database and sorts them by 'active' first and then alphabetically by book 'title' (A-Z). Hides the progress bar when the data is loaded.
+   * Retrieves all elements from the database. Hides the progress bar when the data is loaded.
    */
   private getAllBooks(){
-    // TODO Add parameters to search
     this.booksSubsrciption = this.bookService.getAll().subscribe({
       next: (response) => {
-        this.books = response.content;
+        this.data = response.content;
 
-        this.datasource.data = response.content;
+        this.dataSource.data = response.content;
 
         this.isLoading = false;
       }
@@ -188,7 +199,7 @@ export class ListBookComponent implements OnInit, OnDestroy {
    * Sets the filter of the book datasource. The datasource will only consist of those elements whose title or author contain the filter.
    */
   private setFilterToSearchByTitleOrAuthor() {
-    this.datasource.filterPredicate = function (record, filter){
+    this.dataSource.filterPredicate = function (record, filter){
       let found = false;
 
       if(record.parameters.author.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ||

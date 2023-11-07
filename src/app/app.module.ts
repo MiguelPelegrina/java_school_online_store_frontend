@@ -28,19 +28,14 @@ import { ListBookGenreComponent } from './components/book-genres/list-book-genre
 import { ListBookParametersFormatComponent } from './components/book-parameters-formats/list-book-parameters-format/list-book-parameters-format.component';
 import { AddEditBookFormComponent } from './components/book/add-edit-book-form/add-edit-book-form.component';
 import { ListBookComponent } from './components/book/list-book/list-book.component';
-import { ViewBookComponent } from './components/book/view-book/view-book.component';
 import { BooksHeaderComponent } from './components/catalog/books-header/books-header.component';
 import { CatalogComponent } from './components/catalog/catalog.component';
-import { DetailCountryComponent } from './components/country/detail-country/detail-country.component';
-import { ListCountryComponent } from './components/country/list-country/list-country.component';
-import { UpdateCountryComponent } from './components/country/update-country/update-country.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './components/user/login/login.component';
 import { ImageSelectorComponent } from './shared/components/image-selector/image-selector.component';
 import { SearchBarComponent } from './shared/components/search-bar/search-bar.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { AddCountryComponent } from './components/country/add-country/add-country.component';
 import { FiltersComponent } from './components/catalog/filters/filters.component';
 import { BookBoxComponent } from './components/catalog/book-box/book-box.component';
 import { CartComponent } from './components/cart/cart.component';
@@ -53,42 +48,39 @@ import { AddEditAddressForm } from './components/user/forms/address/add-edit-add
 import { AddEditUserForm } from './components/user/forms/user/add-edit-user-form.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask} from 'ngx-mask';
-import { CheckoutComponent } from './components/checkout/checkout.component';
 import { MatStepperModule } from '@angular/material/stepper';
-import { OrderDetailsFormComponent } from './components/checkout/order-details-form/order-details-form.component';
+import { OrderDetailsFormComponent } from './components/cart/order-details-form/order-details-form.component';
+import { ListOrderComponent } from './components/order/list-order/list-order.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
-    AddCountryComponent,
     AddEditBookFormComponent,
     AppComponent,
     BookBoxComponent,
     BooksHeaderComponent,
     CartComponent,
     CatalogComponent,
-    DetailCountryComponent,
     FiltersComponent,
     HeaderComponent,
     ImageSelectorComponent,
     ListBookComponent,
     ListBookGenreComponent,
     ListBookParametersFormatComponent,
-    ListCountryComponent,
     LoginComponent,
     SearchBarComponent,
     TwoDigitDecimalNumberDirective,
-    UpdateCountryComponent,
-    ViewBookComponent,
     AddEditAddressForm,
     ProfileComponent,
     AddEditUserForm,
-    CheckoutComponent,
     OrderDetailsFormComponent,
+    ListOrderComponent,
   ],
   imports: [
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
+    DatePipe,
     FormsModule,
     HttpClientModule,
     MatBadgeModule,

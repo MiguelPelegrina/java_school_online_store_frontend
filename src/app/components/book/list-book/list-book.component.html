@@ -1,13 +1,8 @@
 <!-- TODO
-  - Sorting with table header author does not work
   - Book import from excel
   - Multi-select with Deactivate -> FABs for activate/deactivate of several books
   - Remove div between searchbar and table
-  - Currently a progress bar is shown while loading and the user is informed if loading led to an error
-    -> more than just a snackbar?
-    -> progress spinner instead of progressbar?
   - Advanced filter for searchbar? So the user can choose the criteria
-  - Return and refresh buttons? Or are they redundant?
 -->
 <!-- PROGRESS BAR -->
 <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
@@ -40,28 +35,29 @@
 
     <!-- TABLE -->
   <table class="container mat-elevation-z8 table-responsive-sm"
-    [dataSource]="datasource"
+    [dataSource]="dataSource"
     [hidden]="isLoading"
     matSort
     mat-table
+    multiTemplateDataRows
   >
     <!-- TITLE -->
     <ng-container matColumnDef="title">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Title of the book" sortActionDescription="Sort by title"> Title </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Title of the book" sortActionDescription="Sort by title">Title</th>
       <td mat-cell *matCellDef="let book"> {{book.title}}</td>
     </ng-container>
     <!-- /TITLE -->
 
     <!-- AUTHOR -->
     <ng-container matColumnDef="parameters.author">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Author of the book" sortActionDescription="Sort by author"> Author </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Author of the book" sortActionDescription="Sort by author">Author</th>
       <td mat-cell *matCellDef="let book"> {{book.parameters.author}}</td>
     </ng-container>
     <!-- /AUTHOR -->
 
     <!-- ACTIVE -->
     <ng-container matColumnDef="active">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Book available for sale" sortActionDescription="Sort by active"> Active </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Book available for sale" sortActionDescription="Sort by active">Active</th>
       <td mat-cell *matCellDef="let book">
         <mat-slide-toggle
         (click)="setBookActivity(book)"
@@ -75,30 +71,22 @@
 
   <!-- PRICE -->
   <ng-container matColumnDef="price">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Price of the book" sortActionDescription="Sort by price"> Price </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Price of the book" sortActionDescription="Sort by price">Price</th>
     <td mat-cell *matCellDef="let book"> {{book.price}}</td>
   </ng-container>
   <!-- /PRICE -->
 
   <!-- STOCK -->
   <ng-container matColumnDef="stock">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Remaining stock of the book" sortActionDescription="Sort by stock"> Stock </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Remaining stock of the book" sortActionDescription="Sort by stock">Stock</th>
     <td mat-cell *matCellDef="let book"> {{book.stock}}</td>
   </ng-container>
   <!-- /STOCK -->
 
   <!-- ACTIONS -->
   <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef matTooltip="View more details or edit the book"> Actions </th>
+    <th mat-header-cell *matHeaderCellDef matTooltip="View more details or edit the book">Actions</th>
     <td mat-cell *matCellDef="let book">
-      <mat-icon
-        aria-hidden="false"
-        (click)="viewBookDetails(book.id)"
-        fontIcon="remove_red_eye"
-        matTooltip="View more details"
-        >
-      </mat-icon>
-
       <mat-icon
         aria-hidden="false"
         (click)="editBook(book.id)"
@@ -108,12 +96,51 @@
         style="margin-left:5px"
       >
       </mat-icon>
+
+
     </td>
   </ng-container>
   <!-- /ACTIONS -->
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumnsOfBooks; sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumnsOfBooks;"></tr>
+  <ng-container matColumnDef="expand">
+    <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+        <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+        <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+      <div class="element-detail"
+           [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+        <div class="row vertical-align">
+          <div class="col-sm">
+            <img alt="Book Cover" class="img" *ngIf="element.image" [src]="element.image">
+          </div>
+          <div class="col-sm">
+            ISBN: {{element.isbn}}
+          </div>
+          <div class="col-sm">
+            Genre: {{element.genre.name}}
+          </div>
+          <div class="col-sm">
+            Format: {{element.parameters.format.name}}
+          </div>
+        </div>
+      </div>
+    </td>
+  </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
+    <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
+      class="element-row"
+      [class.expanded-row]="expandedElement === element"
+      (click)="expandedElement = element">
+    </tr>
+    <tr class="detail-row" mat-row *matRowDef="let row; columns: ['expandedDetail'];"></tr>
   </table>
   <!-- /TABLE -->
 
