@@ -15,9 +15,7 @@ export class BookService extends AbstractService<Book, number>{
 
   public override getAll(active?: boolean, filter?: string, sortType?: string, sortProperty?: string, page?: number, size?: number, genre?: string): Observable<any> {
     // TODO
-    // - Create Request body
-
-    // - Create some kind of RequestBuilder
+    // - Refactor this, maybe create some kind of RequestBuilder
     // - '&' should not appear if only one parameter is passed
     // - Add "?" only if at least one parameters is introduced -> create type with Request Params?
     const _active = active != null ? `/search?active=${active}` : '/search?';

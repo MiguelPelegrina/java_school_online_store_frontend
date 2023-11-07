@@ -185,6 +185,7 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
   private loadUser(): void {
     this.usersService.getById(this.id!).subscribe((response) => {
       this.response = response;
+      console.log(response)
 
       this.fillUserForm(response)
 

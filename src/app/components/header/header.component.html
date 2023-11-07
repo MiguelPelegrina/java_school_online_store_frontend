@@ -2,7 +2,7 @@
   - Login and register in profile
   - Optional: Sidenav for wide devices and employees/admin
 -->
-<mat-toolbar class="d-flex justify-content-between sticky-top">
+<mat-toolbar class="d-flex justify-content-between app-toolbar">
   <div class="d-flex">
     <!-- TODO Only for employees and admin -->
     <!-- NAVIGATION -->
@@ -47,7 +47,7 @@
   <mat-menu #menuNavigation="matMenu">
     <div class="d-flex flex-column">
       <button mat-menu-item [matMenuTriggerFor]="menuProducts">Products</button>
-      <button mat-menu-item>Orders</button>
+      <button mat-menu-item routerLink="orders">Orders</button>
     </div>
   </mat-menu>
   <!-- /NAVIGATION MENU -->
@@ -55,13 +55,13 @@
   <!-- PRODUCTS MENU ITEM -->
   <mat-menu #menuProducts="matMenu">
     <button mat-menu-item>
-      <a routerLink="books" routerLinkActive="active" class="text-white nav-link">Books</a>
+      <a routerLink="books" class="text-white nav-link">Books</a>
     </button>
     <button mat-menu-item>
-      <a routerLink="book_genres" routerLinkActive="active" class="text-white nav-link">Genres</a>
+      <a routerLink="book_genres" class="text-white nav-link">Genres</a>
     </button>
     <button mat-menu-item>
-      <a routerLink="book_formats" routerLinkActive="active" class="text-white nav-link">Formats</a>
+      <a routerLink="book_formats" class="text-white nav-link">Formats</a>
     </button>
   </mat-menu>
   <!-- /PRODUCTS MENU ITEM -->
@@ -102,35 +102,25 @@
     <!-- TODO Only if not logged in -->
     <div class="d-flex flex-column m-1 p-1">
       <!-- LOGIN -->
-      <a mat-button routerLink="auth/login">
-        Login
-      </a>
+      <a mat-button routerLink="auth/login">Login</a>
       <!-- /LOGIN -->
 
       <!-- REGISTER -->
-      <a mat-button routerLink="auth/register">
-        Register
-      </a>
+      <a mat-button routerLink="auth/register">Register</a>
       <!-- /REGISTER -->
 
       <!-- TODO Only if logged in-->
       <!-- ORDERS -->
-      <a mat-button routerLink="">
-        My orders
-      </a>
+      <a mat-button routerLink="orders">My orders</a>
       <!-- /ORDERS -->
 
       <!-- PROFILE -->
-      <a mat-button routerLink="profile">
-        My profile
-      </a>
+      <a mat-button routerLink="profile">My profile</a>
       <!-- /PROFILE -->
 
       <!-- TODO Only if logged in -->
       <!-- LOGOUT -->
-      <a mat-button (click)="onLogout()" routerLink="auth/login">
-        Logout
-      </a>
+      <a mat-button (click)="onLogout()" routerLink="auth/login">Logout</a>
       <!-- /LOGOUT -->
     </div>
   </mat-menu>

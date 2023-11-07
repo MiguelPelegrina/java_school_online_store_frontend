@@ -92,7 +92,6 @@ export class CatalogComponent implements OnInit, OnDestroy {
     this.getBooks();
   }
 
-  // TODO Add parameters
   private getBooks(): void{
     this.bookSubscription = this.bookService.getAll(true, this.filter, this.sort, 'title', this.currentPage, this.pageSize, this.genre).subscribe({
       next: (response) => {

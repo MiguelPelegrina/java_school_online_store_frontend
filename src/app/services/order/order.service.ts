@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { Observable, catchError } from 'rxjs';
 import { Order } from 'src/app/shared/domain/order/order';
 import { OrderedBook } from 'src/app/shared/domain/order/ordered-book';
@@ -17,7 +16,6 @@ export class OrderService extends AbstractService<Order, number>{
 
   public createOrderWithBooks(order: Order, orderedBooks: OrderedBook[]){
     const body = JSON.stringify({order, orderedBooks});
-    console.log(body);
 
     return this.httpClient.post(
       `${StringValues.BASE_ORDER_URL}/withBooks`,
@@ -26,4 +24,8 @@ export class OrderService extends AbstractService<Order, number>{
       catchError(this.handleError)
     );
   }
+
+  // public override getAll(): Observable<any>{
+  //   return this.httpClient.get<any>(`${this.baseUrl}/search`)
+  // }
 }

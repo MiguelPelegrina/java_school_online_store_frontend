@@ -7,6 +7,7 @@ import { BookFormatService } from 'src/app/services/book/format/book-format.serv
 import { BookFormat } from 'src/app/shared/domain/book/parameters/book-parameters-format/book-parameters-format';
 import Swal from 'sweetalert2';
 
+// TODO Optimize to paginate manually like catalog
 @Component({
   selector: 'app-list-book-parameters-format',
   templateUrl: './list-book-parameters-format.component.html',

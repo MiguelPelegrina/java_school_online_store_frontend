@@ -13,10 +13,6 @@ import { User } from 'src/app/shared/domain/user/user';
 import { AuthResultDto } from 'src/app/shared/utils/interfaces/authResultDto';
 import Swal from 'sweetalert2';
 
-// TODO, optional
-// - Delay address data until on checkout, and not just while being on cart
-// - Disable all selects or generate a new address
-// - Disable step selection once order is issued
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
@@ -156,6 +152,7 @@ export class CartComponent implements OnInit{
             user: this.user!
           };
 
+          // TODO Might need to assign id with a sequencer and then have Set type instead of List type in backend
           const orderedBooks = this.cart.boughtBooks.map((book) => {
             return {
               book: book,
@@ -167,6 +164,7 @@ export class CartComponent implements OnInit{
           this.orderService.createOrderWithBooks(order, orderedBooks).subscribe({
             next: () => {
               this.stepper.next();
+              this.cartService.clearCart();
               Swal.fire('Order issued succesfully', '', 'success');
             },
             error: () => {

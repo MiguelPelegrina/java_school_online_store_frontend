@@ -52,6 +52,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { OrderDetailsFormComponent } from './components/cart/order-details-form/order-details-form.component';
 import { ListOrderComponent } from './components/order/list-order/list-order.component';
 import { DatePipe } from '@angular/common';
+import { ViewBookComponent } from './components/book/view-book/view-book.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { DatePipe } from '@angular/common';
     AddEditUserForm,
     OrderDetailsFormComponent,
     ListOrderComponent,
+    ViewBookComponent
   ],
   imports: [
     AppRoutingModule,

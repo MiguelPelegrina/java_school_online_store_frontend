@@ -42,6 +42,11 @@ tr.detail-row {
   background-color: #212121;
 }
 
+.small-img {
+  max-width: 100px;
+  max-height: 150px;
+}
+
 .w-30 {
   width: 30% !important;
 }

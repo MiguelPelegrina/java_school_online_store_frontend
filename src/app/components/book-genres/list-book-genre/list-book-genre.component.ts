@@ -8,6 +8,7 @@ import { BookGenre } from 'src/app/shared/domain/book/book-genre/book-genre';
 import Swal from 'sweetalert2';
 
 // TODO Document
+// TODO Optimize to paginate manually like catalog
 @Component({
   selector: 'app-list-book-genre',
   templateUrl: './list-book-genre.component.html',

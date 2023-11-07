@@ -9,6 +9,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { CartComponent } from "./components/cart/cart.component";
 import { ProfileComponent } from "./components/user/profile/profile.component";
 import { ListOrderComponent } from "./components/order/list-order/list-order.component";
+import { ViewBookComponent } from "./components/book/view-book/view-book.component";
 
 const routes: Routes = [
   {path: '', redirectTo:'catalog', pathMatch:'full'},
@@ -19,6 +20,7 @@ const routes: Routes = [
   {path: 'books', component: ListBookComponent},
   {path: 'books/add', component: AddEditBookFormComponent},
   {path: 'books/edit/:id', component: AddEditBookFormComponent},
+  {path: 'books/view/:id', component: ViewBookComponent},
   {path: 'cart', component: CartComponent},
   {path: 'catalog', component: CatalogComponent},
   {path: 'orders', component: ListOrderComponent},
