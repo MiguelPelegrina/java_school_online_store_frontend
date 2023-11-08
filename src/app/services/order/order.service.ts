@@ -25,7 +25,8 @@ export class OrderService extends AbstractService<Order, number>{
     );
   }
 
-  // public override getAll(): Observable<any>{
-  //   return this.httpClient.get<any>(`${this.baseUrl}/search`)
-  // }
+  // TODO Implement filter
+  public override getAll(): Observable<any>{
+    return this.httpClient.get<any>(`${this.baseUrl}/search`)
+  }
 }

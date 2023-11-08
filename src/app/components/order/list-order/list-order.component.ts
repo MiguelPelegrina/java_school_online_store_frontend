@@ -10,7 +10,6 @@ import { Order } from 'src/app/shared/domain/order/order';
 
 // TODO
 // - Optimize to paginate manually like catalog
-// - Add expandable
 @Component({
   selector: 'app-list-order',
   templateUrl: './list-order.component.html',
@@ -98,9 +97,9 @@ export class ListOrderComponent implements OnDestroy, OnInit {
   private getAllOrders(){
     this.orderSubscription = this.orderService.getAll().subscribe({
       next: (response) => {
-        this.data = response;
+        this.data = response.content;
 
-        this.dataSource.data = response;
+        this.dataSource.data = response.content;
 
         this.isLoading = false;
       }
