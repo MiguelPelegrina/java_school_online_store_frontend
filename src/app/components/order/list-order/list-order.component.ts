@@ -4,15 +4,19 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subscription } from 'rxjs';
+import { Subscription, catchError, map, merge, of, startWith, switchMap } from 'rxjs';
 import { OrderStatusService } from 'src/app/services/order/order-status/order-status.service';
 import { OrderService } from 'src/app/services/order/order.service';
+import { PaymentStatusService } from 'src/app/services/order/payment-status/payment-status.service';
+import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
 import { Order } from 'src/app/shared/domain/order/order';
 import { OrderStatus } from 'src/app/shared/domain/order/order-status/order-status';
-import { isAdmin, isClient, isEmployee } from 'src/app/shared/utils/utils';
+import { PaymentStatus } from 'src/app/shared/domain/order/payment-status/payment-status';
+import { IIndexable } from 'src/app/shared/utils/interfaces/i-indexable';
+import { StringValues } from 'src/app/shared/utils/string-values';
+import { isClient } from 'src/app/shared/utils/utils';
+import Swal from 'sweetalert2';
 
-// TODO
-// - Optimize to paginate manually like catalog
 @Component({
   selector: 'app-list-order',
   templateUrl: './list-order.component.html',
@@ -26,6 +30,13 @@ import { isAdmin, isClient, isEmployee } from 'src/app/shared/utils/utils';
     ]),
   ],
 })
+
+// TODO Advanced filter for orders:
+// - Date
+// - Delivery method
+// - Order status
+// - Payment method
+// - Payment status
 export class ListOrderComponent implements OnDestroy, OnInit {
   // Subcomponents
   @ViewChild(MatPaginator)
@@ -34,12 +45,23 @@ export class ListOrderComponent implements OnDestroy, OnInit {
   @ViewChild(MatSort)
   protected sort!: MatSort;
 
+  @ViewChild(SearchBarComponent)
+  protected searchBar!: SearchBarComponent;
+
   // Fields
-  protected allowOrderStatusUpdates = true;
+  protected allowUpdates = true;
 
-  protected columnsToDisplay = ['user', 'deliveryMethod', 'orderStatus', 'paymentMethod', 'paymentStatus', 'date', 'expand'];
+  protected columnsToDisplay = ['date', 'user', 'deliveryMethod', 'paymentMethod', 'orderStatus', 'paymentStatus', 'expand'];
 
-  protected data?: Order[];
+  protected data: Order[] = [];
+
+  protected dataLength = 0;
+
+  protected dataPage = 0;
+
+  protected dataPageSize = StringValues.DEFAULT_PAGE_SIZE;
+
+  protected dataPageSizeOptions: number[] = StringValues.DEFAULT_PAGE_SIZE_OPTIONS;
 
   protected dataSource = new MatTableDataSource<Order>(this.data);
 
@@ -51,13 +73,23 @@ export class ListOrderComponent implements OnDestroy, OnInit {
 
   protected orderStatuses: OrderStatus[] = [];
 
-  private orderSubscription?: Subscription;
+  protected paymentStatuses: PaymentStatus[] = [];
 
-  private previousOrderStatus?: OrderStatus;
+  private orderSubscription?: Subscription;
 
   private orderStatusSubscription?: Subscription;
 
-  constructor(private orderService: OrderService, private orderStatusService: OrderStatusService, private snackbar: MatSnackBar) {
+  private paymentStatusSubscription?: Subscription;
+
+  private previousOrderStatus?: OrderStatus;
+
+  private filter = '';
+
+  constructor(
+    private orderService: OrderService,
+    private orderStatusService: OrderStatusService,
+    private paymentStatusService: PaymentStatusService,
+    private snackbar: MatSnackBar) {
     this.isClient = isClient();
   }
 
@@ -66,17 +98,46 @@ export class ListOrderComponent implements OnDestroy, OnInit {
    * Assigns the Paginator and the Sort components to the respective properties of the datasource to handle pages and sorting of the table.
    */
   public ngAfterViewInit(){
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    merge(this.sort.sortChange, this.paginator.page, this.searchBar.searchEvent).pipe(
+      startWith({}),
+      switchMap(() => {
+        this.isLoading = true;
+
+        this.dataPage = this.paginator.pageIndex;
+
+        this.dataPageSize = this.paginator.pageSize;
+
+        return this.orderService.getAll(this.filter, this.sort.direction, this.sort.active, this.paginator.pageIndex, this.dataPageSize).pipe(catchError(() => of(null)));
+      }),
+      map(response => {
+        if(response === null){
+          return [];
+        }
+        this.isLoading = false;
+
+        this.dataLength = response.totalElements;
+
+        this.dataPage = response.pageable.pageNumber;
+
+        return response.content;
+      }),
+    ).subscribe(data => (this.dataSource = data))
 
     // TODO Might need to assign it after every data change
-    // this.dataSource.sortingDataAccessor = (item, property) => {
-    //   switch(property) {
-    //     case 'parameters.author': return item.parameters.author;
-    //     default: return (item as IIndexable<Book>)[property];
-    //   }
-    // }
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      switch(property) {
+        case 'deliveryMethod.name': return item.deliveryMethod.name;
+        case 'orderStatus.name': return item.orderStatus.name;
+        case 'paymentMethod.name': return item.paymentMethod.name;
+        case 'paymentStatus.name': return item.paymentStatus.name;
+        case 'user.surname': return item.user.surname;
+        default: return (item as IIndexable<Order>)[property];
+      }
+    }
   }
+
 
   /**
    * A lifecycle hook that is called when a directive, pipe, or service is destroyed. Used for any custom cleanup that needs to occur when the instance is destroyed.
@@ -84,6 +145,7 @@ export class ListOrderComponent implements OnDestroy, OnInit {
  public ngOnDestroy(): void {
    this.orderSubscription?.unsubscribe();
    this.orderStatusSubscription?.unsubscribe();
+   this.paymentStatusSubscription?.unsubscribe();
   }
 
   /**
@@ -92,28 +154,55 @@ export class ListOrderComponent implements OnDestroy, OnInit {
    */
   public ngOnInit(): void {
     this.loadOrderStatuses();
+    this.loadPaymentStatuses();
 
     this.loadAllOrders();
-  }
-
-  /**
-   * Filters the data of the table with the value of the input of the search bar.
-   * @param filter - Value of the input field
-   */
-  protected applyFilter(filter: string){
-    this.dataSource.filter = filter.trim().toLowerCase();
   }
 
   protected getTotal(): number | undefined{
     return this.expandedElement?.orderedBooks.map((orderedBook) => orderedBook.amount * orderedBook.book.price).reduce((prev, current) => prev + current, 0);
   }
 
-  protected setCurrentOrderStatus(order: Order){
-    this.previousOrderStatus = order.orderStatus;
+  protected reorder(order: Order){
+    Swal.fire('Confirm reorder', 'Are you sure you want to reorder this?', 'info')
+    .then((result) => {
+      if(result.isConfirmed){
+
+        order.id = undefined;
+        order.orderStatus.name = StringValues.DEFAULT_ORDER_STATUS_ON_ORDER;
+        order.paymentStatus.name = StringValues.DEFAULT_PAYMENT_STATUS_ON_ORDER;
+
+        this.orderService.createOrderWithBooks(order, order.orderedBooks).subscribe({
+          next: () => {
+            this.loadAllOrders();
+            Swal.fire('Reorder successful', '', 'success');
+          },
+          error: () => {
+            Swal.fire('An error ocurred', 'Order could not be saved', 'info')
+          }
+        });
+      }
+    })
+  }
+
+  protected setFilter(filter: string){
+    this.filter = filter;
   }
 
   protected setOrderStatus(order: Order){
-    this.allowOrderStatusUpdates = false;
+    this.allowUpdates = false;
+    this.isLoading = true;
+
+    if(order.id){
+      this.orderService.createOrderWithBooks(order, []).subscribe({
+        complete: () => this.handleUpdateSuccessResponse(`Order status updated successfully!`),
+        error: () => this.handleUpdateErrorResponse(order, `Order status could not be changed.`)
+      })
+    }
+  }
+
+  protected setPaymentStatus(order: Order){
+    this.allowUpdates = false;
     this.isLoading = true;
 
     if(order.id){
@@ -136,7 +225,11 @@ export class ListOrderComponent implements OnDestroy, OnInit {
       order.orderStatus = this.previousOrderStatus;
     }
 
-    this.handleUpdateResponse(message);
+    Swal.fire('An error ocurred', message, 'warning');
+
+    this.isLoading = false;
+
+    this.allowUpdates = true;
   }
 
   /**
@@ -149,7 +242,7 @@ export class ListOrderComponent implements OnDestroy, OnInit {
 
     this.isLoading = false;
 
-    this.allowOrderStatusUpdates = true;
+    this.allowUpdates = true;
   }
 
   /**
@@ -174,6 +267,9 @@ export class ListOrderComponent implements OnDestroy, OnInit {
         this.dataSource.data = response.content;
 
         this.isLoading = false;
+      },
+      error: () => {
+        Swal.fire('An error ocurred', '', 'warning')
       }
     })
   }
@@ -181,6 +277,12 @@ export class ListOrderComponent implements OnDestroy, OnInit {
   private loadOrderStatuses(){
     this.orderStatusSubscription = this.orderStatusService.getAll(true).subscribe((response) => {
       this.orderStatuses = response;
+    })
+  }
+
+  private loadPaymentStatuses(){
+    this.paymentStatusSubscription = this.paymentStatusService.getAll(true).subscribe((response) => {
+      this.paymentStatuses = response;
     })
   }
 }

@@ -13,8 +13,6 @@ import { IIndexable } from 'src/app/shared/utils/interfaces/i-indexable';
 import { StringValues } from 'src/app/shared/utils/string-values';
 import Swal from 'sweetalert2';
 
-// TODO
-// - Optimize to paginate manually like catalog
 @Component({
   selector: 'app-list-book',
   templateUrl: './list-book.component.html',
@@ -40,17 +38,15 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
   protected searchBar!: SearchBarComponent;
 
   // Fields
-  protected allowActivityUpdates = true;
+  protected allowUpdates = true;
 
-  protected displayedColumns: string [] = ['title', 'parameters.author', 'active', 'price', 'stock', 'actions'];
+  protected columnsToDisplay: string [] = ['title', 'parameters.author', 'active', 'price', 'stock', 'actions'];
 
   protected data: Book[] = [];
 
   protected dataLength = 0;
 
   protected dataPage = 0;
-
-  protected dataPageEvent?: PageEvent;
 
   protected dataPageSize = StringValues.DEFAULT_PAGE_SIZE;
 
@@ -62,7 +58,7 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
 
   protected isLoading = true;
 
-  private booksSubsrciption?: Subscription;
+  private booksSubscription?: Subscription;
 
   private active? = undefined;
 
@@ -85,7 +81,7 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
    * A lifecycle hook that is called when a directive, pipe, or service is destroyed. Used for any custom cleanup that needs to occur when the instance is destroyed.
    */
   public ngOnDestroy(): void {
-    this.booksSubsrciption?.unsubscribe();
+    this.booksSubscription?.unsubscribe();
   }
 
   // Methods
@@ -101,15 +97,18 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
       startWith({}),
       switchMap(() => {
         this.isLoading = true;
+
+        this.dataPage = this.paginator.pageIndex;
+
+        this.dataPageSize = this.paginator.pageSize;
+
         return this.bookService.getAll(this.active, this.filter, this.sort.direction, this.sort.active, this.paginator.pageIndex, this.dataPageSize).pipe(catchError(() => of(null)));
       }),
       map(response => {
-        this.isLoading = false;
         if(response === null){
           return [];
         }
-
-        this.data = response.content;
+        this.isLoading = false;
 
         this.dataLength = response.totalElements;
 
@@ -147,14 +146,6 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   /**
-   * Filters the data of the table with the value of the input of the search bar.
-   * @param filter - Value of the input field
-   */
-  protected applyFilter(filter: string){
-    this.dataSource.filter = filter.trim().toLowerCase();
-  }
-
-  /**
    * Navigates the user to the 'Edit book' page, allowing them to modify an existing one.
    * @param id Id of the chosen book.
    */
@@ -162,19 +153,12 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
     this.router.navigate(['books/edit', id]);
   }
 
-  protected onPageChange(event: PageEvent): void {
-    this.dataPageEvent = event;
-    this.dataPage = event.pageIndex;
-    this.dataPageSize = event.pageSize;
-    this.getAllBooks();
-  }
-
   /**
    * Sets the book 'active' state. If it was active before, it's not active now and viceversa. Disables the toggle button during the transaction until success or error.
    * @param book Book whose 'active' state will be changed.
    */
   protected setBookActivity(book: Book){
-    this.allowActivityUpdates = false;
+    this.allowUpdates = false;
     this.isLoading = true;
 
     this.bookService.update(book.id, book).subscribe({
@@ -200,7 +184,7 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
    * Retrieves all elements from the database. Hides the progress bar when the data is loaded.
    */
   private getAllBooks(){
-    this.booksSubsrciption = this.bookService.getAll().subscribe({
+    this.booksSubscription = this.bookService.getAll().subscribe({
       next: (response) => {
         this.data = response.content;
 
@@ -233,7 +217,7 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
 
     this.isLoading = false;
 
-    this.allowActivityUpdates = true;
+    this.allowUpdates = true;
   }
 
   /**
