@@ -144,7 +144,6 @@ export class CartComponent implements OnInit{
           const order: Order = {
             orderedBooks: [],
             date: new Date(),
-            id: 0,
             deliveryMethod: {name: this.form.value.orderDetails.deliveryMethod},
             orderStatus: {name: this.selectedOrderStatus},
             paymentMethod: {name: this.form.value.orderDetails.paymentMethod},

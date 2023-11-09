@@ -6,7 +6,7 @@
 <h1 class="text-center mt-3">List of orders</h1>
 <!-- /TITLE -->
 
-<div class="container mat-elevation-z8 pb-3">
+<div *ngIf="data" class="container mat-elevation-z8 pb-3">
   <!-- SEARCHBAR -->
   <app-search-bar [placeholder]="'by '" (searchEvent)="applyFilter($event)"></app-search-bar>
   <!-- /SEARCHBAR -->
@@ -20,39 +20,52 @@
   >
 
   <ng-container matColumnDef="user">
-    <th mat-header-cell *matHeaderCellDef>User</th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>User</th>
     <td mat-cell *matCellDef="let element">{{element.user.surname}}, {{element.user.name}}</td>
   </ng-container>
 
   <ng-container matColumnDef="deliveryMethod">
-    <th mat-header-cell *matHeaderCellDef>Delivery Method</th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Delivery Method</th>
     <td mat-cell *matCellDef="let element">{{element.deliveryMethod.name}}</td>
   </ng-container>
 
-  <ng-container matColumnDef="orderStatus">
-    <th mat-header-cell *matHeaderCellDef>Order Status</th>
-    <td mat-cell *matCellDef="let element">{{element.orderStatus.name}}</td>
+  <ng-container matColumnDef="orderStatus" *ngIf="isClient">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Order Status</th>
+    <td mat-cell *matCellDef="let element" >
+      {{element.orderStatus.name}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="orderStatus" *ngIf="!isClient">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Order Status</th>
+    <td mat-cell *matCellDef="let element" (click)="setCurrentOrderStatus(element); $event.stopPropagation()">
+      <mat-select class="select" (selectionChange)="setOrderStatus(element)" [(value)]="element.orderStatus.name">
+        <mat-option  *ngFor="let orderStatus of orderStatuses" [value]="orderStatus.name">
+          {{orderStatus.name}}
+        </mat-option>
+      </mat-select>
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="paymentMethod">
-    <th mat-header-cell *matHeaderCellDef>Payment Method</th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Payment Method</th>
     <td mat-cell *matCellDef="let element">{{element.paymentMethod.name}}</td>
   </ng-container>
 
   <ng-container matColumnDef="paymentStatus">
-    <th mat-header-cell *matHeaderCellDef>Payment status</th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Payment status</th>
     <td mat-cell *matCellDef="let element">{{element.paymentStatus.name}}</td>
   </ng-container>
 
   <ng-container matColumnDef="date">
-    <th mat-header-cell *matHeaderCellDef>Date</th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
     <td mat-cell *matCellDef="let element">{{element.date}}</td>
   </ng-container>
 
   <ng-container matColumnDef="expand">
     <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
     <td mat-cell *matCellDef="let element">
-      <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+      <button mat-icon-button aria-label="expand row">
         <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
         <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
       </button>
@@ -88,6 +101,6 @@
       [class.expanded-row]="expandedElement === element"
       (click)="expandedElement = expandedElement === element ? null : element">
   </tr>
-  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+  <tr class="detail-row" mat-row *matRowDef="let row; columns: ['expandedDetail']"></tr>
   </table>
 </div>

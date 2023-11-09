@@ -98,7 +98,7 @@ export abstract class AbstractService<Entity, ID> {
   protected handleError(error: HttpErrorResponse) {
     console.log(error)
     // Check if a client-side or network error occurred.
-    if (error.status === 0) {
+    /*if (error.status === 0) {
       console.error('An error occurred:', error.error);
       Swal.fire('An network error ocurred', '', 'info')
     } else {
@@ -112,7 +112,7 @@ export abstract class AbstractService<Entity, ID> {
       }
       console.error(
         `Backend returned code ${error.status}, body was: `, error.error);
-    }
+    }*/
 
     return throwError(() => new Error('Something bad happened; please try again later.'));
   }

@@ -25,8 +25,6 @@ export class AuthService {
     );
   }
 
-  // public register(dateOfBirth: string, email: string, name:string, password: string, phone: string, surname: string){
-  //   const body = JSON.stringify({dateOfBirth, email, name, password, phone, surname});
   public register(user: User){
     const body = JSON.stringify(user);
 
