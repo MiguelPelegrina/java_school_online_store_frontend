@@ -61,9 +61,8 @@ export class CatalogComponent implements OnInit, OnDestroy {
    * Filters the data of the table with the value of the input of the search bar.
    * @param filter - Value of the input field
    */
-  protected applyFilter(filter: string){
+  protected setFilter(filter: string){
     this.filter = filter;
-    this.getBooks();
   }
 
   protected onAddToCart(book: Book): void {
@@ -79,6 +78,10 @@ export class CatalogComponent implements OnInit, OnDestroy {
     this.pageEvent = event;
     this.currentPage = event.pageIndex;
     this.pageSize = event.pageSize;
+    this.getBooks();
+  }
+
+  protected onSearch(): void {
     this.getBooks();
   }
 

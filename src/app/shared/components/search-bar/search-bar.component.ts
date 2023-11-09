@@ -16,10 +16,17 @@ export class SearchBarComponent {
   @Output()
   searchEvent = new EventEmitter<string>();
 
+  @Output()
+  setFilterEvent = new EventEmitter<string>();
+
   protected value: string = '';
 
   // Methods
   public searchItem(value: string){
     this.searchEvent.emit(value);
+  }
+
+  public setFilter(value: string){
+    this.setFilterEvent.emit(value);
   }
 }

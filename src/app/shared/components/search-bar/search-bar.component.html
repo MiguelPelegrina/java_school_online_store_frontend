@@ -4,7 +4,7 @@
   <!-- /LABEL -->
 
   <!-- INPUT -->
-  <input #input (keyup.enter)="searchItem(input.value)" matInput placeholder={{placeholder}} type="text" [(ngModel)]="value">
+  <input #input (keyup)="setFilter(input.value)" matInput placeholder={{placeholder}} type="text" [(ngModel)]="value">
   <!-- /INPUT -->
 
   <!-- SEARCH BUTTON -->

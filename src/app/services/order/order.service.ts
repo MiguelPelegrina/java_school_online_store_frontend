@@ -14,6 +14,7 @@ export class OrderService extends AbstractService<Order, number>{
     super(StringValues.BASE_ORDER_URL, httpClient);
   }
 
+  // TODO Might be unnecessary?
   public createOrderWithBooks(order: Order, orderedBooks: OrderedBook[]){
     const body = JSON.stringify({order, orderedBooks});
 
