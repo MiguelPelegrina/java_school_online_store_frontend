@@ -5,8 +5,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { catchError, map, merge, of, startWith, Subscription, switchMap } from 'rxjs';
 import { BookService } from 'src/app/services/book/book.service';
+import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
 import { Book } from 'src/app/shared/domain/book/book';
 import { IIndexable } from 'src/app/shared/utils/interfaces/i-indexable';
 import Swal from 'sweetalert2';
@@ -16,7 +17,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-list-book',
   templateUrl: './list-book.component.html',
-  styleUrls: ['./list-book.component.css'],
+  styleUrls: ['./list-book.component.css', '../../../app.component.css'],
   animations: [
     trigger('detailExpand', [
       state('collapsed, void', style({height: '0px', minHeight: '0'})),
@@ -34,12 +35,17 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild(MatSort)
   protected sort!: MatSort;
 
+  @ViewChild(SearchBarComponent)
+  protected searchBar!: SearchBarComponent;
+
   // Fields
   protected allowActivityUpdates = true;
 
-  protected columnsToDisplay: string [] = ['title', 'parameters.author', 'active', 'price', 'stock', 'actions', 'expand'];
+  protected displayedColumns: string [] = ['title', 'parameters.author', 'active', 'price', 'stock', 'actions', 'expand'];
 
   protected data: Book[] = [];
+
+  protected dataLength = 0;
 
   protected dataSource = new MatTableDataSource<Book>(this.data);
 
@@ -48,6 +54,10 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
   protected isLoading = true;
 
   private booksSubsrciption?: Subscription;
+
+  private active = undefined;
+
+  private filter = '';
 
   // Constructor
   /**
@@ -76,8 +86,24 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
    * Assigns the Paginator and the Sort components to the respective properties of the datasource to handle pages and sorting of the table.
    */
   public ngAfterViewInit(){
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    merge(this.sort.sortChange, this.paginator.page, this.searchBar.searchEvent).pipe(
+      startWith({}),
+      switchMap(() => {
+        this.isLoading = true;
+        return this.bookService.getAll(this.active, this.filter, this.sort.direction, this.sort.active, this.paginator.pageIndex).pipe(catchError(() => of(null)));
+      }),
+      map(response => {
+        this.isLoading = false;
+        if(response === null){
+          return [];
+        }
+
+        this.dataLength = response.totalElements;
+        return response.content;
+      }),
+    ).subscribe(data => (this.dataSource = data))
 
     // TODO Might need to assign it after every data change
     this.dataSource.sortingDataAccessor = (item, property) => {
@@ -129,10 +155,15 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
   protected setBookActivity(book: Book){
     this.allowActivityUpdates = false;
     this.isLoading = true;
+
     this.bookService.update(book.id, book).subscribe({
       complete: () => this.handleUpdateSuccessResponse(`Activity of ${book.title} updated successfully!`),
       error: () => this.handleUpdateErrorResponse(book, `Activity of ${book.title} could not be changed.`)
     })
+  }
+
+  protected setFilter(filter: string){
+    this.filter = filter;
   }
 
   /**
@@ -210,25 +241,6 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
 
       return found;
     }
-  }
-
-  /**
-   *The book list is sorted by the activity first and then by the title of the book
-   * @param bookList - Book list that will be sorted.
-   * @returns The sorted book list.
-   * @deprecated
-   */
-  private sortBookListByActivityName(bookList: Book[]): Book[] {
-    return bookList.sort((a, b) => {
-      if (a.active && !b.active) {
-        return -1;
-      } else if (!a.active && b.active) {
-        return 1;
-      } else {
-        // If both are active or both are inactive, compare by name
-        return a.title.localeCompare(b.title);
-      }
-    });
   }
 
   // Deprecated methods

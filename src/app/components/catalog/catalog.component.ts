@@ -14,19 +14,15 @@ const ROWS_HEIGHT: { [id: number]: number} = { 1: 400, 3: 335, 4: 350 };
 })
 export class CatalogComponent implements OnInit, OnDestroy {
   // Fields
-  protected bookList: Book[] = [];
-
-  protected bookSubscription?: Subscription;
+  protected data: Book[] = [];
 
   protected cols = 3;
 
   protected currentPage = 0;
 
-  protected filter = '';
-
   protected genre?: string;
 
-  protected isLoading: boolean = true;
+  protected isLoading = true;
 
   protected pageEvent?: PageEvent;
 
@@ -36,9 +32,13 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   protected rowHeight = ROWS_HEIGHT[this.cols];
 
-  protected sort = 'asc';
+  protected totalElements = 0;
 
-  protected totalElements: number = 0;
+  private bookSubscription?: Subscription;
+
+  private filter = '';
+
+  private sort = 'asc';
 
   /**
    * Constructor
@@ -54,7 +54,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.getBooks();
+    this.getActiveBooks();
   }
 
   /**
@@ -78,31 +78,31 @@ export class CatalogComponent implements OnInit, OnDestroy {
     this.pageEvent = event;
     this.currentPage = event.pageIndex;
     this.pageSize = event.pageSize;
-    this.getBooks();
+    this.getActiveBooks();
   }
 
   protected onSearch(): void {
-    this.getBooks();
+    this.getActiveBooks();
   }
 
   protected onShowGenre(genre: string): void{
     this.genre = genre;
-    this.getBooks();
+    this.getActiveBooks();
   }
 
   protected onSortChange(newSort: string) {
     this.sort = newSort;
-    this.getBooks();
+    this.getActiveBooks();
   }
 
-  private getBooks(): void{
+  private getActiveBooks(): void{
     this.bookSubscription = this.bookService.getAll(true, this.filter, this.sort, 'title', this.currentPage, this.pageSize, this.genre).subscribe({
       next: (response) => {
         this.currentPage = response.pageable.pageNumber;
 
         this.totalElements = response.totalElements;
 
-        this.bookList = response.content;
+        this.data = response.content;
 
         this.isLoading = false;
       }

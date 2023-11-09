@@ -39,12 +39,12 @@
       [cols]="cols"
       [rowHeight]="rowHeight"
     >
-      <mat-grid-tile *ngFor="let book of bookList">
+      <mat-grid-tile *ngFor="let element of data">
         <!-- TODO Decide which one looks better -->
         <!-- <app-book-box [ngClass]="{'w-100': cols === 1}" [fullWidthMode]="cols === 1"></app-book-box> -->
         <app-book-box
           (addToCart)="onAddToCart($event)"
-          [book]="book"
+          [book]="element"
           class="w-100"
           [fullWidthMode]="cols === 1"
         ></app-book-box>
