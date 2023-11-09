@@ -25,10 +25,10 @@
     </app-books-header>
 
     <mat-paginator
-      [length]="totalElements"
-      [pageIndex]="currentPage"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="pageSizeOptions"
+      [length]="dataLength"
+      [pageIndex]="dataPage"
+      [pageSize]="dataPageSize"
+      [pageSizeOptions]="dataPageSizeOptions"
       (page)="onPageChange($event)"
       [showFirstLastButtons]="true"
     >
@@ -52,10 +52,10 @@
     </mat-grid-list>
 
     <mat-paginator
-      [length]="totalElements"
-      [pageIndex]="currentPage"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="pageSizeOptions"
+      [length]="dataLength"
+      [pageIndex]="dataPage"
+      [pageSize]="dataPageSize"
+      [pageSizeOptions]="dataPageSizeOptions"
       (page)="onPageChange($event)"
       [showFirstLastButtons]="true"
     >

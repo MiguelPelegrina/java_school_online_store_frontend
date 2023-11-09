@@ -1,14 +1,14 @@
 <!-- TODO
   - Implement image selector
 -->
-<!-- LOADING -->
-<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
-<!-- /LOADING -->
 
 <h2 class="text-center" *ngIf="isAddMode">Add a new book</h2>
 <h2 class="text-center" *ngIf="!isAddMode">Edit book</h2>
 
 <div class="container form-container mat-elevation-z8">
+  <div class="loading-shade" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
+  </div>
   <form [formGroup]="form" (ngSubmit)="onSubmit()" #bookForm="ngForm">
     <!-- IDENTIFIER -->
     <div [hidden]="true">

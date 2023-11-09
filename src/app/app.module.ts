@@ -53,6 +53,7 @@ import { OrderDetailsFormComponent } from './components/cart/order-details-form/
 import { ListOrderComponent } from './components/order/list-order/list-order.component';
 import { DatePipe } from '@angular/common';
 import { ViewBookComponent } from './components/book/view-book/view-book.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,7 @@ import { ViewBookComponent } from './components/book/view-book/view-book.compone
     AddEditUserForm,
     OrderDetailsFormComponent,
     ListOrderComponent,
-    ViewBookComponent
+    ViewBookComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -88,6 +89,7 @@ import { ViewBookComponent } from './components/book/view-book/view-book.compone
     MatBadgeModule,
     MatButtonModule,
     MatCardModule,
+    MatDialogModule,
     MatDatepickerModule,
     MatExpansionModule,
     MatFormFieldModule,

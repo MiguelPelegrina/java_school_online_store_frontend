@@ -34,6 +34,16 @@
     <app-search-bar [placeholder]="'by title or author'" (setFilterEvent)="setFilter($event)"></app-search-bar>
     <!-- /SEARCHBAR -->
 
+    <mat-paginator
+      [length]="dataLength"
+      [pageIndex]="dataPage"
+      [pageSize]="dataPageSize"
+      [pageSizeOptions]="dataPageSizeOptions"
+      (page)="onPageChange($event)"
+      [showFirstLastButtons]="true"
+    >
+    </mat-paginator>
+
       <!-- TABLE -->
     <table class="container mat-elevation-z8 table-responsive-sm"
       [dataSource]="dataSource"
@@ -87,10 +97,10 @@
     <!-- ACTIONS -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef matTooltip="View more details or edit the book">Actions</th>
-      <td mat-cell *matCellDef="let book">
+      <td mat-cell *matCellDef="let element">
         <mat-icon
           aria-hidden="false"
-          (click)="viewBookDetails(book.id)"
+          (click)="viewBookDetails(element.id)"
           fontIcon="remove_red_eye"
           matTooltip="View more details"
           >
@@ -98,7 +108,7 @@
 
         <mat-icon
           aria-hidden="false"
-          (click)="editBook(book.id)"
+          (click)="editBook(element.id)"
           color="accent"
           fontIcon="edit"
           matTooltip="Edit the book"
@@ -106,20 +116,13 @@
         >
         </mat-icon>
 
-
-      </td>
-    </ng-container>
-    <!-- /ACTIONS -->
-
-    <ng-container matColumnDef="expand">
-      <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
-      <td mat-cell *matCellDef="let element">
         <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
           <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
           <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
         </button>
       </td>
     </ng-container>
+    <!-- /ACTIONS -->
 
     <ng-container matColumnDef="expandedDetail">
       <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
@@ -154,8 +157,14 @@
     <!-- /TABLE -->
 
     <!-- PAGINATOR -->
-    <mat-paginator class="mat-elevation-z8" [pageSizeOptions]="[5, 10, 20]"
-      showFirstLastButtons>
+    <mat-paginator
+      [length]="dataLength"
+      [pageIndex]="dataPage"
+      [pageSize]="dataPageSize"
+      [pageSizeOptions]="dataPageSizeOptions"
+      (page)="onPageChange($event)"
+      [showFirstLastButtons]="true"
+    >
     </mat-paginator>
     <!-- /PAGINATOR -->
   </div>

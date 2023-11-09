@@ -47,7 +47,7 @@ export class StringValues{
   public static BASE_DELIVERY_METHODS_URL: string = `${this.BASE_URL}${this.DELIVERY_METHODS_URL}`;
 
   /////////////////////////////////////////////////////
-  // Delivery statuses
+  // Order statuses
   /////////////////////////////////////////////////////
   public static ORDER_STATUSES_URL: string = '/order_statuses';
   public static BASE_ORDER_STATUSES_URL: string = `${this.BASE_URL}${this.ORDER_STATUSES_URL}`;
@@ -88,5 +88,11 @@ export class StringValues{
   public static USER_ADDRESSES_URL: string = '/user_addresses';
   public static BASE_USER_ADDRESSES_URL: string = `${this.BASE_URL}${this.USER_ADDRESSES_URL}`;
 
-
+  /////////////////////////////////////////////////////
+  // Default values
+  ////////////////////////////////////////////////////
+  public static DEFAULT_ORDER_STATUS_ON_ORDER: string = 'Pending payment';
+  public static DEFAULT_PAGE_SIZE = 12;
+  public static DEFAULT_PAGE_SIZE_OPTIONS = [1, 3, 6, 9, 12, 24, 36];
+  public static DEFAULT_PAYMENT_STATUS_ON_ORDER: string = 'Pending';
 }

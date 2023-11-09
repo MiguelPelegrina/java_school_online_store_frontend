@@ -11,6 +11,7 @@ import { Cart } from 'src/app/shared/domain/cart/cart';
 import { Order } from 'src/app/shared/domain/order/order';
 import { User } from 'src/app/shared/domain/user/user';
 import { AuthResultDto } from 'src/app/shared/utils/interfaces/authResultDto';
+import { StringValues } from 'src/app/shared/utils/string-values';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -43,9 +44,9 @@ export class CartComponent implements OnInit{
 
   protected loading = true;
 
-  protected selectedOrderStatus = 'Pending payment';
+  protected selectedOrderStatus = StringValues.DEFAULT_ORDER_STATUS_ON_ORDER;
 
-  protected selectedPaymentStatus = 'Pending';
+  protected selectedPaymentStatus = StringValues.DEFAULT_PAYMENT_STATUS_ON_ORDER;
 
   protected user?: User;
 

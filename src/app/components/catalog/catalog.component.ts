@@ -4,6 +4,7 @@ import { BookService } from 'src/app/services/book/book.service';
 import { CartService } from 'src/app/services/cart/cart.service';
 import { Subscription } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
+import { StringValues } from 'src/app/shared/utils/string-values';
 
 const ROWS_HEIGHT: { [id: number]: number} = { 1: 400, 3: 335, 4: 350 };
 
@@ -18,21 +19,21 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   protected cols = 3;
 
-  protected currentPage = 0;
+  protected dataLength = 0;
+
+  protected dataPage = 0;
+
+  protected dataPageEvent?: PageEvent;
+
+  protected dataPageSize = StringValues.DEFAULT_PAGE_SIZE;
+
+  protected dataPageSizeOptions: number[] = StringValues.DEFAULT_PAGE_SIZE_OPTIONS;
 
   protected genre?: string;
 
   protected isLoading = true;
 
-  protected pageEvent?: PageEvent;
-
-  protected pageSize = 12;
-
-  protected pageSizeOptions: number[] = [3, 6, 9, 12, 24, 36];
-
   protected rowHeight = ROWS_HEIGHT[this.cols];
-
-  protected totalElements = 0;
 
   private bookSubscription?: Subscription;
 
@@ -75,9 +76,9 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   protected onPageChange(event: PageEvent): void {
-    this.pageEvent = event;
-    this.currentPage = event.pageIndex;
-    this.pageSize = event.pageSize;
+    this.dataPageEvent = event;
+    this.dataPage = event.pageIndex;
+    this.dataPageSize = event.pageSize;
     this.getActiveBooks();
   }
 
@@ -96,13 +97,13 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   private getActiveBooks(): void{
-    this.bookSubscription = this.bookService.getAll(true, this.filter, this.sort, 'title', this.currentPage, this.pageSize, this.genre).subscribe({
+    this.bookSubscription = this.bookService.getAll(true, this.filter, this.sort, 'title', this.dataPage, this.dataPageSize, this.genre).subscribe({
       next: (response) => {
-        this.currentPage = response.pageable.pageNumber;
-
-        this.totalElements = response.totalElements;
-
         this.data = response.content;
+
+        this.dataLength = response.totalElements;
+
+        this.dataPage = response.pageable.pageNumber;
 
         this.isLoading = false;
       }

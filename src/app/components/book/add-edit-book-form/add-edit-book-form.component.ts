@@ -35,7 +35,7 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
 
   protected isAddMode?: boolean;
 
-  protected loading = true;
+  protected isLoading = true;
 
   protected submitted = false;
 
@@ -81,7 +81,7 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
     this.isAddMode = !this.id;
 
     if(this.isAddMode){
-      this.loading = false;
+      this.isLoading = false;
     }
 
     this.loadGenres();
@@ -141,7 +141,7 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
     this.submitted = true;
 
     if(!this.form.invalid){
-      this.loading = true;
+      this.isLoading = true;
 
       if(this.isAddMode){
         this.createBook();
@@ -169,7 +169,7 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
 
   private handleErrorResponse(action: string, error: any) {
     Swal.fire('Error', `The book could not be ${action}: ${error.message}` , 'warning');
-    this.loading = false;
+    this.isLoading = false;
   }
 
   private handleSuccessResponse(action: string){
@@ -188,7 +188,7 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
 
       this.form.patchValue(response);
 
-      this.loading = false;
+      this.isLoading = false;
     });
   }
 

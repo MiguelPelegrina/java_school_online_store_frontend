@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -10,6 +10,7 @@ import { BookService } from 'src/app/services/book/book.service';
 import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
 import { Book } from 'src/app/shared/domain/book/book';
 import { IIndexable } from 'src/app/shared/utils/interfaces/i-indexable';
+import { StringValues } from 'src/app/shared/utils/string-values';
 import Swal from 'sweetalert2';
 
 // TODO
@@ -41,11 +42,19 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
   // Fields
   protected allowActivityUpdates = true;
 
-  protected displayedColumns: string [] = ['title', 'parameters.author', 'active', 'price', 'stock', 'actions', 'expand'];
+  protected displayedColumns: string [] = ['title', 'parameters.author', 'active', 'price', 'stock', 'actions'];
 
   protected data: Book[] = [];
 
   protected dataLength = 0;
+
+  protected dataPage = 0;
+
+  protected dataPageEvent?: PageEvent;
+
+  protected dataPageSize = StringValues.DEFAULT_PAGE_SIZE;
+
+  protected dataPageSizeOptions: number[] = StringValues.DEFAULT_PAGE_SIZE_OPTIONS;
 
   protected dataSource = new MatTableDataSource<Book>(this.data);
 
@@ -55,7 +64,7 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
 
   private booksSubsrciption?: Subscription;
 
-  private active = undefined;
+  private active? = undefined;
 
   private filter = '';
 
@@ -92,7 +101,7 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
       startWith({}),
       switchMap(() => {
         this.isLoading = true;
-        return this.bookService.getAll(this.active, this.filter, this.sort.direction, this.sort.active, this.paginator.pageIndex).pipe(catchError(() => of(null)));
+        return this.bookService.getAll(this.active, this.filter, this.sort.direction, this.sort.active, this.paginator.pageIndex, this.dataPageSize).pipe(catchError(() => of(null)));
       }),
       map(response => {
         this.isLoading = false;
@@ -100,7 +109,12 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
           return [];
         }
 
+        this.data = response.content;
+
         this.dataLength = response.totalElements;
+
+        this.dataPage = response.pageable.pageNumber;
+
         return response.content;
       }),
     ).subscribe(data => (this.dataSource = data))
@@ -146,6 +160,13 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
    */
   protected editBook(id: number){
     this.router.navigate(['books/edit', id]);
+  }
+
+  protected onPageChange(event: PageEvent): void {
+    this.dataPageEvent = event;
+    this.dataPage = event.pageIndex;
+    this.dataPageSize = event.pageSize;
+    this.getAllBooks();
   }
 
   /**
@@ -264,7 +285,6 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
         this.bookService.delete(book.id).subscribe(response =>{
           this.getAllBooks();
           Swal.fire('Delete successful', '', 'success');
-          error: Swal.fire('An error ocurred, contact your support', '', 'warning');
         });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire('Changes are not saved', '', 'info')
