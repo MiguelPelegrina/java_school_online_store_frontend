@@ -86,9 +86,6 @@ export class ListCustomerComponent implements AfterViewInit, OnDestroy {
           return [];
         }
 
-        // TODO Addresses of users are not being retrieved
-        console.log(response)
-
         this.dataLength = response.totalElements;
 
         this.dataPage = response.pageable.pageNumber;

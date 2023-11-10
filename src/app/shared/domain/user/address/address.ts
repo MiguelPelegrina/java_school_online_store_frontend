@@ -1,4 +1,3 @@
-import { User } from "../user";
 import { PostalCode } from "./postal-code/postal-code";
 
 export interface Address {
