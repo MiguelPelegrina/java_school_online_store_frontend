@@ -1,15 +1,13 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import { catchError, map, merge, of, startWith, Subscription, switchMap } from 'rxjs';
+import { map, merge, Observable, startWith, switchMap } from 'rxjs';
 import { BookService } from 'src/app/services/book/book.service';
 import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
 import { Book } from 'src/app/shared/domain/book/book';
-import { IIndexable } from 'src/app/shared/utils/interfaces/i-indexable';
 import { StringValues } from 'src/app/shared/utils/string-values';
 import Swal from 'sweetalert2';
 
@@ -26,7 +24,7 @@ import Swal from 'sweetalert2';
     ]),
   ],
 })
-export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
+export class ListBookComponent implements AfterViewInit {
   // Subcomponents
   @ViewChild(MatPaginator)
   protected paginator!: MatPaginator;
@@ -44,6 +42,8 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
 
   protected data: Book[] = [];
 
+  protected data$ = new Observable<Book[]>();
+
   protected dataLength = 0;
 
   protected dataPage = 0;
@@ -58,8 +58,6 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
 
   protected isLoading = true;
 
-  private booksSubscription?: Subscription;
-
   private active? = undefined;
 
   private filter = '';
@@ -69,20 +67,11 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
    * Constructor of the component.
    * @param bookService - Service that gets all the books
    * @param snackbar - Snackbar to inform the user of events
-   * @param router - Router to nagivate the user
    */
   constructor(
     private bookService: BookService,
     private snackbar: MatSnackBar,
-    private router: Router,
   ){}
-
-  /**
-   * A lifecycle hook that is called when a directive, pipe, or service is destroyed. Used for any custom cleanup that needs to occur when the instance is destroyed.
-   */
-  public ngOnDestroy(): void {
-    this.booksSubscription?.unsubscribe();
-  }
 
   // Methods
   // Public methods
@@ -93,7 +82,7 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
   public ngAfterViewInit(){
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
-    merge(this.sort.sortChange, this.paginator.page, this.searchBar.searchEvent).pipe(
+    this.data$ = merge(this.sort.sortChange, this.paginator.page, this.searchBar.searchEvent).pipe(
       startWith({}),
       switchMap(() => {
         this.isLoading = true;
@@ -102,13 +91,14 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
 
         this.dataPageSize = this.paginator.pageSize;
 
-        return this.bookService.getAll(this.active, this.filter, this.sort.direction, this.sort.active, this.paginator.pageIndex, this.dataPageSize).pipe(catchError(() => of(null)));
+        return this.bookService.getAll(this.active, this.filter, this.sort.direction, this.sort.active, this.paginator.pageIndex, this.dataPageSize);
       }),
       map(response => {
+        this.isLoading = false;
+
         if(response === null){
           return [];
         }
-        this.isLoading = false;
 
         this.dataLength = response.totalElements;
 
@@ -116,43 +106,10 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
 
         return response.content;
       }),
-    ).subscribe(data => (this.dataSource = data))
-
-    // TODO Might need to assign it after every data change
-    this.dataSource.sortingDataAccessor = (item, property) => {
-      switch(property) {
-        case 'parameters.author': return item.parameters.author;
-        default: return (item as IIndexable<Book>)[property];
-      }
-    }
-  }
-
-  /**
-   * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
-   * Fills the table with data from the database and sets the filter of the searchbar to search by book title or book author
-   */
-  public ngOnInit(): void {
-    this.getAllBooks();
-
-    this.setFilterToSearchByTitleOrAuthor();
+    )
   }
 
   // Protected methods
-  /**
-   * Navigates the user to the 'Add book' page, allowing them to create a new one.
-   */
-  protected addBook(){
-    this.router.navigate(['books/add']);
-  }
-
-  /**
-   * Navigates the user to the 'Edit book' page, allowing them to modify an existing one.
-   * @param id Id of the chosen book.
-   */
-  protected editBook(id: number){
-    this.router.navigate(['books/edit', id]);
-  }
-
   /**
    * Sets the book 'active' state. If it was active before, it's not active now and viceversa. Disables the toggle button during the transaction until success or error.
    * @param book Book whose 'active' state will be changed.
@@ -171,20 +128,12 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
     this.filter = filter;
   }
 
-  /**
-   * Navigates the user to the 'View book' page, allowing them to see more details of the chosen book.
-   * @param id Id of the chosen book.
-   */
-  protected viewBookDetails(id: number){
-    this.router.navigate(['books/view', id]);
-  }
-
   // Private methods
   /**
    * Retrieves all elements from the database. Hides the progress bar when the data is loaded.
    */
   private getAllBooks(){
-    this.booksSubscription = this.bookService.getAll().subscribe({
+    this.bookService.getAll().subscribe({
       next: (response) => {
         this.data = response.content;
 
@@ -229,23 +178,6 @@ export class ListBookComponent implements AfterViewInit, OnDestroy, OnInit {
     this.getAllBooks();
 
     this.handleUpdateResponse(message);
-  }
-
-  /**
-   * Sets the filter of the book datasource. The datasource will only consist of those elements whose title or author contain the filter.
-   */
-  private setFilterToSearchByTitleOrAuthor() {
-    this.dataSource.filterPredicate = function (record, filter){
-      let found = false;
-
-      if(record.parameters.author.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ||
-        record.title.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
-      ){
-        found = true;
-      }
-
-      return found;
-    }
   }
 
   // Deprecated methods
