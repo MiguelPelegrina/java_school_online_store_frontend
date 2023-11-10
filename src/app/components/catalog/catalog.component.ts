@@ -55,7 +55,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.getActiveBooks();
+    this.loadActiveBooks();
   }
 
   /**
@@ -79,24 +79,24 @@ export class CatalogComponent implements OnInit, OnDestroy {
     this.dataPageEvent = event;
     this.dataPage = event.pageIndex;
     this.dataPageSize = event.pageSize;
-    this.getActiveBooks();
+    this.loadActiveBooks();
   }
 
   protected onSearch(): void {
-    this.getActiveBooks();
+    this.loadActiveBooks();
   }
 
   protected onShowGenre(genre: string): void{
     this.genre = genre;
-    this.getActiveBooks();
+    this.loadActiveBooks();
   }
 
   protected onSortChange(newSort: string) {
     this.sort = newSort;
-    this.getActiveBooks();
+    this.loadActiveBooks();
   }
 
-  private getActiveBooks(): void{
+  private loadActiveBooks(): void{
     this.bookSubscription = this.bookService.getAll(true, this.filter, this.sort, 'title', this.dataPage, this.dataPageSize, this.genre).subscribe({
       next: (response) => {
         this.data = response.content;

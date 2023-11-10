@@ -18,7 +18,7 @@ export class BookService extends AbstractService<Book, number>{
     // - Refactor this, maybe create some kind of RequestBuilder
     // - '&' should not appear if only one parameter is passed
     // - Add "?" only if at least one parameters is introduced -> create type with Request Params?
-    const _active = active != null ? `/search?active=${active}` : '';
+    const _active = active != null ? `/&active=${active}` : '';
     const _filter = filter != null ? `&name=${filter}` : '';
     const _sortType = sortType != null ? `&sortType=${sortType}` : '&sortType=asc';
     const _sortProperty = sortProperty != null ? `&sortProperty=${sortProperty}` : '&sortProperty=title';

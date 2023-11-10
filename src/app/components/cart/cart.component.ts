@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { CartService } from 'src/app/services/cart/cart.service';
 import { OrderService } from 'src/app/services/order/order.service';
-import { UserService } from 'src/app/services/user.service';
+import { UserService } from 'src/app/services/user/user.service';
 import { BoughtBook } from 'src/app/shared/domain/book/bought-book/bought-book';
 import { Cart } from 'src/app/shared/domain/cart/cart';
 import { Order } from 'src/app/shared/domain/order/order';

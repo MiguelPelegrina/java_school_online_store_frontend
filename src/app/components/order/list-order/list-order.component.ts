@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subscription, catchError, map, merge, of, startWith, switchMap } from 'rxjs';
+import { Observable, Subscription, map, merge, startWith, switchMap } from 'rxjs';
 import { OrderStatusService } from 'src/app/services/order/order-status/order-status.service';
 import { OrderService } from 'src/app/services/order/order.service';
 import { PaymentStatusService } from 'src/app/services/order/payment-status/payment-status.service';
@@ -55,6 +55,8 @@ export class ListOrderComponent implements OnDestroy, OnInit {
 
   protected data: Order[] = [];
 
+  protected data$ = new Observable<Order[]>
+
   protected dataLength = 0;
 
   protected dataPage = 0;
@@ -74,8 +76,6 @@ export class ListOrderComponent implements OnDestroy, OnInit {
   protected orderStatuses: OrderStatus[] = [];
 
   protected paymentStatuses: PaymentStatus[] = [];
-
-  private orderSubscription?: Subscription;
 
   private orderStatusSubscription?: Subscription;
 
@@ -100,7 +100,7 @@ export class ListOrderComponent implements OnDestroy, OnInit {
   public ngAfterViewInit(){
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
-    merge(this.sort.sortChange, this.paginator.page, this.searchBar.searchEvent).pipe(
+    this.data$ = merge(this.sort.sortChange, this.paginator.page, this.searchBar.searchEvent).pipe(
       startWith({}),
       switchMap(() => {
         this.isLoading = true;
@@ -109,7 +109,7 @@ export class ListOrderComponent implements OnDestroy, OnInit {
 
         this.dataPageSize = this.paginator.pageSize;
 
-        return this.orderService.getAll(this.filter, this.sort.direction, this.sort.active, this.paginator.pageIndex, this.dataPageSize).pipe(catchError(() => of(null)));
+        return this.orderService.getAll(this.filter, this.sort.direction, this.sort.active, this.paginator.pageIndex, this.dataPageSize);
       }),
       map(response => {
         if(response === null){
@@ -123,7 +123,7 @@ export class ListOrderComponent implements OnDestroy, OnInit {
 
         return response.content;
       }),
-    ).subscribe(data => (this.dataSource = data))
+    )
 
     // TODO Might need to assign it after every data change
     this.dataSource.sortingDataAccessor = (item, property) => {
@@ -143,7 +143,6 @@ export class ListOrderComponent implements OnDestroy, OnInit {
    * A lifecycle hook that is called when a directive, pipe, or service is destroyed. Used for any custom cleanup that needs to occur when the instance is destroyed.
   */
  public ngOnDestroy(): void {
-   this.orderSubscription?.unsubscribe();
    this.orderStatusSubscription?.unsubscribe();
    this.paymentStatusSubscription?.unsubscribe();
   }
@@ -169,6 +168,7 @@ export class ListOrderComponent implements OnDestroy, OnInit {
       if(result.isConfirmed){
 
         order.id = undefined;
+        order.date = new Date();
         order.orderStatus.name = StringValues.DEFAULT_ORDER_STATUS_ON_ORDER;
         order.paymentStatus.name = StringValues.DEFAULT_PAYMENT_STATUS_ON_ORDER;
 
@@ -260,7 +260,7 @@ export class ListOrderComponent implements OnDestroy, OnInit {
    * Retrieves all elements from the database. Hides the progress bar when the data is loaded.
    */
   private loadAllOrders(){
-    this.orderSubscription = this.orderService.getAll().subscribe({
+    this.orderService.getAll().subscribe({
       next: (response) => {
         this.data = response.content;
 

@@ -10,6 +10,7 @@ import { CartComponent } from "./components/cart/cart.component";
 import { ProfileComponent } from "./components/user/profile/profile.component";
 import { ListOrderComponent } from "./components/order/list-order/list-order.component";
 import { ViewBookComponent } from "./components/book/view-book/view-book.component";
+import { SalesStatisticsComponent } from "./components/sales-statistics/sales-statistics.component";
 
 const routes: Routes = [
   {path: '', redirectTo:'catalog', pathMatch:'full'},
@@ -23,6 +24,7 @@ const routes: Routes = [
   {path: 'books/view/:id', component: ViewBookComponent},
   {path: 'cart', component: CartComponent},
   {path: 'catalog', component: CatalogComponent},
+  {path: 'sales_statistics', component: SalesStatisticsComponent},
   {path: 'orders', component: ListOrderComponent},
   {path: 'profile', component: ProfileComponent}
 ];

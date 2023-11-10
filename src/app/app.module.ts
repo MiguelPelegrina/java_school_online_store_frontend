@@ -54,10 +54,14 @@ import { ListOrderComponent } from './components/order/list-order/list-order.com
 import { DatePipe } from '@angular/common';
 import { ViewBookComponent } from './components/book/view-book/view-book.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { SalesStatisticsComponent } from './components/sales-statistics/sales-statistics.component';
+import { ListCustomerComponent } from './components/sales-statistics/list-customer/list-customer.component';
 
 @NgModule({
   declarations: [
+    AddEditAddressForm,
     AddEditBookFormComponent,
+    AddEditUserForm,
     AppComponent,
     BookBoxComponent,
     BooksHeaderComponent,
@@ -69,14 +73,14 @@ import { MatDialogModule } from '@angular/material/dialog';
     ListBookComponent,
     ListBookGenreComponent,
     ListBookParametersFormatComponent,
+    ListCustomerComponent,
+    ListOrderComponent,
     LoginComponent,
+    ProfileComponent,
+    OrderDetailsFormComponent,
+    SalesStatisticsComponent,
     SearchBarComponent,
     TwoDigitDecimalNumberDirective,
-    AddEditAddressForm,
-    ProfileComponent,
-    AddEditUserForm,
-    OrderDetailsFormComponent,
-    ListOrderComponent,
     ViewBookComponent,
   ],
   imports: [

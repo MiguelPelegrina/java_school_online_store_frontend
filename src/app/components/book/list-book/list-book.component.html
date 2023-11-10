@@ -74,76 +74,76 @@
           [disabled]="!this.allowUpdates"
           [(ngModel)]="book.active"
           >
-        </mat-slide-toggle>
-      </td>
-    </ng-container>
-    <!-- /ACTIVE -->
+          </mat-slide-toggle>
+        </td>
+      </ng-container>
+      <!-- /ACTIVE -->
 
-    <!-- PRICE -->
-    <ng-container matColumnDef="price">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Price of the book" sortActionDescription="Sort by price">Price</th>
-      <td mat-cell *matCellDef="let book"> {{book.price}}</td>
-    </ng-container>
-    <!-- /PRICE -->
+      <!-- PRICE -->
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Price of the book" sortActionDescription="Sort by price">Price</th>
+        <td mat-cell *matCellDef="let book"> {{book.price}}</td>
+      </ng-container>
+      <!-- /PRICE -->
 
-    <!-- STOCK -->
-    <ng-container matColumnDef="stock">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Remaining stock of the book" sortActionDescription="Sort by stock">Stock</th>
-      <td mat-cell *matCellDef="let book"> {{book.stock}}</td>
-    </ng-container>
-    <!-- /STOCK -->
+      <!-- STOCK -->
+      <ng-container matColumnDef="stock">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Remaining stock of the book" sortActionDescription="Sort by stock">Stock</th>
+        <td mat-cell *matCellDef="let book"> {{book.stock}}</td>
+      </ng-container>
+      <!-- /STOCK -->
 
-    <!-- ACTIONS -->
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef matTooltip="View more details or edit the book">Actions</th>
-      <td mat-cell *matCellDef="let element">
-        <mat-icon
-          aria-hidden="false"
-          fontIcon="remove_red_eye"
-          matTooltip="View more details"
-          [routerLink]="['/books/view', element.id]"
+      <!-- ACTIONS -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef matTooltip="View more details or edit the book">Actions</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon
+            aria-hidden="false"
+            fontIcon="remove_red_eye"
+            matTooltip="View more details"
+            [routerLink]="['/books/view', element.id]"
+            >
+          </mat-icon>
+
+          <mat-icon
+            aria-hidden="false"
+            color="accent"
+            fontIcon="edit"
+            matTooltip="Edit the book"
+            [routerLink]="['/books/edit', element.id]"
+            style="margin-left:5px"
           >
-        </mat-icon>
+          </mat-icon>
 
-        <mat-icon
-          aria-hidden="false"
-          color="accent"
-          fontIcon="edit"
-          matTooltip="Edit the book"
-          [routerLink]="['/books/edit', element.id]"
-          style="margin-left:5px"
-        >
-        </mat-icon>
+          <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+            <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+            <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <!-- /ACTIONS -->
 
-        <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
-          <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
-          <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
-        </button>
-      </td>
-    </ng-container>
-    <!-- /ACTIONS -->
-
-    <ng-container matColumnDef="expandedDetail">
-      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
-        <div class="element-detail"
-            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-          <div class="row vertical-align">
-            <div class="col-sm">
-              <img alt="Book Cover" class="small-img" *ngIf="element.image" [src]="element.image">
-            </div>
-            <div class="col-sm">
-              ISBN: {{element.isbn}}
-            </div>
-            <div class="col-sm">
-              Genre: {{element.genre.name}}
-            </div>
-            <div class="col-sm">
-              Format: {{element.parameters.format.name}}
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+          <div class="element-detail"
+              [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <div class="row vertical-align">
+              <div class="col-sm">
+                <img alt="Book Cover" class="small-img" *ngIf="element.image" [src]="element.image">
+              </div>
+              <div class="col-sm">
+                ISBN: {{element.isbn}}
+              </div>
+              <div class="col-sm">
+                Genre: {{element.genre.name}}
+              </div>
+              <div class="col-sm">
+                Format: {{element.parameters.format.name}}
+              </div>
             </div>
           </div>
-        </div>
-      </td>
-    </ng-container>
+        </td>
+      </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
       <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"

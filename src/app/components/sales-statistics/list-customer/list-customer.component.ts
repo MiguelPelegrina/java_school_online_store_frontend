@@ -1,20 +1,19 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { map, merge, Observable, startWith, Subscription, switchMap } from 'rxjs';
-import { BookService } from 'src/app/services/book/book.service';
+import { Observable, Subscription, map, merge, startWith, switchMap } from 'rxjs';
+import { UserService } from 'src/app/services/user/user.service';
 import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
-import { Book } from 'src/app/shared/domain/book/book';
+import { User } from 'src/app/shared/domain/user/user';
 import { StringValues } from 'src/app/shared/utils/string-values';
-import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-list-book',
-  templateUrl: './list-book.component.html',
-  styleUrls: ['./list-book.component.css', '../../../app.component.css'],
+  selector: 'app-list-customer',
+  templateUrl: './list-customer.component.html',
+  styleUrls: ['./list-customer.component.css', '../../../app.component.css'],
   animations: [
     trigger('detailExpand', [
       state('collapsed, void', style({height: '0px', minHeight: '0'})),
@@ -24,25 +23,25 @@ import Swal from 'sweetalert2';
     ]),
   ],
 })
-export class ListBookComponent implements AfterViewInit, OnDestroy {
+export class ListCustomerComponent implements AfterViewInit, OnDestroy {
   // Subcomponents
   @ViewChild(MatPaginator)
   protected paginator!: MatPaginator;
 
-  @ViewChild(SearchBarComponent)
-  protected searchBar!: SearchBarComponent;
-
   @ViewChild(MatSort)
   protected sort!: MatSort;
+
+  @ViewChild(SearchBarComponent)
+  protected searchBar!: SearchBarComponent;
 
   // Fields
   protected allowUpdates = true;
 
-  protected columnsToDisplay: string [] = ['title', 'parameters.author', 'active', 'price', 'stock', 'actions'];
+  protected columnsToDisplay: string [] = ['surname', 'name', 'dateOfBirth', 'email', 'active', 'phone', 'expand'];
 
-  protected data: Book[] = [];
+  protected data: User[] = [];
 
-  protected data$ = new Observable<Book[]>();
+  protected data$ = new Observable<User[]>();
 
   protected dataLength = 0;
 
@@ -52,34 +51,20 @@ export class ListBookComponent implements AfterViewInit, OnDestroy {
 
   protected dataPageSizeOptions: number[] = StringValues.DEFAULT_PAGE_SIZE_OPTIONS;
 
-  protected dataSource = new MatTableDataSource<Book>(this.data);
+  protected dataSource = new MatTableDataSource<User>(this.data);
 
-  protected expandedElement?: Book;
+  protected expandedElement?: User;
 
   protected isLoading = true;
 
-  private active? = undefined;
+  private userSubscription?: Subscription;
 
-  private bookSubscription?: Subscription;
+  private active? = undefined;
 
   private filter = '';
 
-  // Constructor
-  /**
-   * Constructor of the component.
-   * @param bookService - Service that gets all the books
-   * @param snackbar - Snackbar to inform the user of events
-   */
-  constructor(
-    private bookService: BookService,
-    private snackbar: MatSnackBar,
-  ){}
+  constructor(private userService: UserService, private snackbar: MatSnackBar) {}
 
-  // Methods
-  // Public methods
-  /**
-   * A lifecycle hook that is called after Angular has fully initialized a component's view.
-   */
   public ngAfterViewInit(){
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
@@ -92,7 +77,7 @@ export class ListBookComponent implements AfterViewInit, OnDestroy {
 
         this.dataPageSize = this.paginator.pageSize;
 
-        return this.bookService.getAll(this.active, this.filter, this.sort.direction, this.sort.active, this.paginator.pageIndex, this.dataPageSize);
+        return this.userService.getAll(this.active, this.filter, this.sort.direction, this.sort.active, this.paginator.pageIndex, this.dataPageSize);
       }),
       map(response => {
         this.isLoading = false;
@@ -100,6 +85,9 @@ export class ListBookComponent implements AfterViewInit, OnDestroy {
         if(response === null){
           return [];
         }
+
+        // TODO Addresses of users are not being retrieved
+        console.log(response)
 
         this.dataLength = response.totalElements;
 
@@ -111,21 +99,21 @@ export class ListBookComponent implements AfterViewInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.bookSubscription?.unsubscribe();
+    this.userSubscription?.unsubscribe();
   }
 
   // Protected methods
   /**
-   * Sets the book 'active' state. If it was active before, it's not active now and viceversa. Disables the toggle button during the transaction until success or error.
-   * @param book Book whose 'active' state will be changed.
+   * Sets the user 'active' state. If it was active before, it's not active now and viceversa. Disables the toggle button during the transaction until success or error.
+   * @param user User whose 'active' state will be changed.
    */
-  protected setBookActivity(book: Book){
+  protected setUserActivity(user: User){
     this.allowUpdates = false;
     this.isLoading = true;
 
-    this.bookSubscription = this.bookService.update(book.id, book).subscribe({
-      complete: () => this.handleUpdateSuccessResponse(`Activity of ${book.title} updated successfully!`),
-      error: () => this.handleUpdateErrorResponse(book, `Activity of ${book.title} could not be changed.`)
+    this.userSubscription = this.userService.update(user.id, user).subscribe({
+      complete: () => this.handleUpdateSuccessResponse(`Activity of ${user.email} updated successfully!`),
+      error: () => this.handleUpdateErrorResponse(user, `Activity of ${user.email} could not be changed.`)
     })
   }
 
@@ -137,8 +125,8 @@ export class ListBookComponent implements AfterViewInit, OnDestroy {
   /**
    * Retrieves all elements from the database. Hides the progress bar when the data is loaded.
    */
-  private loadAllBooks(){
-    this.bookSubscription = this.bookService.getAll().subscribe({
+  private loadAllUsers(){
+    this.userSubscription = this.userService.getAll().subscribe({
       next: (response) => {
         this.data = response.content;
 
@@ -150,19 +138,19 @@ export class ListBookComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * Handles the response when updating the state of a book from 'active' to 'inactive' or viceversa. Sets the value of 'active',
+   * Handles the response when updating the state of a user from 'active' to 'inactive' or viceversa. Sets the value of 'active',
    * hides the progress bar, allows further changes and informs the user that the modification was successful.
-   * @param book Book that was updated.
+   * @param user User that was updated.
    * @param message Message to the user.
    */
-  private handleUpdateErrorResponse(book: Book, message: string){
-    book.active = !book.active;
+  private handleUpdateErrorResponse(user: User, message: string){
+    user.active = !user.active;
 
     this.handleUpdateResponse(message);
   }
 
   /**
-   * Handles the response when trying to update the state of a book. Hides the progress bar, allows further changes and
+   * Handles the response when trying to update the state of a user. Hides the progress bar, allows further changes and
    * informs the user about the result of the modification.
    * @param message Message to the user.
    */
@@ -175,12 +163,12 @@ export class ListBookComponent implements AfterViewInit, OnDestroy {
   }
 
   /**
-   * Handles the error when trying to update the state of a book from 'active' to 'inactive' or viceversa. Hides the progress bar,
+   * Handles the error when trying to update the state of a user from 'active' to 'inactive' or viceversa. Hides the progress bar,
    * allows further changes and informs the user that the modification could not be done.
    * @param message Message to the user.
    */
   private handleUpdateSuccessResponse(message: string){
-    this.loadAllBooks();
+    this.loadAllUsers();
 
     this.handleUpdateResponse(message);
   }

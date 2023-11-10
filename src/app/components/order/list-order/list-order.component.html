@@ -24,7 +24,7 @@
 
   <!-- TABLE -->
   <table class="container mat-elevation-z8 table-responsive-sm"
-    [dataSource]="dataSource"
+    [dataSource]="data$"
     [hidden]="isLoading"
     matSort
     mat-table
@@ -140,7 +140,7 @@
     <!-- COLUMNS -->
 
     <!-- ROWS -->
-    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
     <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
       class="element-row"
       [class.expanded-row]="expandedElement === element"

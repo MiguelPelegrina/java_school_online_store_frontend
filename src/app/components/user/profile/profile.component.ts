@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { UserService } from 'src/app/services/user.service';
+import { UserService } from 'src/app/services/user/user.service';
 import { AbstractForm } from 'src/app/shared/components/abstract-form';
 import { Address } from 'src/app/shared/domain/user/address/address';
 import { User } from 'src/app/shared/domain/user/user';
@@ -56,6 +56,7 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
     ){
     super();
 
+    // TODO Do this in onInit, not in the constructor
     // TODO Needs to change?
     const token = localStorage.getItem('auth_token');
 
@@ -185,7 +186,6 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
   private loadUser(): void {
     this.usersService.getById(this.id!).subscribe((response) => {
       this.response = response;
-      console.log(response)
 
       this.fillUserForm(response)
 

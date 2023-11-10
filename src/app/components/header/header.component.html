@@ -1,5 +1,4 @@
 <!-- TODO
-  - Login and register in profile
   - Optional: Sidenav for wide devices and employees/admin
 -->
 <mat-toolbar class="d-flex justify-content-between app-toolbar">
@@ -12,7 +11,7 @@
     <!-- /NAVIGATION -->
 
     <!-- HOME -->
-    <a mat-icon-button routerLink="catalog" routerLinkActive="active" class="nav-link" >
+    <a mat-icon-button routerLink="catalog"  class="nav-link" >
       <mat-icon class="icon icon-display" fontIcon="home"></mat-icon>
     </a>
     <!-- /HOME -->
@@ -48,6 +47,7 @@
     <div class="d-flex flex-column">
       <button mat-menu-item [matMenuTriggerFor]="menuProducts">Products</button>
       <button mat-menu-item routerLink="orders">Orders</button>
+      <button mat-menu-item routerLink="sales_statistics">Sales statistics</button>
     </div>
   </mat-menu>
   <!-- /NAVIGATION MENU -->
@@ -97,7 +97,7 @@
   </mat-menu>
   <!-- /SHOPPING CART MENU -->
 
-  <!-- TODO Profile -->
+  <!-- Profile -->
   <mat-menu #menuProfile="matMenu">
     <!-- TODO Only if not logged in -->
     <div class="d-flex flex-column m-1 p-1">
