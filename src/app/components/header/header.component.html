@@ -45,9 +45,9 @@
   <!-- NAVIGATION MENU -->
   <mat-menu #menuNavigation="matMenu">
     <div class="d-flex flex-column">
-      <button mat-menu-item [matMenuTriggerFor]="menuProducts">Products</button>
-      <button mat-menu-item routerLink="orders">Orders</button>
-      <button mat-menu-item routerLink="sales_statistics">Sales statistics</button>
+      <button mat-menu-item [matMenuTriggerFor]="menuProducts"><mat-icon>book</mat-icon>Products</button>
+      <button mat-menu-item routerLink="orders"><mat-icon>list</mat-icon>Orders</button>
+      <button mat-menu-item routerLink="sales_statistics"><mat-icon>euro_symbol</mat-icon>Sales statistics</button>
     </div>
   </mat-menu>
   <!-- /NAVIGATION MENU -->
@@ -102,25 +102,25 @@
     <!-- TODO Only if not logged in -->
     <div class="d-flex flex-column m-1 p-1">
       <!-- LOGIN -->
-      <a mat-button routerLink="auth/login">Login</a>
+      <a mat-button routerLink="auth/login"><mat-icon>how_to_reg</mat-icon>Login</a>
       <!-- /LOGIN -->
 
       <!-- REGISTER -->
-      <a mat-button routerLink="auth/register">Register</a>
+      <a mat-button routerLink="auth/register"><mat-icon>how_to_reg</mat-icon>Register</a>
       <!-- /REGISTER -->
 
       <!-- TODO Only if logged in-->
       <!-- ORDERS -->
-      <a mat-button routerLink="orders">My orders</a>
+      <a mat-button routerLink="orders"><mat-icon>list</mat-icon>My orders</a>
       <!-- /ORDERS -->
 
       <!-- PROFILE -->
-      <a mat-button routerLink="profile">My profile</a>
+      <a mat-button routerLink="profile"><mat-icon>settings</mat-icon>My profile</a>
       <!-- /PROFILE -->
 
       <!-- TODO Only if logged in -->
       <!-- LOGOUT -->
-      <a mat-button (click)="onLogout()" routerLink="auth/login">Logout</a>
+      <a (click)="onLogout()" mat-button routerLink="auth/login"><mat-icon>exit_to_app</mat-icon>Logout</a>
       <!-- /LOGOUT -->
     </div>
   </mat-menu>

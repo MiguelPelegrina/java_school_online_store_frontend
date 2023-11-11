@@ -1,6 +1,6 @@
 <ng-container class="d-flex flex-column" [formGroup]="form">
   <mat-card class="form-container">
-    <mat-card-title class="text-white">Personal data</mat-card-title>
+    <mat-card-title class="text-white"><mat-icon>perm_identity</mat-icon> Personal data</mat-card-title>
     <!-- IDENTIFIER -->
     <div class="form-row" [hidden]="true">
       <!-- TODO Not sure what to do with this, need to exist for edit, but dont need to be visible? -->
@@ -51,7 +51,7 @@
           <mat-label>Your date of birth </mat-label>
           <input formControlName="dateOfBirth" matInput [matDatepicker]="picker" required>
           <!-- TODO Change format -->
-          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-hint>DD/MM/YYYY</mat-hint>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           <mat-error *ngIf="f['dateOfBirth'].invalid">{{getErrorMessage('dateOfBirth')}}</mat-error>
