@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 })
 export class RevenueCalculatorComponent implements AfterViewInit, OnInit {
   // Fields
-  protected calculatedValue: number = 0;
+  protected calculatedValue?: number;
 
   protected fb: FormBuilder = new FormBuilder();
 

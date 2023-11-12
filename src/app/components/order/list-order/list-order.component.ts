@@ -207,8 +207,8 @@ export class ListOrderComponent implements OnDestroy, OnInit {
 
     if(order.id){
       this.orderService.createOrderWithBooks(order, []).subscribe({
-        complete: () => this.handleUpdateSuccessResponse(`Order status updated successfully!`),
-        error: () => this.handleUpdateErrorResponse(order, `Order status could not be changed.`)
+        complete: () => this.handleUpdateSuccessResponse(`Payment status updated successfully!`),
+        error: () => this.handleUpdateErrorResponse(order, `Payment status could not be changed.`)
       })
     }
   }
