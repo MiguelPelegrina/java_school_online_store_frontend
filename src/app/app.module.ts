@@ -57,6 +57,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { SalesStatisticsComponent } from './components/sales-statistics/sales-statistics.component';
 import { ListCustomerComponent } from './components/sales-statistics/list-customer/list-customer.component';
 import { RevenueCalculatorComponent } from './components/sales-statistics/revenue-calculator/revenue-calculator.component';
+import { TopProductsComponent } from './components/sales-statistics/top-products/top-products.component';
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import { RevenueCalculatorComponent } from './components/sales-statistics/revenu
     TwoDigitDecimalNumberDirective,
     ViewBookComponent,
     RevenueCalculatorComponent,
+    TopProductsComponent,
   ],
   imports: [
     AppRoutingModule,

@@ -42,7 +42,6 @@ export class OrderService extends AbstractService<Order, number>{
   }
 
   public getRevenue(startDate: string, endDate: string): Observable<any> {
-    console.log(`${this.baseUrl}/revenue?start=${startDate}&end=${endDate}`);
     return this.httpClient.get<any>(`${this.baseUrl}/revenue?start=${startDate}&end=${endDate}`).pipe(
       catchError(this.handleError)
     );;

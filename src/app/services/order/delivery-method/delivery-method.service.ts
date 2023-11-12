@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
 import { DeliveryMethod } from 'src/app/shared/domain/order/delivery-method/delivery-method';
 import { AbstractService } from 'src/app/shared/service/abstract.service';
 import { StringValues } from 'src/app/shared/utils/string-values';
@@ -16,10 +16,9 @@ export class DeliveryMethodService extends AbstractService<DeliveryMethod, strin
   public override getAll(active?: boolean): Observable<any>{
     const _active = active != null ? `/search?active=${active}` : '/search?';
 
-    console.log(`${this.baseUrl}${_active}`);
     return this.httpClient.get<any>(`${this.baseUrl}${_active}`).pipe(
       // TODO Handle error
-      // catchError(this.handleError)
+      catchError(this.handleError)
     );
   }
 }

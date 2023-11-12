@@ -17,7 +17,6 @@ export class CityService extends AbstractService<City, string> {
     const _active = active != null ? `/search?active=${active}` : '/search?';
     const _filter = countryName != null ? `&country_name=${countryName}` : '';
 
-    console.log(`${this.baseUrl}${_active}${_filter}`);
     return this.httpClient.get<any>(`${this.baseUrl}${_active}${_filter}`).pipe(
       // TODO Handle error
       // catchError(this.handleError)

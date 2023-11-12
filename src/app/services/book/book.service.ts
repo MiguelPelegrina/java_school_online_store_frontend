@@ -26,10 +26,20 @@ export class BookService extends AbstractService<Book, number>{
     const _size = size != null || undefined ? `&size=${size}` : '&size=20';
     const _genre = genre != null || undefined ? `&genre=${genre}` : '';
 
+    console.log(`${this.baseUrl}/search?${_active}${_filter}${_sortType}${_sortProperty}${_page}${_size}${_genre}`);
+
     // console.log(`${this.baseUrl}${_active}${_filter}${_sortType}${_sortProperty}${_page}${_size}${_genre}`);
     return this.httpClient.get<any>(`${this.baseUrl}/search?${_active}${_filter}${_sortType}${_sortProperty}${_page}${_size}${_genre}`).pipe(
       // TODO Handle error
-      // catchError(this.handleError)
+      catchError(this.handleError)
     );
+  }
+
+  public getTopProducts(number: number){
+    console.log(`${this.baseUrl}/top_products?limit=${number}`);
+
+    return this.httpClient.get<any>(`${this.baseUrl}/top_products?limit=${number}`).pipe(
+      catchError(this.handleError)
+    )
   }
 }

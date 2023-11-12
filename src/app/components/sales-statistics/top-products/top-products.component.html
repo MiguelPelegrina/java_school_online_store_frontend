@@ -1,0 +1,122 @@
+<!-- TITLE -->
+<h1 class="text-center mt-3">List of books</h1>
+<!-- /TITLE -->
+
+<div class="container mat-elevation-z8 py-3">
+  <div class="loading-shade" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div>
+    <!-- TABLE -->
+    <table class="container mat-elevation-z8 table-responsive"
+      [dataSource]="data"
+      matSort
+      mat-table
+      multiTemplateDataRows
+    >
+      <!-- TITLE -->
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Title of the book" sortActionDescription="Sort by title">Title</th>
+        <td mat-cell *matCellDef="let book"> {{book.title}}</td>
+      </ng-container>
+      <!-- /TITLE -->
+
+      <!-- AUTHOR -->
+      <ng-container matColumnDef="parameters.author">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Author of the book" sortActionDescription="Sort by author">Author</th>
+        <td mat-cell *matCellDef="let book"> {{book.parameters.author}}</td>
+      </ng-container>
+      <!-- /AUTHOR -->
+
+      <!-- ACTIVE -->
+      <ng-container matColumnDef="active">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Book available for sale" sortActionDescription="Sort by active">Active</th>
+        <td mat-cell *matCellDef="let book">
+          <mat-slide-toggle
+
+          [disabled]="true"
+          [(ngModel)]="book.active"
+          >
+          </mat-slide-toggle>
+        </td>
+      </ng-container>
+      <!-- /ACTIVE -->
+
+      <!-- PRICE -->
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Price of the book" sortActionDescription="Sort by price">Price</th>
+        <td mat-cell *matCellDef="let book"> {{book.price}}</td>
+      </ng-container>
+      <!-- /PRICE -->
+
+      <!-- STOCK -->
+      <ng-container matColumnDef="stock">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Remaining stock of the book" sortActionDescription="Sort by stock">Stock</th>
+        <td mat-cell *matCellDef="let book"> {{book.stock}}</td>
+      </ng-container>
+      <!-- /STOCK -->
+
+      <!-- ACTIONS -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef matTooltip="View more details or edit the book">Actions</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon
+            aria-hidden="false"
+            fontIcon="remove_red_eye"
+            matTooltip="View more details"
+            [routerLink]="['/books/view', element.id]"
+            >
+          </mat-icon>
+
+          <mat-icon
+            aria-hidden="false"
+            color="accent"
+            fontIcon="edit"
+            matTooltip="Edit the book"
+            [routerLink]="['/books/edit', element.id]"
+            style="margin-left:5px"
+          >
+          </mat-icon>
+
+          <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+            <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+            <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <!-- /ACTIONS -->
+
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+          <div class="element-detail"
+              [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <div class="row vertical-align">
+              <div class="col-sm">
+                <img alt="Book Cover" class="small-img" *ngIf="element.image" [src]="element.image">
+              </div>
+              <div class="col-sm">
+                ISBN: {{element.isbn}}
+              </div>
+              <div class="col-sm">
+                Genre: {{element.genre.name}}
+              </div>
+              <div class="col-sm">
+                Format: {{element.parameters.format.name}}
+              </div>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
+      <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
+        class="element-row"
+        [class.expanded-row]="expandedElement === element"
+        (click)="expandedElement = element">
+      </tr>
+      <tr class="detail-row" mat-row *matRowDef="let row; columns: ['expandedDetail'];"></tr>
+    </table>
+    <!-- /TABLE -->
+  </div>
+</div>
