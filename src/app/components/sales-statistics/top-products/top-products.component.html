@@ -9,12 +9,19 @@
 
   <div>
     <!-- TABLE -->
-    <table class="container mat-elevation-z8 table-responsive"
+    <table class="container mat-elevation-z8 table-responsive-md"
       [dataSource]="data"
       matSort
       mat-table
       multiTemplateDataRows
     >
+      <!-- AMOUNT -->
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Sold amount of the book" sortActionDescription="Sort by sold amount">Sold amount</th>
+        <td mat-cell *matCellDef="let book"> {{book.totalAmount}}</td>
+      </ng-container>
+      <!-- /AMOUNT -->
+
       <!-- TITLE -->
       <ng-container matColumnDef="title">
         <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Title of the book" sortActionDescription="Sort by title">Title</th>

@@ -19,7 +19,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 })
 export class TopProductsComponent implements AfterViewInit {
   //Fields
-  protected columnsToDisplay: string [] = ['title', 'parameters.author', 'active', 'price', 'stock', 'actions'];
+  protected columnsToDisplay: string [] = ['amount', 'title', 'parameters.author', 'active', 'price', 'stock', 'actions'];
 
   protected data: Book[] = [];
 
