@@ -38,6 +38,13 @@ export class OrderService extends AbstractService<Order, number>{
     const _page = page != null || undefined ? `&page=${page}` : '&page=0';
     const _size = size != null || undefined ? `&size=${size}` : '&size=20';
 
-    return this.httpClient.get<any>(`${this.baseUrl}/search?${_filter}${_sortType}${_sortProperty}${_page}${_size}`)
+    return this.httpClient.get<any>(`${this.baseUrl}/search?${_filter}${_sortType}${_sortProperty}${_page}${_size}`);
+  }
+
+  public getRevenue(startDate: string, endDate: string): Observable<any> {
+    console.log(`${this.baseUrl}/revenue?start=${startDate}&end=${endDate}`);
+    return this.httpClient.get<any>(`${this.baseUrl}/revenue?start=${startDate}&end=${endDate}`).pipe(
+      catchError(this.handleError)
+    );;
   }
 }

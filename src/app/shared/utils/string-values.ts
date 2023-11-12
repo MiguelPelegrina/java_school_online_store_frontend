@@ -1,3 +1,5 @@
+export const DATE_FORMAT = 'DD-MM-YYYY';
+
 export class StringValues{
   public static BASE_URL: string = 'http://localhost:8081'
 

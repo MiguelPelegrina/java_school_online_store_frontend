@@ -1,0 +1,73 @@
+<div class="container mt-3 p-3 mat-elevation-z8">
+  <mat-card class="card-container mat-elevation-z8 mx-auto">
+    <mat-card-title class="m-2 p-2 text-white text-center">Revenues</mat-card-title>
+
+    <div class="row m-3">
+      <mat-card-subtitle class="text-white">
+        Current month (<label>{{startOfMonth}}</label> to <label>{{today}}</label>):
+        <label>{{revenueOfCurrentMonth | currency}}</label>
+      </mat-card-subtitle>
+    </div>
+
+    <div class="row m-3">
+      <mat-card-subtitle class="text-white">
+        Last month (<label>{{startOfLastMonth}}</label> to <label>{{endOfLastMonth}}</label>):
+        <label>{{revenueOfLastMonth | currency}}</label>
+      </mat-card-subtitle>
+    </div>
+
+    <div class="row m-3">
+      <mat-card-subtitle class="text-white">
+        Last 30 days(<label>{{thirtyDaysBefore}}</label> to <label>{{today}}</label>):
+        <label>{{revenueOfLast30Days | currency}}</label>
+      </mat-card-subtitle>
+    </div>
+
+    <div class="row m-3">
+      <mat-card-subtitle class="text-white">
+        Current week (<label>{{startOfWeek}}</label> to <label>{{today}}</label>):
+        <label>{{revenueOfCurrentWeek | currency}}</label>
+      </mat-card-subtitle>
+    </div>
+
+    <div class="row m-3">
+      <mat-card-subtitle class="text-white">
+        Last week (<label>{{startOfLastWeek}}</label> to <label>{{endOfLastWeek}}</label>):
+        <label>{{revenueOfLastWeek | currency}}</label>
+      </mat-card-subtitle>
+    </div>
+
+    <div class="row m-3">
+      <mat-card-subtitle class="text-white">
+        Last 7 days (<label>{{sevenDaysBefore}}</label> to <label>{{today}}</label>):
+        <label>{{revenueOfLast7Days | currency}}</label>
+      </mat-card-subtitle>
+    </div>
+
+    <mat-card-title class="m-2 p-2 text-center text-white">Choose date range to calculate revenue</mat-card-title>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="row d-flex justify-content-around">
+        <div class="col-sm d-flex justify-content-center">
+          <mat-form-field>
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+              <input matStartDate formControlName="startDate" placeholder="Start date">
+              <input matEndDate formControlName="endDate" placeholder="End date">
+            </mat-date-range-input>
+            <mat-hint class="text-white">DD/MM/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row d-flex justify-content-center m-2 p-2">
+        <button mat-raised-button color="primary" [disabled]="!form.valid" type="submit">
+          Calculate revenue
+        </button>
+      </div>
+    <mat-card-footer class="m-2 p-2 text-center text-white">Calculated revenue: <label>{{calculatedValue | currency}}</label></mat-card-footer>
+    </form>
+  </mat-card>
+</div>

@@ -40,7 +40,7 @@ import { FiltersComponent } from './components/catalog/filters/filters.component
 import { BookBoxComponent } from './components/catalog/book-box/book-box.component';
 import { CartComponent } from './components/cart/cart.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
+import { MAT_DATE_LOCALE, MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { TwoDigitDecimalNumberDirective } from './shared/utils/directives/twoDigitDecimalNumber'
 import { MatSelectModule } from '@angular/material/select';
 import { ProfileComponent } from './components/user/profile/profile.component';
@@ -56,6 +56,7 @@ import { ViewBookComponent } from './components/book/view-book/view-book.compone
 import { MatDialogModule } from '@angular/material/dialog';
 import { SalesStatisticsComponent } from './components/sales-statistics/sales-statistics.component';
 import { ListCustomerComponent } from './components/sales-statistics/list-customer/list-customer.component';
+import { RevenueCalculatorComponent } from './components/sales-statistics/revenue-calculator/revenue-calculator.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { ListCustomerComponent } from './components/sales-statistics/list-custom
     SearchBarComponent,
     TwoDigitDecimalNumberDirective,
     ViewBookComponent,
+    RevenueCalculatorComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -124,7 +126,9 @@ import { ListCustomerComponent } from './components/sales-statistics/list-custom
   providers: [
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 5000} },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    provideNgxMask()
+    provideNgxMask(),
+    {provide: MAT_DATE_LOCALE, useValue: 'es-ES'},
+
   ],
   bootstrap: [AppComponent]
 })

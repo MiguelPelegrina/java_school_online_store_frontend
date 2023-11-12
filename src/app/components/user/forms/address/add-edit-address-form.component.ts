@@ -70,13 +70,8 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
 
     this.loadCountries();
 
-    console.log(this.form.value);
-
     this.selectedCountry = this.form.value.country;
     this.selectedCity = this.form.value.city;
-
-    console.log(this.selectedCountry);
-    console.log(this.selectedCity);
 
     if(!(this.selectedCountry?.length == 0)){
       this.loadCities();
