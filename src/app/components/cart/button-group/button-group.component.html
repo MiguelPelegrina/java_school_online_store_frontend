@@ -1,0 +1,10 @@
+<button (click)="onAddQuantity()" [disabled]="isDisabled" mat-icon-button>
+  <mat-icon>add</mat-icon>
+</button>
+
+<!-- TODO Looks iffy, not in the same row as the buttons -->
+<span>{{element.quantity}}</span>
+
+<button (click)="onRemoveQuantity()" mat-icon-button>
+  <mat-icon>remove</mat-icon>
+</button>

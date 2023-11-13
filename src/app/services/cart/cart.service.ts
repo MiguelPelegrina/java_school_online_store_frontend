@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject } from 'rxjs';
+import { Book } from 'src/app/shared/domain/book/book';
 import { BoughtBook } from 'src/app/shared/domain/book/bought-book/bought-book';
 import { Cart } from 'src/app/shared/domain/cart/cart';
 
@@ -48,6 +49,15 @@ export class CartService {
     localStorage.removeItem("cart_items");
 
     this.snackbar.open('Cart is cleared', 'Ok', { duration: 3000 })
+  }
+
+  public enoughStock(book: Book){
+    const bookInCart = this.cart.find((_book) => _book.id === book?.id);
+
+    return !(
+      bookInCart &&
+      bookInCart.quantity + 1 > book.stock
+    );
   }
 
   public getBooks() {

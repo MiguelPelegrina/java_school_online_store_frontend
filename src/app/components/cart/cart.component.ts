@@ -122,10 +122,6 @@ export class CartComponent implements OnInit{
     return this.cartService.getTotal(boughtBooks);
   }
 
-  protected onAddQuantity(boughtBook: BoughtBook){
-    this.cartService.addToCart(boughtBook);
-  }
-
   protected onClearCart(): void {
     // TODO Ask user for confirmation
     this.cartService.clearCart();
@@ -178,9 +174,5 @@ export class CartComponent implements OnInit{
 
   protected onRemoveFromCart(bookBought: BoughtBook): void {
     this.cartService.removeFromCart(bookBought);
-  }
-
-  protected onRemoveQuantity(boughtBook: BoughtBook): void{
-    this.cartService.removeQuantity(boughtBook);
   }
 }

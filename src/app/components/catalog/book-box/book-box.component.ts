@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterContentInit, Component, EventEmitter, Input, Output } from '@angular/core';
 import { CartService } from 'src/app/services/cart/cart.service';
 import { Book } from 'src/app/shared/domain/book/book';
 
@@ -15,7 +15,7 @@ export class BookBoxComponent implements AfterContentInit {
   @Input()
   public book!: Book;
 
-  protected enoughStock?: boolean = true;
+  protected enoughStock?: boolean = false;
 
   @Output()
   private addToCart = new EventEmitter();
@@ -23,27 +23,19 @@ export class BookBoxComponent implements AfterContentInit {
   constructor(private cartService: CartService){}
 
   public ngAfterContentInit(): void {
-    if(this.book?.stock <= 0){
-      this.enoughStock = false;
+    const boughtBook = this.cartService.getBooks().find(book => {
+      return this.book.id === book.id;
+    })
+
+    if (boughtBook) {
+      this.enoughStock = this.book?.stock - boughtBook.quantity > 0;
+    } else {
+      this.enoughStock = this.book?.stock > 0;
     }
   }
 
   public onAddToCart(): void{
-    const cart = this.cartService.getBooks();
-
-    const bookInCart = cart.find((book) => {
-      if(book.id === this.book?.id){
-        return book;
-      } else {
-        return null;
-      }
-    })
-
-    // TODO Seems iffy
-    if(bookInCart && (bookInCart.quantity + 2) > this.book!.stock){
-      this.enoughStock = false;
-    }
-
     this.addToCart.emit(this.book);
+    this.enoughStock = this.cartService.enoughStock(this.book);
   }
 }

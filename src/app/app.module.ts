@@ -58,6 +58,7 @@ import { SalesStatisticsComponent } from './components/sales-statistics/sales-st
 import { ListCustomerComponent } from './components/sales-statistics/list-customer/list-customer.component';
 import { RevenueCalculatorComponent } from './components/sales-statistics/revenue-calculator/revenue-calculator.component';
 import { TopProductsComponent } from './components/sales-statistics/top-products/top-products.component';
+import { ButtonGroupComponent } from './components/cart/button-group/button-group.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import { TopProductsComponent } from './components/sales-statistics/top-products
     ViewBookComponent,
     RevenueCalculatorComponent,
     TopProductsComponent,
+    ButtonGroupComponent,
   ],
   imports: [
     AppRoutingModule,
