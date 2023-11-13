@@ -23,7 +23,7 @@
 
       <div [ngClass]="{'d-flex flex-column': !fullWidthMode, 'd-flex justify-content-between': fullWidthMode}">
         <span class="text-info"> {{ book.price | currency}}</span>
-        <button (click)="onAddToCart()" class="btn icon">
+        <button (click)="onAddToCart()" class="btn icon" [disabled]="!enoughStock">
           <mat-icon color="accent">add_shopping_cart</mat-icon>
         </button>
       </div>

@@ -1,4 +1,3 @@
-import { LocalizedString } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject } from 'rxjs';
@@ -87,7 +86,6 @@ export class CartService {
 
     return this.cart;
   }
-
 
   public removeQuantity(updatedBook: BoughtBook): void {
     let bookForRemoval: BoughtBook | undefined;
