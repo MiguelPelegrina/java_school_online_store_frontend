@@ -59,7 +59,7 @@ export function isClient(): boolean {
   return isClient
 }
 
-function getRoles(): string[] {
+export function getRoles(): string[] {
   let roles: string[] = [];
   const token = localStorage.getItem('auth_token');
 

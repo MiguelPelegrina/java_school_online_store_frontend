@@ -5,13 +5,15 @@ import { CartService } from 'src/app/services/cart/cart.service';
 import { Subscription } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import { StringValues } from 'src/app/shared/utils/string-values';
+import { NgxPermissionsService } from 'ngx-permissions';
+import { getRoles } from 'src/app/shared/utils/utils';
 
 const ROWS_HEIGHT: { [id: number]: number} = { 1: 400, 3: 335, 4: 350 };
 
 @Component({
   selector: 'app-catalog',
   templateUrl: './catalog.component.html',
-  styleUrls: ['./catalog.component.css']
+  styleUrls: ['./catalog.component.css', '../../app.component.css']
 })
 export class CatalogComponent implements OnInit, OnDestroy {
   // Fields
@@ -45,7 +47,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
    * Constructor
    * @param bookService - Book service
    */
-  constructor(private bookService: BookService, private cartService: CartService){}
+  constructor(private bookService: BookService, private cartService: CartService, private permissionsService: NgxPermissionsService){}
 
   /**
    * A lifecycle hook that is called when a directive, pipe, or service is destroyed. Used for any custom cleanup that needs to occur when the instance is destroyed.
@@ -55,6 +57,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    this.permissionsService.loadPermissions(getRoles())
     this.loadActiveBooks();
   }
 

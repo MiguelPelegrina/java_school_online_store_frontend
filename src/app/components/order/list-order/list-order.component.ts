@@ -14,7 +14,6 @@ import { OrderStatus } from 'src/app/shared/domain/order/order-status/order-stat
 import { PaymentStatus } from 'src/app/shared/domain/order/payment-status/payment-status';
 import { IIndexable } from 'src/app/shared/utils/interfaces/i-indexable';
 import { StringValues } from 'src/app/shared/utils/string-values';
-import { isClient } from 'src/app/shared/utils/utils';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -69,7 +68,7 @@ export class ListOrderComponent implements OnDestroy, OnInit {
 
   protected expandedElement?: Order | null;
 
-  protected isClient: boolean;
+  protected isClient?: boolean;
 
   protected isLoading = true;
 
@@ -89,9 +88,7 @@ export class ListOrderComponent implements OnDestroy, OnInit {
     private orderService: OrderService,
     private orderStatusService: OrderStatusService,
     private paymentStatusService: PaymentStatusService,
-    private snackbar: MatSnackBar) {
-    this.isClient = isClient();
-  }
+    private snackbar: MatSnackBar) {}
 
   /**
    * A lifecycle hook that is called after Angular has fully initialized a component's view.

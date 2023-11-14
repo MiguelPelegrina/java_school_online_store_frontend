@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { NgxPermissionsService } from 'ngx-permissions';
 import { CartService } from 'src/app/services/cart/cart.service';
 import { BoughtBook } from 'src/app/shared/domain/book/bought-book/bought-book';
 import { Cart } from 'src/app/shared/domain/cart/cart';
+import { getRoles } from 'src/app/shared/utils/utils';
 
 @Component({
   selector: 'app-header',
@@ -17,7 +19,7 @@ export class HeaderComponent implements OnInit{
 
   private _cart: Cart = { boughtBooks: [] };
 
-  constructor(private cartService: CartService){}
+  constructor(private cartService: CartService, private permissionsService: NgxPermissionsService){}
 
   // Methods
   @Input()
@@ -34,6 +36,7 @@ export class HeaderComponent implements OnInit{
 
   // Public methods
   public ngOnInit(): void {
+    this.permissionsService.loadPermissions(getRoles());
     this.cartService.cartSubject.subscribe((_cart) => {
       this.cart = _cart;
     })
@@ -50,5 +53,6 @@ export class HeaderComponent implements OnInit{
 
   protected onLogout(){
     localStorage.clear();
+    this.permissionsService.flushPermissions();
   }
 }

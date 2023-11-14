@@ -19,12 +19,6 @@ import { AbstractForm } from 'src/app/shared/components/abstract-form';
 })
 export class AddEditBookFormComponent extends AbstractForm implements OnDestroy, OnInit {
   // Fields
-  protected booksSubscription?: Subscription;
-
-  protected bookFormatsSubscription?: Subscription;
-
-  protected bookGenresSubscription?: Subscription;
-
   protected formatTypes: BookFormat[] = []
 
   protected genreTypes: BookGenre[] = []
@@ -42,6 +36,12 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
   protected selectedGenre: string = '';
 
   protected selectedFormat: string = '';
+
+  private booksSubscription?: Subscription;
+
+  private bookFormatsSubscription?: Subscription;
+
+  private bookGenresSubscription?: Subscription;
 
   // Constructor
   /**
@@ -68,6 +68,7 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
   // Methods
   // Public methods
   public ngOnDestroy(): void {
+    this.booksSubscription?.unsubscribe();
     this.bookFormatsSubscription?.unsubscribe();
     this.bookGenresSubscription?.unsubscribe()
   }
@@ -194,6 +195,7 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
 
   private loadFormats(): void {
     this.bookGenresSubscription = this.bookFormatService.getAll().subscribe(bookFormatList => {
+      console.log(bookFormatList)
       this.formatTypes = bookFormatList;
     })
   }

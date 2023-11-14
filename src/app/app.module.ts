@@ -59,6 +59,7 @@ import { ListCustomerComponent } from './components/sales-statistics/list-custom
 import { RevenueCalculatorComponent } from './components/sales-statistics/revenue-calculator/revenue-calculator.component';
 import { TopProductsComponent } from './components/sales-statistics/top-products/top-products.component';
 import { ButtonGroupComponent } from './components/cart/button-group/button-group.component';
+import { NgxPermissionsModule } from 'ngx-permissions';
 
 @NgModule({
   declarations: [
@@ -124,6 +125,7 @@ import { ButtonGroupComponent } from './components/cart/button-group/button-grou
     MatTooltipModule,
     NgxMaskDirective,
     NgxMaskPipe,
+    NgxPermissionsModule.forRoot(),
     ReactiveFormsModule,
     RouterModule,
   ],

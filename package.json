@@ -25,6 +25,7 @@
     "jwt-decode": "^4.0.0",
     "moment": "^2.29.4",
     "ngx-mask": "^16.3.9",
+    "ngx-permissions": "^16.0.1",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.7.32",
     "tslib": "^2.3.0",

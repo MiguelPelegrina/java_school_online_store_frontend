@@ -5,7 +5,7 @@
   <div class="d-flex">
     <!-- TODO Only for employees and admin -->
     <!-- NAVIGATION -->
-    <button mat-icon-button [matMenuTriggerFor]="menuNavigation">
+    <button mat-icon-button [matMenuTriggerFor]="menuNavigation" *ngxPermissionsOnly="['ADMIN', 'EMPLOYEE']">
       <mat-icon>menu</mat-icon>
     </button>
     <!-- /NAVIGATION -->
@@ -99,28 +99,27 @@
 
   <!-- Profile -->
   <mat-menu #menuProfile="matMenu">
-    <!-- TODO Only if not logged in -->
     <div class="d-flex flex-column m-1 p-1">
+      <!-- TODO Only if not logged in -->
       <!-- LOGIN -->
-      <a mat-button routerLink="auth/login"><mat-icon>how_to_reg</mat-icon>Login</a>
+      <a mat-button  routerLink="auth/login"><mat-icon>how_to_reg</mat-icon>Login</a>
       <!-- /LOGIN -->
 
+      <!-- TODO Only if not logged in -->
       <!-- REGISTER -->
-      <a mat-button routerLink="auth/register"><mat-icon>how_to_reg</mat-icon>Register</a>
+      <a mat-button  routerLink="auth/register"><mat-icon>how_to_reg</mat-icon>Register</a>
       <!-- /REGISTER -->
 
-      <!-- TODO Only if logged in-->
       <!-- ORDERS -->
-      <a mat-button routerLink="orders"><mat-icon>list</mat-icon>My orders</a>
+      <a mat-button *ngxPermissionsOnly="['ADMIN', 'EMPLOYEE', 'CLIENT']" routerLink="orders"><mat-icon>list</mat-icon>My orders</a>
       <!-- /ORDERS -->
 
       <!-- PROFILE -->
-      <a mat-button routerLink="profile"><mat-icon>settings</mat-icon>My profile</a>
+      <a mat-button *ngxPermissionsOnly="['ADMIN', 'EMPLOYEE', 'CLIENT']" routerLink="profile"><mat-icon>settings</mat-icon>My profile</a>
       <!-- /PROFILE -->
 
-      <!-- TODO Only if logged in -->
       <!-- LOGOUT -->
-      <a (click)="onLogout()" mat-button routerLink="auth/login"><mat-icon>exit_to_app</mat-icon>Logout</a>
+      <a (click)="onLogout()" mat-button *ngxPermissionsOnly="['ADMIN', 'EMPLOYEE', 'CLIENT']" routerLink="auth/login"><mat-icon>exit_to_app</mat-icon>Logout</a>
       <!-- /LOGOUT -->
     </div>
   </mat-menu>

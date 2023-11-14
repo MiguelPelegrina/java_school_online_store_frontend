@@ -3,6 +3,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import { AbstractForm } from 'src/app/shared/components/abstract-form';
+import Swal from 'sweetalert2';
+import { NgxPermissionsService } from 'ngx-permissions';
+import { getRoles } from 'src/app/shared/utils/utils';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +17,7 @@ import { AbstractForm } from 'src/app/shared/components/abstract-form';
  */
 export class LoginComponent extends AbstractForm {
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router){
+  constructor(private authService: AuthService, private formBuilder: FormBuilder, private permissionsService: NgxPermissionsService, private router: Router){
     super();
     this.form = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -27,12 +30,14 @@ export class LoginComponent extends AbstractForm {
       next: (response: any) => {
         this.authService.setAuthResultDto(response);
 
+        this.permissionsService.loadPermissions(getRoles())
+
         this.router.navigate(['../']);
       },
-      // TODO Error handling
       error: (error: any) => {
-        console.log(`An error ocurred: ${error.message}`);
+        Swal.fire('An error ocurred', error.error, 'warning')
       }
     });
   }
 }
+
