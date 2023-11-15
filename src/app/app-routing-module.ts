@@ -13,10 +13,44 @@ import { ViewBookComponent } from "./components/book/view-book/view-book.compone
 import { SalesStatisticsComponent } from "./components/sales-statistics/sales-statistics.component";
 import { ngxPermissionsGuard } from "ngx-permissions";
 
-const generateRoute = (path: string, component: any, canActivate: any[] = [], permissions: string[] = []) => ({
+
+/**
+ * Generates a route configuration object with optional permissions.
+ * @param path - The route path.
+ * @param component - The component associated with the route.
+ * @param permissions - An array of user permissions required for the route. Default is ['ADMIN', 'EMPLOYEE'].
+ * @returns A route configuration object.
+ *
+ * @example
+ * const route = generateRoute('books', BookComponent, ['USER']);
+ * // Result: { path: 'books', component: BookComponent, data: { permissions: { only: ['USER'] } } }
+ */
+const generateRoute = (path: string, component: any, permissions: string[] = []) => ({
+  /**
+   * The route path.
+   * @type {string}
+   */
   path,
+
+  /**
+   * The component associated with the route.
+   * @type {any}
+   */
   component,
-  canActivate: canActivate.length ? [...canActivate] : undefined,
+
+  /**
+   * An array of route guards for activation. Uses ngxPermissionGuard as default.
+   * @type {any[]}
+   */
+  canActivate: [ngxPermissionsGuard],
+
+  /**
+   * Data associated with the route, including permissions required for access.
+   * @type {object}
+   * @property {object} permissions - Object specifying user permissions.
+   * @property {string[]} permissions.only - An array of user permissions required for the route. Default is ['ADMIN', 'EMPLOYEE'].
+   * @property {string} permissions.redirectTo - The path to redirect if permissions are not met. Default is '/catalog'.
+   */
   data: {
     permissions: {
       only: permissions.length ? permissions : ['ADMIN', 'EMPLOYEE'],
@@ -29,17 +63,17 @@ const routes: Routes = [
   { path: '', redirectTo: 'catalog', pathMatch: 'full' },
   { path: 'auth/login', component: LoginComponent },
   { path: 'auth/register', component: ProfileComponent },
-  generateRoute('book_formats', ListBookParametersFormatComponent, [ngxPermissionsGuard]),
-  generateRoute('book_genres', ListBookGenreComponent, [ngxPermissionsGuard]),
-  generateRoute('books', ListBookComponent, [ngxPermissionsGuard]),
-  generateRoute('books/add', AddEditBookFormComponent, [ngxPermissionsGuard]),
-  generateRoute('books/edit/:id', AddEditBookFormComponent, [ngxPermissionsGuard]),
+  generateRoute('book_formats', ListBookParametersFormatComponent),
+  generateRoute('book_genres', ListBookGenreComponent),
+  generateRoute('books', ListBookComponent),
+  generateRoute('books/add', AddEditBookFormComponent),
+  generateRoute('books/edit/:id', AddEditBookFormComponent),
   { path: 'books/view/:id', component: ViewBookComponent },
   { path: 'cart', component: CartComponent },
   { path: 'catalog', component: CatalogComponent },
-  generateRoute('orders', ListOrderComponent, [ngxPermissionsGuard], ['ADMIN', 'EMPLOYEE', 'CLIENT']),
+  generateRoute('orders', ListOrderComponent, ['ADMIN', 'EMPLOYEE', 'CLIENT']),
   { path: 'profile', component: ProfileComponent },
-  generateRoute('sales_statistics', SalesStatisticsComponent, [ngxPermissionsGuard]),
+  generateRoute('sales_statistics', SalesStatisticsComponent),
 ];
 
 @NgModule({

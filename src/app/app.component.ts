@@ -9,15 +9,19 @@ import { CartService } from './services/cart/cart.service';
 })
 export class AppComponent implements OnInit{
   // Fields
-  cart: Cart = {boughtBooks: []};
+  public cart: Cart = {boughtBooks: []};
 
-  title = 'Online Bookstore';
+  public title = 'Online Bookstore';
 
+  /**
+   * Default constructor
+   * @param cartService
+   */
   constructor(private cartService: CartService) {}
 
   // Metods
   // Public methods
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.cartService.loadCart();
   }
 }
