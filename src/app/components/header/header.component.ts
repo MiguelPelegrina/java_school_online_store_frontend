@@ -3,7 +3,7 @@ import { NgxPermissionsService } from 'ngx-permissions';
 import { CartService } from 'src/app/services/cart/cart.service';
 import { BoughtBook } from 'src/app/shared/domain/book/bought-book/bought-book';
 import { Cart } from 'src/app/shared/domain/cart/cart';
-import { getRoles } from 'src/app/shared/utils/utils';
+import { AuthUtils } from 'src/app/shared/utils/auth-utils';
 
 @Component({
   selector: 'app-header',
@@ -43,7 +43,7 @@ export class HeaderComponent implements OnInit{
 
   // Public methods
   public ngOnInit(): void {
-    this.permissionsService.loadPermissions(getRoles());
+    this.permissionsService.loadPermissions(AuthUtils.getRoles());
 
     this.cartService.cartSubject.subscribe((_cart) => {
       this.cart = _cart;

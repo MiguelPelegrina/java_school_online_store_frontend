@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import { StringValues } from 'src/app/shared/utils/string-values';
 import { NgxPermissionsService } from 'ngx-permissions';
-import { getRoles } from 'src/app/shared/utils/utils';
+import { AuthUtils } from 'src/app/shared/utils/auth-utils';
 
 const ROWS_HEIGHT: { [id: number]: number} = { 1: 400, 3: 335, 4: 350 };
 
@@ -57,7 +57,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.permissionsService.loadPermissions(getRoles())
+    this.permissionsService.loadPermissions(AuthUtils.getRoles())
     this.loadActiveBooks();
   }
 

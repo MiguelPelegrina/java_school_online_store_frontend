@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { AbstractForm } from 'src/app/shared/components/abstract-form';
 import Swal from 'sweetalert2';
 import { NgxPermissionsService } from 'ngx-permissions';
-import { getRoles } from 'src/app/shared/utils/utils';
+import { AuthUtils } from 'src/app/shared/utils/auth-utils';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +30,7 @@ export class LoginComponent extends AbstractForm {
       next: (response: any) => {
         this.authService.setAuthResultDto(response);
 
-        this.permissionsService.loadPermissions(getRoles())
+        this.permissionsService.loadPermissions(AuthUtils.getRoles())
 
         this.router.navigate(['../']);
       },

@@ -32,7 +32,6 @@ import { BooksHeaderComponent } from './components/catalog/books-header/books-he
 import { CatalogComponent } from './components/catalog/catalog.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './components/user/login/login.component';
-import { ImageSelectorComponent } from './shared/components/image-selector/image-selector.component';
 import { SearchBarComponent } from './shared/components/search-bar/search-bar.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -74,7 +73,6 @@ import { NgxPermissionsModule } from 'ngx-permissions';
     CatalogComponent,
     FiltersComponent,
     HeaderComponent,
-    ImageSelectorComponent,
     ListBookComponent,
     ListBookGenreComponent,
     ListBookParametersFormatComponent,

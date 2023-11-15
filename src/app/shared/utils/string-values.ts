@@ -1,5 +1,8 @@
 export const DATE_FORMAT = 'DD-MM-YYYY';
 
+/**
+ * Class containing all default values and shared URLs.
+ */
 export class StringValues{
   public static BASE_URL: string = 'http://localhost:8081'
 
