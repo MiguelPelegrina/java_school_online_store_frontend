@@ -3,7 +3,6 @@
 -->
 <mat-toolbar class="d-flex justify-content-between app-toolbar">
   <div class="d-flex">
-    <!-- TODO Only for employees and admin -->
     <!-- NAVIGATION -->
     <button mat-icon-button [matMenuTriggerFor]="menuNavigation" *ngxPermissionsOnly="['ADMIN', 'EMPLOYEE']">
       <mat-icon>menu</mat-icon>
@@ -23,7 +22,6 @@
     </h1>
   </div>
 
-  <!-- TODO Add other navigation elements -->
   <div>
     <!-- CART MENU -->
     <button mat-icon-button [matMenuTriggerFor]="menuCart">
@@ -100,14 +98,12 @@
   <!-- Profile -->
   <mat-menu #menuProfile="matMenu">
     <div class="d-flex flex-column m-1 p-1">
-      <!-- TODO Only if not logged in -->
       <!-- LOGIN -->
-      <a mat-button  routerLink="auth/login"><mat-icon>how_to_reg</mat-icon>Login</a>
+      <a *ngxPermissionsExcept="['ADMIN', 'EMPLOYEE', 'CLIENT']" mat-button routerLink="auth/login"><mat-icon>how_to_reg</mat-icon>Login</a>
       <!-- /LOGIN -->
 
-      <!-- TODO Only if not logged in -->
       <!-- REGISTER -->
-      <a mat-button  routerLink="auth/register"><mat-icon>how_to_reg</mat-icon>Register</a>
+      <a mat-button *ngxPermissionsExcept="['ADMIN', 'EMPLOYEE', 'CLIENT']" routerLink="auth/register"><mat-icon>how_to_reg</mat-icon>Register</a>
       <!-- /REGISTER -->
 
       <!-- ORDERS -->

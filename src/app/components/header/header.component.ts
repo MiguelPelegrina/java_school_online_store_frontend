@@ -17,8 +17,15 @@ export class HeaderComponent implements OnInit{
 
   protected booksQuantity = 0;
 
+  protected hasRoles: boolean = false;
+
   private _cart: Cart = { boughtBooks: [] };
 
+  /**
+   *
+   * @param cartService
+   * @param permissionsService
+   */
   constructor(private cartService: CartService, private permissionsService: NgxPermissionsService){}
 
   // Methods
@@ -37,6 +44,7 @@ export class HeaderComponent implements OnInit{
   // Public methods
   public ngOnInit(): void {
     this.permissionsService.loadPermissions(getRoles());
+
     this.cartService.cartSubject.subscribe((_cart) => {
       this.cart = _cart;
     })
