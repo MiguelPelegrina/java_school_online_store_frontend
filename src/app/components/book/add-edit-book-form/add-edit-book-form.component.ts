@@ -6,10 +6,11 @@ import { BookGenreService } from 'src/app/services/book/genre/book-genre.service
 import { BookService } from 'src/app/services/book/book.service';
 import { BookFormat } from '../../../shared/domain/book/parameters/book-parameters-format/book-parameters-format';
 import { BookGenre } from '../../../shared/domain/book/book-genre/book-genre';
-import { getBase64 } from 'src/app/shared/utils/utils';
 import Swal from 'sweetalert2';
 import { Subscription } from 'rxjs';
 import { AbstractForm } from 'src/app/shared/components/abstract-form';
+import { Utils } from 'src/app/shared/utils/utils';
+import { requiredFileType } from 'src/app/shared/utils/required-file-type';
 
 // TODO Document
 @Component({
@@ -120,12 +121,13 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
     if (inputElement.files && inputElement.files[0]) {
       const file = event.target.files[0];
 
-      // TODO Check that file is png or jpg
-      if(file){
-        getBase64(file, (base64String) => {
+      if(file && requiredFileType(file)){
+        Utils.getBase64(file, (base64String) => {
           this.image = base64String;
           this.form.get('image')?.setValue(this.image);
         });
+      } else {
+        Swal.fire('','','warning');
       }
     }
   }
@@ -195,7 +197,6 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
 
   private loadFormats(): void {
     this.bookGenresSubscription = this.bookFormatService.getAll().subscribe(bookFormatList => {
-      console.log(bookFormatList)
       this.formatTypes = bookFormatList;
     })
   }
