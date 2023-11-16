@@ -5,27 +5,32 @@ import { Book } from 'src/app/shared/domain/book/book';
 import { BoughtBook } from 'src/app/shared/domain/book/bought-book/bought-book';
 import { Cart } from 'src/app/shared/domain/cart/cart';
 
+/**
+ * A service for managing the shopping cart.
+ * Handles operations such as adding, removing, and updating items in the cart.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
   // Fields
-  // TODO Not sure if redundant
   cartSubject = new BehaviorSubject<Cart>({boughtBooks: []});
 
   cart: BoughtBook[] = [];
 
-  // Constructor
+  /**
+   * Constructor for the CartService.
+   * @param snackbar - Angular Material's MatSnackBar for displaying notifications.
+   */
   constructor(private snackbar: MatSnackBar){}
 
-  // Methods
-  // Public methods
+  /**
+   * Adds a new item to the cart.
+   *
+   * @param newItem - The item to be added to the cart.
+   */
   public addToCart(newItem: BoughtBook): void {
-    if (localStorage.getItem('cart_items')) {
-      this.cart = JSON.parse(localStorage.getItem('cart_items')!);
-    } else {
-      this.cart = [];
-    }
+    this.loadCart();
 
     const itemInCart = this.cart.find(item => item.id === newItem.id);
 
@@ -37,44 +42,57 @@ export class CartService {
 
     this.saveCart();
 
-    this.snackbar.open(`${newItem.title} added to cart`, 'Ok', { duration: 3000});
+    this.snackbar.open(`${newItem.title} added to cart`, 'Ok', { duration: 3000 });
   }
 
-  // Public methods
-  public clearCart() {
-    this.cartSubject.next({boughtBooks: []});
+  /**
+   * Clears the cart.
+   */
+  public clearCart(): void {
+    this.cartSubject.next({ boughtBooks: [] });
 
     this.cart = [];
 
-    localStorage.removeItem("cart_items");
+    localStorage.removeItem('cart_items');
 
-    this.snackbar.open('Cart is cleared', 'Ok', { duration: 3000 })
+    this.snackbar.open('Cart is cleared', 'Ok', { duration: 3000 });
   }
 
-  public enoughStock(book: Book){
-    const bookInCart = this.cart.find((_book) => _book.id === book?.id);
+  /**
+   * Checks if there is enough stock for a given book.
+   * @param book - The book to check for stock availability.
+   * @returns True if there is enough stock, false otherwise.
+   */
+  public enoughStock(book: Book): boolean {
+    const bookInCart = this.cart.find(_book => _book.id === book?.id);
 
-    return !(
-      bookInCart &&
-      bookInCart.quantity + 1 > book.stock
-    );
+    return !(bookInCart && bookInCart.quantity + 1 > book.stock);
   }
 
-  public getBooks() {
+  /**
+   * Retrieves the books in the cart.
+   * @returns An array of bought books in the cart.
+   */
+  public getBooks(): BoughtBook[] {
     return this.cart;
   }
 
-  public getTotal(boughtBooks: BoughtBook[]): number{
-    return boughtBooks.map(
-        (boughtBook) => boughtBook.price * boughtBook.quantity)
-      .reduce(
-        (prev, current) => prev + current, 0
-      );
+  /**
+   * Calculates the total price of bought books in the cart.
+   * @param boughtBooks - The array of bought books in the cart.
+   * @returns The total price of bought books.
+   */
+  public getTotal(boughtBooks: BoughtBook[]): number {
+    return boughtBooks.map((boughtBook) => boughtBook.price * boughtBook.quantity)
+      .reduce((prev, current) => prev + current, 0);
   }
 
+  /**
+   * Loads the cart from local storage.
+   */
   public loadCart(): void {
-    if (localStorage.getItem('cart_items')){
-      this.cart = JSON.parse(localStorage.getItem("cart_items")!);
+    if (localStorage.getItem('cart_items')) {
+      this.cart = JSON.parse(localStorage.getItem('cart_items')!) || [];
     } else {
       this.cart = [];
     }
@@ -82,14 +100,17 @@ export class CartService {
     this.saveCart();
   }
 
+  /**
+   * Removes a bought book from the cart.
+   * @param boughtBook - The bought book to be removed.
+   * @param update - Whether to display a snackbar message.
+   * @returns The updated array of bought books in the cart.
+   */
   public removeFromCart(boughtBook: BoughtBook, update = true): BoughtBook[] {
-    this.cart = this.cart.filter(
-      (book) => book.id !== boughtBook.id
-    );
+    this.cart = this.cart.filter((book) => book.id !== boughtBook.id);
 
-    if(update){
-      //this.cart.next({ boughtBooks: filteredBooks});
-      this.snackbar.open(`${boughtBook.title} removed from cart`, 'Ok', {duration: 3000})
+    if (update) {
+      this.snackbar.open(`${boughtBook.title} removed from cart`, 'Ok', { duration: 3000 });
     }
 
     this.saveCart();
@@ -97,34 +118,41 @@ export class CartService {
     return this.cart;
   }
 
+  /**
+   * Removes one quantity from a bought book in the cart.
+   *
+   * @param updatedBook - The bought book to be updated.
+   */
   public removeQuantity(updatedBook: BoughtBook): void {
     let bookForRemoval: BoughtBook | undefined;
 
     this.cart = this.cart.map((book) => {
-      if(book.id === updatedBook.id){
+      if (book.id === updatedBook.id) {
         book.quantity--;
 
-        if(book.quantity === 0){
+        if (book.quantity === 0) {
           bookForRemoval = book;
         }
       }
 
       return book;
-    })
+    });
 
-    if(bookForRemoval){
+    if (bookForRemoval) {
       this.cart = this.removeFromCart(bookForRemoval, false);
     }
 
     this.saveCart();
 
-    this.snackbar.open('1 item removed from cart', 'Ok', {duration: 3000});
+    this.snackbar.open('1 item removed from cart', 'Ok', { duration: 3000 });
   }
 
   // Private methods
+  /**
+   * Saves the current cart state to local storage and notifies subscribers.
+   */
   private saveCart(): void {
-    this.cartSubject.next({boughtBooks: this.cart});
-
+    this.cartSubject.next({ boughtBooks: this.cart });
     localStorage.setItem('cart_items', JSON.stringify(this.cart));
   }
 }

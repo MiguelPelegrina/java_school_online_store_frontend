@@ -5,7 +5,7 @@
  * @returns An object with a `requiredFileType` property set to true if the file type is valid, or null otherwise.
  *
  * @example
- * const file = new File(["content"], "example.jpg", { type: "image/jpeg" });
+ * const file = new File(["content"]});
  * const validation = requiredFileType(file);
  * // Result: { requiredFileType: true } or null
  */

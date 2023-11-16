@@ -3,32 +3,56 @@ import { AbstractService } from '../../shared/service/abstract.service';
 import { User } from '../../shared/domain/user/user';
 import { HttpClient } from '@angular/common/http';
 import { StringValues } from '../../shared/utils/string-values';
-import { Observable } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
+import { QueryBuilderService } from 'src/app/shared/service/query-builder.service';
 
+/**
+ * A service for managing user-related operations.
+ * Extends the AbstractService class for common service functionalities.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class UserService extends AbstractService<User, number>{
-  constructor(protected override httpClient: HttpClient) {
+  /**
+   * Constructor for the UserService.
+   * @param httpClient - The Angular HttpClient for making HTTP requests.
+   */
+  constructor(protected override httpClient: HttpClient, private queryBuilderService: QueryBuilderService) {
     super(StringValues.BASE_USER_URL, httpClient);
   }
 
-  public override getAll(active?: boolean, filter?: string, sortType?: string, sortProperty?: string, page?: number, size?: number): Observable<any> {
-    // TODO
-    // - Refactor this, maybe create some kind of RequestBuilder
-    // - '&' should not appear if only one parameter is passed
-    // - Add "?" only if at least one parameters is introduced -> create type with Request Params?
-    const _active = active != null ? `/&active=${active}` : '';
-    const _filter = filter != null ? `&name=${filter}` : '';
-    const _sortType = sortType != null ? `&sortType=${sortType}` : '&sortType=asc';
-    const _sortProperty = sortProperty != null ? `&sortProperty=${sortProperty}` : '&sortProperty=email';
-    const _page = page != null || undefined ? `&page=${page}` : '&page=0';
-    const _size = size != null || undefined ? `&size=${size}` : '&size=20';
+  /**
+   * Retrieves a list of users based on optional query parameters.
+   * @param active - Optional. Filters users based on their active status.
+   * @param filter - Optional. Filters users based on a provided string.
+   * @param sortType - Optional. Specifies the sorting type (asc/desc) for the results.
+   * @param sortProperty - Optional. Specifies the property for sorting the results.
+   * @param page - Optional. Specifies the page number for paginated results.
+   * @param size - Optional. Specifies the page size for paginated results.
+   * @returns An Observable containing the list of users matching the specified criteria.
+   */
+  public override getAll(
+    active?: boolean,
+    filter?: string,
+    sortType?: string,
+    sortProperty?: string,
+    page?: number,
+    size?: number
+  ): Observable<any> {
+    const queryParams = this.queryBuilderService.buildQueryParams({
+      active,
+      name: filter,
+      sortType: sortType || 'asc',
+      sortProperty: sortProperty || 'email',
+      page: page != null ? page : 0,
+      size: size != null ? size : 20
+    });
 
-    // console.log(`${this.baseUrl}${_active}${_filter}${_sortType}${_sortProperty}${_page}${_size}`);
-    return this.httpClient.get<any>(`${this.baseUrl}/search?${_active}${_filter}${_sortType}${_sortProperty}${_page}${_size}`).pipe(
-      // TODO Handle error
-      // catchError(this.handleError)
+    const searchUrl = `${this.baseUrl}/search${queryParams}`;
+
+    return this.httpClient.get<any>(searchUrl).pipe(
+      catchError(this.handleError)
     );
   }
 }

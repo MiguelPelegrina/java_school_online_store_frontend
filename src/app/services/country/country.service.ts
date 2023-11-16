@@ -3,23 +3,43 @@ import { StringValues } from '../../shared/utils/string-values';
 import { HttpClient } from '@angular/common/http';
 import { Country } from '../../shared/domain/country/country';
 import { AbstractService } from '../../shared/service/abstract.service';
-import { Observable } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
+import { QueryBuilderService } from 'src/app/shared/service/query-builder.service';
 
+/**
+ * A service for managing country-related operations.
+ * Extends the AbstractService class for common service functionalities.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class CountryService extends AbstractService<Country, string> {
-  // TODO Not sure if this is right
-  constructor(protected override httpClient: HttpClient) {
+  /**
+   * Constructor for the CountryService.
+   * @param httpClient - The Angular HttpClient for making HTTP requests.
+   * @param queryBuilderService - The service for building query parameters.
+   */
+  constructor(
+    protected override httpClient: HttpClient,
+    private queryBuilderService: QueryBuilderService
+  ) {
     super(StringValues.BASE_COUNTRY_URL, httpClient);
   }
 
-  public override getAll(active?: boolean): Observable<any>{
-    const _active = active != null ? `/search?active=${active}` : '/search?';
+  /**
+   * Retrieves a list of countries based on optional query parameters.
+   * @param active - Optional. Filters countries based on their active status.
+   * @returns An Observable containing the list of countries matching the specified criteria.
+   */
+  public override getAll(active?: boolean): Observable<any> {
+    const queryParams = this.queryBuilderService.buildQueryParams({
+      active
+    });
 
-    return this.httpClient.get<any>(`${this.baseUrl}${_active}`).pipe(
-      // TODO Handle error
-      // catchError(this.handleError)
+    const searchUrl = `${this.baseUrl}/search${queryParams}`;
+
+    return this.httpClient.get<any>(searchUrl).pipe(
+      catchError(this.handleError)
     );
   }
 }

@@ -3,7 +3,7 @@
 <mat-progress-bar *ngIf="!isBookLoaded" mode="indeterminate"></mat-progress-bar>
 <h2 *ngIf="isBookLoaded" class="text-center m-3">Details of {{book.title}}</h2>
 <div class="text-right m-3">
-  <button (click)="editBook(book.id)" mat-mini-fab matTooltip="Add a new book to the list">
+  <button (click)="editBook(book.id)" mat-mini-fab matTooltip="Add a new book to the list" *ngxPermissionsOnly="['ADMIN', 'EMPLOYEE']">
     <mat-icon>edit</mat-icon>
   </button>
 </div>

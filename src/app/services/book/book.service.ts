@@ -3,43 +3,77 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError } from 'rxjs';
 import { Book } from 'src/app/shared/domain/book/book';
 import { AbstractService } from 'src/app/shared/service/abstract.service';
+import { QueryBuilderService } from 'src/app/shared/service/query-builder.service';
 import { StringValues } from 'src/app/shared/utils/string-values';
 
+/**
+ * A service for managing book-related operations.
+ * Extends the AbstractService class for common service functionalities.
+ */
 @Injectable({
   providedIn: 'root'
 })
-export class BookService extends AbstractService<Book, number>{
-  constructor(protected override httpClient: HttpClient) {
+export class BookService extends AbstractService<Book, number> {
+  /**
+   * Constructor for the BookService.
+   *
+   * @param httpClient - The Angular HttpClient for making HTTP requests.
+   * @param queryBuilderService - The service for building query parameters.
+   */
+  constructor(
+    protected override httpClient: HttpClient,
+    private queryBuilderService: QueryBuilderService
+  ) {
     super(StringValues.BASE_BOOK_URL, httpClient);
   }
 
-  public override getAll(active?: boolean, filter?: string, sortType?: string, sortProperty?: string, page?: number, size?: number, genre?: string): Observable<any> {
-    // TODO
-    // - Refactor this, maybe create some kind of RequestBuilder
-    // - '&' should not appear if only one parameter is passed
-    // - Add "?" only if at least one parameters is introduced -> create type with Request Params?
-    const _active = active != null ? `/&active=${active}` : '';
-    const _filter = filter != null ? `&name=${filter}` : '';
-    const _sortType = sortType != null ? `&sortType=${sortType}` : '&sortType=asc';
-    const _sortProperty = sortProperty != null ? `&sortProperty=${sortProperty}` : '&sortProperty=title';
-    const _page = page != null || undefined ? `&page=${page}` : '&page=0';
-    const _size = size != null || undefined ? `&size=${size}` : '&size=20';
-    const _genre = genre != null || undefined ? `&genre=${genre}` : '';
+  /**
+   * Retrieves a list of books based on optional query parameters.
+   * @param active - Optional. Filters books based on their active status.
+   * @param filter - Optional. Filters books based on a search term.
+   * @param sortType - Optional. Specifies the sort order (asc or desc).
+   * @param sortProperty - Optional. Specifies the property to sort by.
+   * @param page - Optional. Specifies the page number for pagination.
+   * @param size - Optional. Specifies the number of items per page for pagination.
+   * @param genre - Optional. Filters books based on the genre.
+   * @returns An Observable containing the list of books matching the specified criteria.
+   */
+  public override getAll(
+    active?: boolean,
+    filter?: string,
+    sortType?: string,
+    sortProperty?: string,
+    page?: number,
+    size?: number,
+    genre?: string
+  ): Observable<any> {
+    const queryParams = this.queryBuilderService.buildQueryParams({
+      active,
+      name: filter,
+      sortType,
+      sortProperty,
+      page,
+      size,
+      genre
+    });
 
-    console.log(`${this.baseUrl}/search?${_active}${_filter}${_sortType}${_sortProperty}${_page}${_size}${_genre}`);
+    const searchUrl = `${this.baseUrl}/search${queryParams}`;
 
-    // console.log(`${this.baseUrl}${_active}${_filter}${_sortType}${_sortProperty}${_page}${_size}${_genre}`);
-    return this.httpClient.get<any>(`${this.baseUrl}/search?${_active}${_filter}${_sortType}${_sortProperty}${_page}${_size}${_genre}`).pipe(
-      // TODO Handle error
+    return this.httpClient.get<any>(searchUrl).pipe(
       catchError(this.handleError)
     );
   }
 
-  public getTopProducts(number: number){
-    console.log(`${this.baseUrl}/top_products?limit=${number}`);
+  /**
+   * Retrieves a list of top products based on the specified limit.
+   * @param number - The limit of top products to retrieve.
+   * @returns An Observable containing the list of top products.
+   */
+  public getTopProducts(number: number): Observable<any> {
+    const topProductsUrl = `${this.baseUrl}/top_products?limit=${number}`;
 
-    return this.httpClient.get<any>(`${this.baseUrl}/top_products?limit=${number}`).pipe(
+    return this.httpClient.get<any>(topProductsUrl).pipe(
       catchError(this.handleError)
-    )
+    );
   }
 }
