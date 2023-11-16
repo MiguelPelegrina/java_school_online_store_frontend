@@ -10,8 +10,10 @@ import { CartComponent } from "./components/cart/cart.component";
 import { ProfileComponent } from "./components/user/profile/profile.component";
 import { ListOrderComponent } from "./components/order/list-order/list-order.component";
 import { ViewBookComponent } from "./components/book/view-book/view-book.component";
-import { SalesStatisticsComponent } from "./components/sales-statistics/sales-statistics.component";
 import { ngxPermissionsGuard } from "ngx-permissions";
+import { TopProductsComponent } from "./components/sales-statistics/top-products/top-products.component";
+import { ListCustomerComponent } from "./components/sales-statistics/list-customer/list-customer.component";
+import { RevenueCalculatorComponent } from "./components/sales-statistics/revenue-calculator/revenue-calculator.component";
 
 
 /**
@@ -63,17 +65,19 @@ const routes: Routes = [
   { path: '', redirectTo: 'catalog', pathMatch: 'full' },
   { path: 'auth/login', component: LoginComponent },
   { path: 'auth/register', component: ProfileComponent },
+  { path: 'books/view/:id', component: ViewBookComponent },
+  { path: 'cart', component: CartComponent },
+  { path: 'catalog', component: CatalogComponent },
+  { path: 'profile', component: ProfileComponent },
   generateRoute('book_formats', ListBookParametersFormatComponent),
+  generateRoute('orders', ListOrderComponent, ['ADMIN', 'EMPLOYEE', 'CLIENT']),
   generateRoute('book_genres', ListBookGenreComponent),
   generateRoute('books', ListBookComponent),
   generateRoute('books/add', AddEditBookFormComponent),
   generateRoute('books/edit/:id', AddEditBookFormComponent),
-  { path: 'books/view/:id', component: ViewBookComponent },
-  { path: 'cart', component: CartComponent },
-  { path: 'catalog', component: CatalogComponent },
-  generateRoute('orders', ListOrderComponent, ['ADMIN', 'EMPLOYEE', 'CLIENT']),
-  { path: 'profile', component: ProfileComponent },
-  generateRoute('sales_statistics', SalesStatisticsComponent),
+  generateRoute('top_products', TopProductsComponent),
+  generateRoute('clients', ListCustomerComponent),
+  generateRoute('revenues', RevenueCalculatorComponent)
 ];
 
 @NgModule({

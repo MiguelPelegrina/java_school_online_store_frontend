@@ -53,7 +53,6 @@ import { ListOrderComponent } from './components/order/list-order/list-order.com
 import { DatePipe } from '@angular/common';
 import { ViewBookComponent } from './components/book/view-book/view-book.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { SalesStatisticsComponent } from './components/sales-statistics/sales-statistics.component';
 import { ListCustomerComponent } from './components/sales-statistics/list-customer/list-customer.component';
 import { RevenueCalculatorComponent } from './components/sales-statistics/revenue-calculator/revenue-calculator.component';
 import { TopProductsComponent } from './components/sales-statistics/top-products/top-products.component';
@@ -82,7 +81,6 @@ import { NgxPermissionsModule } from 'ngx-permissions';
     ProfileComponent,
     RevenueCalculatorComponent,
     OrderDetailsFormComponent,
-    SalesStatisticsComponent,
     SearchBarComponent,
     TopProductsComponent,
     TwoDigitDecimalNumberDirective,

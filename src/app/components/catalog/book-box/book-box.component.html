@@ -10,7 +10,9 @@
 
     <div class="w-100" [ngClass]="{'p-3 d-flex flex-column justify-content-between': fullWidthMode}">
       <div>
-        <h5>{{book.title}}</h5>
+        <h5>
+          <a [routerLink]="['/books/view', book.id]">{{book.title}}</a>
+        </h5>
         <!-- TODO
           - Truncate does not seem to work
           - Would be nice if it shows whole text on hover

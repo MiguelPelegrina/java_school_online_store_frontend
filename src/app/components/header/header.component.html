@@ -45,7 +45,7 @@
     <div class="d-flex flex-column">
       <button mat-menu-item [matMenuTriggerFor]="menuProducts"><mat-icon>book</mat-icon>Products</button>
       <button mat-menu-item routerLink="orders"><mat-icon>list</mat-icon>Orders</button>
-      <button mat-menu-item routerLink="sales_statistics"><mat-icon>euro_symbol</mat-icon>Sales statistics</button>
+      <button mat-menu-item [matMenuTriggerFor]="menuSalesStatistics"><mat-icon>euro_symbol</mat-icon>Sales statistics</button>
     </div>
   </mat-menu>
   <!-- /NAVIGATION MENU -->
@@ -63,6 +63,21 @@
     </button>
   </mat-menu>
   <!-- /PRODUCTS MENU ITEM -->
+
+
+  <!-- SALES STATISTICS MENU -->
+  <mat-menu #menuSalesStatistics="matMenu">
+    <button mat-menu-item>
+      <a routerLink="clients" class="text-white nav-link">Clients</a>
+    </button>
+    <button mat-menu-item>
+      <a routerLink="top_products" class="text-white nav-link">Top products</a>
+    </button>
+    <button mat-menu-item>
+      <a routerLink="revenues" class="text-white nav-link">Revenues</a>
+    </button>
+  </mat-menu>
+    <!-- /SALES STATISTICS MENU -->
 
   <!-- SHOPPING CART MENU -->
   <mat-menu #menuCart="matMenu">
