@@ -6,6 +6,7 @@ import { AbstractForm } from 'src/app/shared/components/abstract-form';
 import Swal from 'sweetalert2';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { AuthUtils } from 'src/app/shared/utils/auth-utils';
+import { informUserOfError } from 'src/app/shared/utils/utils';
 
 @Component({
   selector: 'app-login',
@@ -32,7 +33,7 @@ export class LoginComponent extends AbstractForm {
         this.router.navigate(['../']);
       },
       error: (error: any) => {
-        Swal.fire('An error ocurred', error.error, 'warning')
+        informUserOfError(error);
       }
     });
   }

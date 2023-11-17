@@ -1,6 +1,4 @@
-import { Router } from "@angular/router";
 import { jwtDecode } from "jwt-decode";
-import Swal from "sweetalert2";
 import { AuthResultDto } from "./interfaces/authResultDto";
 
 export class AuthUtils {

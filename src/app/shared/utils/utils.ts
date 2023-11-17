@@ -1,20 +1,23 @@
-import { Router } from "@angular/router";
 import Swal from "sweetalert2";
 
+// Stores utility functions
 /**
- * Utility functions for common tasks.
- */
-export class Utils {
-  /**
    * Converts an image file to a Base64-encoded string.
    * @param image - The file representing the image to convert.
    * @param callback - A callback function that will receive the Base64-encoded string.
    */
-  static getBase64(image: Blob, callback: (result: string | ArrayBuffer | null) => any): void {
+export function getBase64(image: Blob, callback: (result: string | ArrayBuffer | null) => any): void {
     const reader = new FileReader();
 
     reader.addEventListener('load', () => callback(reader.result));
 
     reader.readAsDataURL(image);
-  }
+}
+
+/**
+ * Shows an error that ocurred to the user.
+ * @param error - The error response.
+ */
+export function informUserOfError(error: any){
+  Swal.fire('An error ocurred', error.error, 'warning')
 }
