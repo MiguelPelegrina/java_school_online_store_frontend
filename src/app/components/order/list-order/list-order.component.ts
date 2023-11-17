@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Observable, Subscription, map, merge, startWith, switchMap } from 'rxjs';
+import { Observable, Subscription, catchError, map, merge, startWith, switchMap } from 'rxjs';
 import { OrderStatusService } from 'src/app/services/order/order-status/order-status.service';
 import { OrderService } from 'src/app/services/order/order.service';
 import { PaymentStatusService } from 'src/app/services/order/payment-status/payment-status.service';
@@ -14,6 +14,7 @@ import { OrderStatus } from 'src/app/shared/domain/order/order-status/order-stat
 import { PaymentStatus } from 'src/app/shared/domain/order/payment-status/payment-status';
 import { IIndexable } from 'src/app/shared/utils/interfaces/i-indexable';
 import { StringValues } from 'src/app/shared/utils/string-values';
+import { informUserOfError } from 'src/app/shared/utils/utils';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -106,7 +107,12 @@ export class ListOrderComponent implements OnDestroy, OnInit {
 
         this.dataPageSize = this.paginator.pageSize;
 
-        return this.orderService.getAll(this.filter, this.sort.direction, this.sort.active, this.paginator.pageIndex, this.dataPageSize);
+        return this.orderService.getAll(this.filter, this.sort.direction, this.sort.active, this.paginator.pageIndex, this.dataPageSize).pipe(
+          catchError((error) => {
+            this.informUserOfError(error);
+            return [];
+          })
+        );
       }),
       map(response => {
         if(response === null){
@@ -122,7 +128,6 @@ export class ListOrderComponent implements OnDestroy, OnInit {
       }),
     )
 
-    // TODO Might need to assign it after every data change
     this.dataSource.sortingDataAccessor = (item, property) => {
       switch(property) {
         case 'deliveryMethod.name': return item.deliveryMethod.name;
@@ -183,7 +188,7 @@ export class ListOrderComponent implements OnDestroy, OnInit {
             Swal.fire('Reorder successful', '', 'success');
           },
           error: (error) => {
-            Swal.fire('An error ocurred', error.error, 'warning')
+            this.informUserOfError(error);
           }
         });
       }
@@ -261,6 +266,11 @@ export class ListOrderComponent implements OnDestroy, OnInit {
     this.handleUpdateResponse(message);
   }
 
+  private informUserOfError(error: any){
+    this.isLoading = false;
+    informUserOfError(error)
+  }
+
   /**
    * Retrieves all elements from the database. Hides the progress bar when the data is loaded.
    */
@@ -273,16 +283,22 @@ export class ListOrderComponent implements OnDestroy, OnInit {
 
         this.isLoading = false;
       },
-      error: () => {
-        Swal.fire('An error ocurred', '', 'warning')
+      error: (error) => {
+        this.informUserOfError(error);
       }
     })
   }
 
   private loadOrderStatuses(){
-    this.orderStatusSubscription = this.orderStatusService.getAll(true).subscribe((response) => {
-      this.orderStatuses = response;
-    })
+    this.orderStatusSubscription = this.orderStatusService.getAll(true).subscribe({
+      next: (response) => {
+        this.orderStatuses = response;
+        Swal.fire('Reorder successful', '', 'success');
+      },
+      error: (error) => {
+        this.informUserOfError(error);
+      }
+    });
   }
 
   private loadPaymentStatuses(){
