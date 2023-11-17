@@ -160,7 +160,15 @@ export class ListOrderComponent implements OnDestroy, OnInit {
   }
 
   protected reorder(order: Order){
-    Swal.fire('Confirm reorder', 'Are you sure you want to reorder this?', 'info')
+    Swal.fire({
+      title:'Confirm reorder',
+      text: 'Are you sure you want to reorder this?',
+      icon: 'info',
+      showCloseButton: true,
+      showCancelButton: true,
+      focusConfirm: false,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No'})
     .then((result) => {
       if(result.isConfirmed){
 
@@ -174,8 +182,8 @@ export class ListOrderComponent implements OnDestroy, OnInit {
             this.loadAllOrders();
             Swal.fire('Reorder successful', '', 'success');
           },
-          error: () => {
-            Swal.fire('An error ocurred', 'Order could not be saved', 'info')
+          error: (error) => {
+            Swal.fire('An error ocurred', error.error, 'warning')
           }
         });
       }

@@ -42,9 +42,7 @@ export abstract class AbstractService<Entity, ID> {
    * @returns An Observable representing the result of the deletion operation.
    */
   delete(id: ID): Observable<Object> {
-    return this.httpClient.delete(`${this.baseUrl}/${id}`).pipe(
-      catchError(this.handleError)
-    );
+    return this.httpClient.delete(`${this.baseUrl}/${id}`).pipe();
   }
 
   /**
@@ -52,9 +50,7 @@ export abstract class AbstractService<Entity, ID> {
    * @returns An Observable of an array of Entity objects.
    */
   getAll(): Observable<Entity[]> {
-    return this.httpClient.get<Entity[]>(this.baseUrl).pipe(
-      catchError(this.handleError)
-    );
+    return this.httpClient.get<Entity[]>(this.baseUrl).pipe();
   }
 
   /**
@@ -87,6 +83,6 @@ export abstract class AbstractService<Entity, ID> {
    * @returns An Observable that emits an error message.
    */
   protected handleError(error: HttpErrorResponse): Observable<never> {
-    return throwError(() => new Error(error.message));
+    return throwError(() => error);
   }
 }
