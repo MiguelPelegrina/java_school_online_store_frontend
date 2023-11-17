@@ -10,11 +10,8 @@ import { AuthUtils } from 'src/app/shared/utils/auth-utils';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css', '../../../app.component.css']
 })
-/**
- * @deprecated
- */
 export class LoginComponent extends AbstractForm {
 
   constructor(private authService: AuthService, private formBuilder: FormBuilder, private permissionsService: NgxPermissionsService, private router: Router){

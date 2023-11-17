@@ -1,40 +1,42 @@
-<div class="row justify-content-center">
-  <div style="width: 18rem">
-    <div class="card-body">
-      <h1 class="card-title text-center">Login</h1>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <div class="container">
-          <mat-form-field appearance="fill">
-            <mat-label>Enter your email</mat-label>
-            <input
-              formControlName="email"
-              matInput
-              placeholder="E.g user@example.com"
-              required
-              type="text"
-            >
-            <mat-error *ngIf="form.controls['email'].invalid">{{getErrorMessage('email')}}</mat-error>
-          </mat-form-field>
+<h2 class="m-2 p-2 text-center">Login</h2>
+<mat-card class="container form-container mat-elevation-z8">
+  <div class="row justify-content-center">
+    <div style="width: 18rem">
+      <div class="row m-3">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="container d-flex flex-wrap">
+            <mat-form-field class="mx-auto" appearance="fill">
+              <mat-label>Enter your email</mat-label>
+              <input
+                formControlName="email"
+                matInput
+                placeholder="E.g user@example.com"
+                required
+                type="text"
+              >
+              <mat-error *ngIf="form.controls['email'].invalid">{{getErrorMessage('email')}}</mat-error>
+            </mat-form-field>
 
-          <mat-form-field appearance="fill">
-            <mat-label>Enter your password</mat-label>
-            <input formControlName="password" matInput placeholder="Password" required type="password">
-            <mat-error *ngIf="form.controls['password'].invalid">{{getErrorMessage('password')}}</mat-error>
-          </mat-form-field>
-          </div>
+            <mat-form-field appearance="fill" class="mx-auto">
+              <mat-label>Enter your password</mat-label>
+              <input formControlName="password" matInput placeholder="Password" required type="password">
+              <mat-error *ngIf="form.controls['password'].invalid">{{getErrorMessage('password')}}</mat-error>
+            </mat-form-field>
+            </div>
 
-          <!-- LOGIN -->
-          <div class="d-flex justify-content-center">
-            <button mat-raised-button color="primary" type="submit">Login</button>
-          </div>
-          <!-- /LOGIN -->
+            <!-- LOGIN -->
+            <div class="d-flex justify-content-center">
+              <button mat-raised-button color="primary" type="submit">Login</button>
+            </div>
+            <!-- /LOGIN -->
 
-          <!-- REGISTER -->
-          <div class="p-3">
-            <p class="text-center">Are you not <a routerLink="/auth/register">registered </a> yet? </p>
-          </div>
-          <!-- /REGISTER -->
+            <!-- REGISTER -->
+            <div class="p-3">
+              <p class="text-center text-white">Are you not <a routerLink="/auth/register">registered </a> yet? </p>
+            </div>
+            <!-- /REGISTER -->
         </form>
       </div>
     </div>
   </div>
+</mat-card>

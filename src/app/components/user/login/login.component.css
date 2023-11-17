@@ -1,1 +1,6 @@
-
+.form-container {
+  background: var(--mat-toolbar-container-background-color);
+  border-radius: 25px;
+  padding: 30px;
+  width: max-content;
+}

@@ -2,10 +2,9 @@
 <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 <!-- /LOADING -->
 
-<h2 class="text-center" *ngIf="isAddMode">Register</h2>
-<h2 class="text-center" *ngIf="!isAddMode">Edit your profile</h2>
+<h2 class="m-2 p-2 text-center" *ngIf="isAddMode">Register</h2>
+<h2 class="m-2 p-2 text-center" *ngIf="!isAddMode">Edit your profile</h2>
 
-<!-- TODO Change CSS of borders -->
 <div class="container form-container mat-elevation-z8">
   <form [formGroup]="form" *ngIf="form" (ngSubmit)="onSubmit()">
     <app-add-edit-user-form formGroupName="personalData"></app-add-edit-user-form>
