@@ -1,11 +1,11 @@
 <h1 class="text-center">Cart</h1>
 
-<mat-stepper [linear]="true" #stepper>
+<mat-stepper [linear]="true" [orientation]="(stepperOrientation | async)!" #stepper>
   <mat-step>
     <ng-template matStepLabel>Your cart</ng-template>
     <!-- CART WITH CONTENT -->
     <mat-card class="card-container mat-elevation-z8 mx-auto" *ngIf="cart.boughtBooks.length">
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 w-100">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" >
         <!-- IMAGE -->
         <ng-container matColumnDef="book">
           <th mat-header-cell *matHeaderCellDef>Book</th>

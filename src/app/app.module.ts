@@ -40,7 +40,7 @@ import { BookBoxComponent } from './components/catalog/book-box/book-box.compone
 import { CartComponent } from './components/cart/cart.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MAT_DATE_LOCALE, MatNativeDateModule, MatOptionModule } from '@angular/material/core';
-import { TwoDigitDecimalNumberDirective } from './shared/utils/directives/twoDigitDecimalNumber'
+import { TwoDigitDecimalNumberDirective } from './shared/utils/directives/twoDigitDecimalNumber.directive'
 import { MatSelectModule } from '@angular/material/select';
 import { ProfileComponent } from './components/user/profile/profile.component';
 import { AddEditAddressForm } from './components/user/forms/address/add-edit-address-form.component';

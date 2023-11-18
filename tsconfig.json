@@ -22,6 +22,7 @@
       "es5", "es6",
       "ES2022",
       "dom",
+      "DOM.Iterable"
     ],
     "typeRoots": ["node_modules/@angular/material"]
   },

@@ -1,8 +1,10 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatStepper } from '@angular/material/stepper';
+import { MatStepper, StepperOrientation } from '@angular/material/stepper';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { Observable, map } from 'rxjs';
 import { CartService } from 'src/app/services/cart/cart.service';
 import { OrderService } from 'src/app/services/order/order.service';
 import { UserService } from 'src/app/services/user/user.service';
@@ -48,6 +50,8 @@ export class CartComponent implements OnInit{
 
   protected selectedPaymentStatus = StringValues.DEFAULT_PAYMENT_STATUS_ON_ORDER;
 
+  protected stepperOrientation: Observable<StepperOrientation>;
+
   protected user?: User;
 
   constructor(
@@ -55,7 +59,13 @@ export class CartComponent implements OnInit{
     private fb: FormBuilder,
     private orderService: OrderService,
     private router: Router,
-    private usersService: UserService){}
+    private usersService: UserService,
+    breakpointObserver: BreakpointObserver
+    ){
+      this.stepperOrientation = breakpointObserver
+        .observe('(min-width:800px)')
+        .pipe(map(({matches}) => (matches ? 'horizontal' : 'vertical')));
+    }
 
   // Methods
   // Public methods
