@@ -24,7 +24,10 @@ export function informUserOfError(error: any, isLoading?: boolean){
   if(error instanceof HttpErrorResponse){
     if(error.status === 0){
       Swal.fire('An error ocurred', 'Connection to the server failed', 'warning')
+    }else {
+      Swal.fire('An error ocurred', error.error, 'warning')
     }
+    // TODO Not sure about this
   } else {
     Swal.fire('An error ocurred', error.error, 'warning')
   }
