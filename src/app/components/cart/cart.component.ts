@@ -14,6 +14,7 @@ import { Order } from 'src/app/shared/domain/order/order';
 import { User } from 'src/app/shared/domain/user/user';
 import { AuthResultDto } from 'src/app/shared/utils/interfaces/authResultDto';
 import { StringValues } from 'src/app/shared/utils/string-values';
+import { informUserOfError } from 'src/app/shared/utils/utils';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -158,7 +159,6 @@ export class CartComponent implements OnInit{
             user: this.user!
           };
 
-          // TODO Might need to assign id with a sequencer and then have Set type instead of List type in backend
           const orderedBooks = this.cart.boughtBooks.map((book) => {
             return {
               book: book,
@@ -173,8 +173,8 @@ export class CartComponent implements OnInit{
               this.cartService.clearCart();
               Swal.fire('Order issued succesfully', '', 'success');
             },
-            error: () => {
-              Swal.fire('An error ocurred, contact your support', '', 'warning');
+            error: (error) => {
+              informUserOfError(error);
             }
           });
         }
