@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
@@ -9,6 +9,7 @@ import { AbstractForm } from 'src/app/shared/components/abstract-form';
 import { Address } from 'src/app/shared/domain/user/address/address';
 import { User } from 'src/app/shared/domain/user/user';
 import { AuthResultDto } from 'src/app/shared/utils/interfaces/authResultDto';
+import { informUserOfError } from 'src/app/shared/utils/utils';
 import Swal from 'sweetalert2';
 
 // TODO
@@ -16,18 +17,21 @@ import Swal from 'sweetalert2';
 //  - More auxiliar methods
 //  - Reduce form content?
 
+/**
+ * Component for user profile management.
+ */
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css', '../../../app.component.css'],
 })
-export class ProfileComponent extends AbstractForm implements OnDestroy {
+export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit {
   // Fields
   protected id?: number;
 
   protected isAddMode?: boolean;
 
-  protected loading = true;
+  protected isLoading = true;
 
   // TODO This variable to store missing properties (active, id) of user/address or hidden forms?
   protected response?: User;
@@ -43,10 +47,11 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
   protected usersSubscription?: Subscription;
 
   /**
-   *
-   * @param fb
-   * @param route
-   * @param usersService
+   * Constructor
+   * @param authService The authentication service.
+   * @param fb The form builder for creating the user profile form.
+   * @param router The Angular router for navigation.
+   * @param usersService The user service for managing user data.
    */
   constructor(
     private authService: AuthService,
@@ -55,9 +60,20 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
     private usersService: UserService,
     ){
     super();
+  }
 
-    // TODO Do this in onInit, not in the constructor
-    // TODO Needs to change?
+  // Methods
+  // Lifecycle Hooks
+  /**
+   * A lifecycle hook that is called when a directive, pipe, or service is destroyed. Used for any custom cleanup that needs to occur when the instance is destroyed.
+   * Unsubscribes from user subscriptions to prevent memory leaks.
+   */
+  public ngOnDestroy(): void {
+    this.usersSubscription?.unsubscribe();
+  }
+
+
+  public ngOnInit(){
     const token = localStorage.getItem('auth_token');
 
     if(token){
@@ -69,25 +85,24 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
       this.loadUser();
     } else {
       this.isAddMode = !this.id;
-      this.loading = false;
+      this.isLoading = false;
 
       this.createFormGroup();
     }
   }
 
-  public ngOnDestroy(): void {
-    this.usersSubscription?.unsubscribe();
-  }
-
-  // Methods
-  // Public methods
+  // Protected methods
+  /**
+   * Handles the form submission.
+   * Marks all form controls as touched and proceeds with user creation or update if the form is valid.
+   */
   protected onSubmit(){
     this.submitted = true;
 
     this.form.markAllAsTouched();
 
     if(!this.form.invalid){
-      this.loading = true;
+      this.isLoading = true;
 
       if(this.isAddMode){
         this.createUser();
@@ -98,6 +113,9 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
   }
 
   // Private methods
+  /**
+   * Creates the user profile form using the form builder.
+   */
   private createFormGroup() {
     this.form = this.fb.group({
       personalData: this.fb.group({
@@ -107,7 +125,6 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
         id: [''],
         name: ['', Validators.required],
         // TODO Not sure about this. Once logged in, it should not be necessary to introduced the password again for changes, or?
-        // TODO Not showing when invalid
         password: ['', Validators.required],
         phone: ['', Validators.required],
         surname: ['', Validators.required]
@@ -122,7 +139,9 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
     })
   }
 
-
+  /**
+   * Creates a new user using the authentication service.
+   */
   private createUser(){
     const address: Address = {
       active: true,
@@ -149,13 +168,16 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
       next: () => {
         this.handleSuccessResponse('created');
       },
-      // TODO Error handling
       error: (error: any) => {
-        this.handleErrorResponse('created', error);
+        this.handleErrorResponse(error);
       }
     })
   }
 
+  /**
+   * Fills the user profile form with user data.
+   * @param response The user data to fill the form with.
+   */
   private fillUserForm(response: any){
     this.form = this.fb.group({
       personalData: this.fb.group({
@@ -183,16 +205,22 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
     this.selectedPostalCode = response.address.postalCode.code;
   }
 
+  /**
+   * Loads user data using the user service.
+   */
   private loadUser(): void {
     this.usersService.getById(this.id!).subscribe((response) => {
       this.response = response;
 
       this.fillUserForm(response)
 
-      this.loading = false;
+      this.isLoading = false;
     })
   }
 
+  /**
+   * Updates the existing user using the user service.
+   */
   private updateUser(): void {
     const user: User = {
       ...this.form.controls['personalData'].value,
@@ -220,18 +248,20 @@ export class ProfileComponent extends AbstractForm implements OnDestroy {
       next: () => {
         this.handleSuccessResponse('updated');
       },
-      // TODO Error handling
       error: (error: any) => {
-        this.handleErrorResponse('updated', error);
+        this.handleErrorResponse(error);
       }
     })
   }
 
-  private handleErrorResponse(action: string, error: any) {
-    // TODO Chane error message
-    Swal.fire('Error', `The user could not be ${action}: ${error.error}` , 'warning');
-
-    this.loading = false;
+  /**
+   * Handles the error response from API calls.
+   * @param action The action performed when the error occurred (e.g., 'loaded', 'created', 'updated').
+   * @param error The error object.
+   */
+  private handleErrorResponse(error: any) {
+    informUserOfError(error);
+    this.isLoading = false;
   }
 
   private handleSuccessResponse(action: string){

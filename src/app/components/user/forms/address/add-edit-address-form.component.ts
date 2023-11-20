@@ -9,6 +9,9 @@ import { City } from '../../../../shared/domain/user/address/postal-code/city/ci
 import { PostalCode } from '../../../../shared/domain/user/address/postal-code/postal-code';
 import { AbstractForm } from 'src/app/shared/components/abstract-form';
 
+/**
+ * Component for adding or editing address information.
+ */
 @Component({
   selector: 'app-add-edit-address-form',
   templateUrl: './add-edit-address-form.component.html',
@@ -57,7 +60,10 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
   }
 
   // Methods
-  // Public methods
+  // Lifecycle Hooks
+  /**
+   * A lifecycle hook that is called when a directive, pipe, or service is destroyed. Used for any custom cleanup that needs to occur when the instance is destroyed.
+  */
   public ngOnDestroy(): void {
     this.addressSubscription?.unsubscribe();
     this.citySubscription?.unsubscribe();
@@ -65,6 +71,10 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
     this.postalCodeSubscription?.unsubscribe();
   }
 
+  /**
+   * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
+   * Fills form with the user, if they exist.
+   */
   public ngOnInit(): void {
     this.form = this.rootFormGroup.control.get(this.formGroupName) as FormGroup;
 
@@ -83,6 +93,10 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
   }
 
   // Protected methods
+  /**
+   * Handles the city selection event. Loads postal codes based on the selected city.
+   * @param city The selected city.
+   */
   protected onCitySelected(city: City): void{
     this.postalCodeService.getAll(true, city.name).subscribe(() => {
       this.selectedPostalCode = '';
@@ -90,6 +104,10 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
     })
   }
 
+  /**
+   * Handles the country selection event. Loads cities and resets selected city and postal code.
+   * @param country The selected country.
+   */
   protected onCountrySelected(country: Country): void{
     this.cityService.getAll(true, country.name).subscribe(() => {
       this.selectedCity = '';
@@ -99,18 +117,27 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
   }
 
   // Private methods
+  /**
+   * Loads cities based on the selected country.
+   */
   private loadCities(): void{
     this.citySubscription = this.cityService.getAll(true,this.selectedCountry).subscribe(cityList => {
       this.cities = cityList;
     });
   }
 
+  /**
+   * Loads countries.
+   */
   private loadCountries(): void{
     this.countrySubscription = this.countryService.getAll(true).subscribe(countryList => {
       this.countries = countryList;
     });
   }
 
+  /**
+   * Loads postal codes based on the selected city.
+   */
   private loadPostalCodes(): void{
     this.postalCodeSubscription = this.postalCodeService.getAll(true, this.selectedCity).subscribe(postalCodeList => {
       this.postalCodes = postalCodeList;

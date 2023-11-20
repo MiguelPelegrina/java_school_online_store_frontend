@@ -19,7 +19,7 @@ export function getBase64(image: Blob, callback: (result: string | ArrayBuffer |
  * Shows an error that ocurred to the user.
  * @param error - The error response.
  */
-export function informUserOfError(error: any, isLoading?: boolean){
+export function informUserOfError(error: any){
   console.log(error)
   if(error instanceof HttpErrorResponse){
     if(error.status === 0){

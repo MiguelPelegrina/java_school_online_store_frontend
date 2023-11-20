@@ -7,13 +7,22 @@ import { NgxPermissionsService } from 'ngx-permissions';
 import { AuthUtils } from 'src/app/shared/utils/auth-utils';
 import { informUserOfError } from 'src/app/shared/utils/utils';
 
+/**
+ * Component for user login.
+ */
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css', '../../../app.component.css']
 })
 export class LoginComponent extends AbstractForm {
-
+  /**
+   * Constructor
+   * @param authService The authentication service.
+   * @param formBuilder The form builder for creating the login form.
+   * @param permissionsService The service for handling user permissions.
+   * @param router The Angular router for navigation.
+   */
   constructor(private authService: AuthService, private formBuilder: FormBuilder, private permissionsService: NgxPermissionsService, private router: Router){
     super();
     this.form = this.formBuilder.group({
@@ -22,6 +31,11 @@ export class LoginComponent extends AbstractForm {
     });
   }
 
+  /**
+   * Handles the form submission.
+   * Calls the authentication service to log in the user.
+   * Navigates to the previous page on successful login.
+   */
   protected onSubmit(){
     this.authService.login(this.f['email'].value, this.f['password'].value).subscribe({
       next: (response: any) => {

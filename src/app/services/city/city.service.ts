@@ -29,13 +29,13 @@ export class CityService extends AbstractService<City, string> {
   /**
    * Retrieves a list of cities based on optional query parameters.
    * @param active - Optional. Filters cities based on their active status.
-   * @param countryName - Optional. Filters cities based on the country name.
+   * @param name - Optional. Filters cities based on the country name.
    * @returns An Observable containing the list of cities matching the specified criteria.
    */
-  public override getAll(active?: boolean, countryName?: string): Observable<any> {
+  public override getAll(active?: boolean, name?: string): Observable<any> {
     const queryParams = this.queryBuilderService.buildQueryParams({
       active,
-      country_name: countryName
+      name: name
     });
 
     const searchUrl = `${this.baseUrl}/search${queryParams}`;
