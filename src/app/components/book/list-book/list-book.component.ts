@@ -8,7 +8,7 @@ import { map, merge, Observable, startWith, Subscription, switchMap } from 'rxjs
 import { BookService } from 'src/app/services/book/book.service';
 import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
 import { Book } from 'src/app/shared/domain/book/book';
-import { StringValues } from 'src/app/shared/utils/string-values';
+import { ANIMATION_DURATION, StringValues } from 'src/app/shared/utils/string-values';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -19,8 +19,8 @@ import Swal from 'sweetalert2';
     trigger('detailExpand', [
       state('collapsed, void', style({height: '0px', minHeight: '0'})),
       state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-      transition('expanded <=> void', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
+      transition('expanded <=> collapsed', animate(ANIMATION_DURATION)),
+      transition('expanded <=> void', animate(ANIMATION_DURATION))
     ]),
   ],
 })

@@ -72,7 +72,10 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
     this.usersSubscription?.unsubscribe();
   }
 
-
+  /**
+   * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
+   * Loads the user data, if they are authenticated.
+   */
   public ngOnInit(){
     const token = localStorage.getItem('auth_token');
 

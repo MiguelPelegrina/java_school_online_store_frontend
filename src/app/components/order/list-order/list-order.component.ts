@@ -13,7 +13,7 @@ import { Order } from 'src/app/shared/domain/order/order';
 import { OrderStatus } from 'src/app/shared/domain/order/order-status/order-status';
 import { PaymentStatus } from 'src/app/shared/domain/order/payment-status/payment-status';
 import { IIndexable } from 'src/app/shared/utils/interfaces/i-indexable';
-import { StringValues } from 'src/app/shared/utils/string-values';
+import { ANIMATION_DURATION, StringValues } from 'src/app/shared/utils/string-values';
 import { informUserOfError } from 'src/app/shared/utils/utils';
 import Swal from 'sweetalert2';
 
@@ -25,8 +25,8 @@ import Swal from 'sweetalert2';
     trigger('detailExpand', [
       state('collapsed, void', style({height: '0px', minHeight: '0'})),
       state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-      transition('expanded <=> void', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
+      transition('expanded <=> collapsed', animate(ANIMATION_DURATION)),
+      transition('expanded <=> void', animate(ANIMATION_DURATION))
     ]),
   ],
 })

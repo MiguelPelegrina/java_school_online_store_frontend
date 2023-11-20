@@ -1,5 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
@@ -8,7 +8,7 @@ import { Observable, Subscription, map, merge, startWith, switchMap } from 'rxjs
 import { UserService } from 'src/app/services/user/user.service';
 import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
 import { User } from 'src/app/shared/domain/user/user';
-import { StringValues } from 'src/app/shared/utils/string-values';
+import { ANIMATION_DURATION, StringValues } from 'src/app/shared/utils/string-values';
 
 @Component({
   selector: 'app-list-customer',
@@ -18,8 +18,8 @@ import { StringValues } from 'src/app/shared/utils/string-values';
     trigger('detailExpand', [
       state('collapsed, void', style({height: '0px', minHeight: '0'})),
       state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-      transition('expanded <=> void', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
+      transition('expanded <=> collapsed', animate(ANIMATION_DURATION)),
+      transition('expanded <=> void', animate(ANIMATION_DURATION))
     ]),
   ],
 })
@@ -45,7 +45,7 @@ export class ListCustomerComponent implements AfterViewInit, OnDestroy {
 
   protected dataLength = 0;
 
-  protected dataPage = 0;
+  protected currentPageIndex = 0;
 
   protected dataPageSize = StringValues.DEFAULT_PAGE_SIZE;
 
@@ -59,12 +59,23 @@ export class ListCustomerComponent implements AfterViewInit, OnDestroy {
 
   private userSubscription?: Subscription;
 
-  private active? = undefined;
+  private active?: boolean;
 
   private filter = '';
 
+  /**
+   * Constructor
+   * @param userService The service for managing user-related operations.
+   * @param snackbar The Material Snack Bar to communicate information to the user.
+   */
   constructor(private userService: UserService, private snackbar: MatSnackBar) {}
 
+  // Methods
+  // Lifecycle hooks
+  /**
+   * A lifecycle hook that is called after Angular has fully initialized a component's view.
+   * Loads all customer from the customer service.
+   */
   public ngAfterViewInit(){
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
@@ -73,7 +84,7 @@ export class ListCustomerComponent implements AfterViewInit, OnDestroy {
       switchMap(() => {
         this.isLoading = true;
 
-        this.dataPage = this.paginator.pageIndex;
+        this.currentPageIndex = this.paginator.pageIndex;
 
         this.dataPageSize = this.paginator.pageSize;
 
@@ -88,13 +99,16 @@ export class ListCustomerComponent implements AfterViewInit, OnDestroy {
 
         this.dataLength = response.totalElements;
 
-        this.dataPage = response.pageable.pageNumber;
+        this.currentPageIndex = response.pageable.pageNumber;
 
         return response.content;
       }),
     )
   }
 
+  /**
+   * A lifecycle hook that is called when a directive, pipe, or service is destroyed. Used for any custom cleanup that needs to occur when the instance is destroyed.
+   */
   public ngOnDestroy(): void {
     this.userSubscription?.unsubscribe();
   }

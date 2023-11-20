@@ -1,5 +1,7 @@
 export const DATE_FORMAT = 'DD-MM-YYYY';
 
+export const ANIMATION_DURATION = '225ms cubic-bezier(0.4, 0.0, 0.2, 1)';
+
 /**
  * Class containing all default values and shared URLs.
  */
