@@ -37,13 +37,11 @@ export class ListBookParametersFormatComponent implements OnInit, OnDestroy {
    * Constructor of the component.
    * @param bookFormatService - Service that gets all the book ParametersFormats
    */
-  constructor(
-    private bookFormatService: BookFormatService,
-  ){}
+  constructor(private bookFormatService: BookFormatService){}
 
 
   // Methods
-  // Public methods
+  // Lifecyclle hooks
   /**
    * A lifecycle hook that is called after Angular has fully initialized a component's view.
    * Assigns the Paginator and the Sort components to the respective properties of the book formats datasource to handle pages and sorting of the table.
@@ -64,7 +62,7 @@ export class ListBookParametersFormatComponent implements OnInit, OnDestroy {
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
    * Fills the table with data from the database and sets the filter of the searchbar to search by book format name.
   */
- public ngOnInit(): void {
+  public ngOnInit(): void {
    this.getAllBookFormats();
   }
 
@@ -84,8 +82,11 @@ export class ListBookParametersFormatComponent implements OnInit, OnDestroy {
     this.bookFormatDatasource.filter = filter.trim().toLowerCase();
   }
 
+  /**
+   * Deletes a book format after confirming with the user.
+   * @param name - Name of the book format to be deleted.
+   */
   protected deleteBookFormat(name: string){
-    // TODO Check for consent first
     Swal.fire({
       title: `Do you really want to delete ${name}?`,
       icon: 'warning',
@@ -110,6 +111,9 @@ export class ListBookParametersFormatComponent implements OnInit, OnDestroy {
   }
 
   // Private methods
+  /**
+   * Opens a modal dialog to add a new book genre.
+   */
   private createAddBookFormatDialog(){
     Swal.fire({
       title: 'Add a new format',
@@ -140,6 +144,10 @@ export class ListBookParametersFormatComponent implements OnInit, OnDestroy {
     })
   }
 
+  /**
+   * Checks if the entered book format is valid.
+   * @param bookFormat - The book format to be validated
+   */
   private checkValidFormat(bookFormat: BookFormat){
     if (!bookFormat.name) {
       Swal.showValidationMessage(`Please enter a valid format`)

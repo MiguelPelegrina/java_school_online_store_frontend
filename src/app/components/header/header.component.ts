@@ -5,6 +5,9 @@ import { BoughtBook } from 'src/app/shared/domain/book/bought-book/bought-book';
 import { Cart } from 'src/app/shared/domain/cart/cart';
 import { AuthUtils } from 'src/app/shared/utils/auth-utils';
 
+/**
+ * Header component of the page.
+ */
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -17,18 +20,22 @@ export class HeaderComponent implements OnInit{
 
   protected booksQuantity = 0;
 
-  protected hasRoles: boolean = false;
+  protected hasRoles = false;
 
-  private _cart: Cart = { boughtBooks: [] };
+  private _cart: Cart;
 
   /**
-   *
-   * @param cartService
-   * @param permissionsService
+   * Constructor
+   * @param cartService - Service for managing the shopping cart
+   * @param permissionsService - Service for managing user permissions
    */
-  constructor(private cartService: CartService, private permissionsService: NgxPermissionsService){}
+  constructor(private cartService: CartService, private permissionsService: NgxPermissionsService){
+    this._cart = { boughtBooks: [] }
+  }
 
   // Methods
+  // Public methods
+  // Getter and setter for cart
   @Input()
   get cart(): Cart {
     return this._cart;
@@ -38,10 +45,14 @@ export class HeaderComponent implements OnInit{
     this._cart = cart;
 
     this.booksQuantity = cart.boughtBooks.map((book)=> book.quantity)
-    .reduce((prev, current) => prev + current, 0);
+      .reduce((prev, current) => prev + current, 0);
   }
 
-  // Public methods
+  // Lifecycle hooks
+  /**
+   * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
+   * Loads the permission of the user, if logged in.
+   */
   public ngOnInit(): void {
     this.permissionsService.loadPermissions(AuthUtils.getRoles());
 
@@ -51,15 +62,26 @@ export class HeaderComponent implements OnInit{
   }
 
   // Protected methods
+  /**
+   * Calculate the total cost of the bought books in the cart
+   * @param boughtBooks - List of bought books
+   * @returns Total cost of the books
+   */
   protected getTotal(boughtBooks: BoughtBook[]): number{
     return this.cartService.getTotal(boughtBooks);
   }
 
-  protected onClearCart(){
+  /**
+   * Clear the items from the cart
+   */
+  protected onClearCart(): void{
     this.cartService.clearCart();
   }
 
-  protected onLogout(){
+  /**
+   * Logout the user by clearing local storage and flushing permissions
+   */
+  protected onLogout(): void{
     localStorage.clear();
     this.permissionsService.flushPermissions();
   }

@@ -7,8 +7,10 @@ import { BookGenreService } from 'src/app/services/book/genre/book-genre.service
 import { BookGenre } from 'src/app/shared/domain/book/book-genre/book-genre';
 import Swal from 'sweetalert2';
 
-// TODO Document
 // TODO Optimize to paginate manually like catalog
+/**
+ * Component that shows a table with all book genres.
+ */
 @Component({
   selector: 'app-list-book-genre',
   templateUrl: './list-book-genre.component.html',
@@ -31,26 +33,23 @@ export class ListBookGenreComponent implements OnInit, OnDestroy{
 
   protected displayedColumnsOfBookGenres: string[] = ['genre', 'actions'];
 
-  protected isLoading: boolean = true;
+  protected isLoading = true;
 
   // Constructor
   /**
    * Constructor of the component.
    * @param bookGenreService - Service that gets all the book genres
    */
-  constructor(
-    private bookGenreService: BookGenreService,
-  ){}
-
+  constructor(private bookGenreService: BookGenreService){}
 
   // Methods
-  // Public methods
+  // Lifecycle hooks
   /**
    * A lifecycle hook that is called after Angular has fully initialized a component's view.
    * Assigns the Paginator and the Sort components to the respective properties of the book genres datasource to handle pages and sorting of the table.
   */
   public ngAfterViewInit(){
-   this.bookGenreDatasource.paginator = this.paginator;
+    this.bookGenreDatasource.paginator = this.paginator;
     this.bookGenreDatasource.sort = this.sort;
   }
 
@@ -85,8 +84,11 @@ export class ListBookGenreComponent implements OnInit, OnDestroy{
     this.bookGenreDatasource.filter = filter.trim().toLowerCase();
   }
 
+  /**
+   * Deletes a book genre after confirming with the user.
+   * @param name - Name of the book genre to be deleted.
+   */
   protected deleteBookGenre(name: string){
-    // TODO Check for consent first
     Swal.fire({
       title: `Do you really want to delete ${name}?`,
       icon: 'warning',
@@ -111,6 +113,9 @@ export class ListBookGenreComponent implements OnInit, OnDestroy{
   }
 
   // Private methods
+  /**
+   * Opens a modal dialog to add a new book genre.
+   */
   private createAddBookGenreDialog(){
     Swal.fire({
       title: 'Add a new genre',
@@ -141,6 +146,10 @@ export class ListBookGenreComponent implements OnInit, OnDestroy{
     })
   }
 
+  /**
+   * Checks if the entered book genre is valid.
+   * @param bookGenre - The book genre to be validated
+   */
   private checkValidGenre(bookGenre: BookGenre){
     if (!bookGenre.name) {
       Swal.showValidationMessage(`Please enter a valid genre`)
@@ -156,7 +165,7 @@ export class ListBookGenreComponent implements OnInit, OnDestroy{
   }
 
   /**
-   * Retrieves all books from the database and sorts them by 'active' first and then alphabetically by book 'title' (A-Z). Hides the progress bar when the data is loaded.
+   * Retrieves all book genres from the database, sorts them alphabetically, and updates the component's data.
    */
   private getAllBookGenres(){
     this.bookGenreSubscription = this.bookGenreService.getAll().subscribe(bookGenreList => {

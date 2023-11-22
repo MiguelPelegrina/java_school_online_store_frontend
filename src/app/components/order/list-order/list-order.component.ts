@@ -1,5 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
@@ -37,7 +37,7 @@ import Swal from 'sweetalert2';
 // - Order status
 // - Payment method
 // - Payment status
-export class ListOrderComponent implements OnDestroy, OnInit {
+export class ListOrderComponent implements AfterViewInit, OnDestroy, OnInit {
   // Subcomponents
   @ViewChild(MatPaginator)
   protected paginator!: MatPaginator;
@@ -85,12 +85,22 @@ export class ListOrderComponent implements OnDestroy, OnInit {
 
   private filter = '';
 
+  /**
+   * Constructor
+   * @param orderService
+   * @param orderStatusService
+   * @param paymentStatusService
+   * @param snackbar
+   */
   constructor(
     private orderService: OrderService,
     private orderStatusService: OrderStatusService,
     private paymentStatusService: PaymentStatusService,
-    private snackbar: MatSnackBar) {}
+    private snackbar: MatSnackBar
+  ) {}
 
+  // Methods
+  // Lifecycle hooks
   /**
    * A lifecycle hook that is called after Angular has fully initialized a component's view.
    * Assigns the Paginator and the Sort components to the respective properties of the datasource to handle pages and sorting of the table.
@@ -140,7 +150,6 @@ export class ListOrderComponent implements OnDestroy, OnInit {
     }
   }
 
-
   /**
    * A lifecycle hook that is called when a directive, pipe, or service is destroyed. Used for any custom cleanup that needs to occur when the instance is destroyed.
   */
@@ -160,6 +169,7 @@ export class ListOrderComponent implements OnDestroy, OnInit {
     this.loadAllOrders();
   }
 
+  // Protected methods
   protected getTotal(): number | undefined{
     return this.expandedElement?.orderedBooks.map((orderedBook) => orderedBook.amount * orderedBook.book.price).reduce((prev, current) => prev + current, 0);
   }
@@ -268,7 +278,7 @@ export class ListOrderComponent implements OnDestroy, OnInit {
 
   private informUserOfError(error: any){
     this.isLoading = false;
-    informUserOfError(error)
+    informUserOfError(error);
   }
 
   /**
@@ -293,7 +303,6 @@ export class ListOrderComponent implements OnDestroy, OnInit {
     this.orderStatusSubscription = this.orderStatusService.getAll(true).subscribe({
       next: (response) => {
         this.orderStatuses = response;
-        Swal.fire('Reorder successful', '', 'success');
       },
       error: (error) => {
         this.informUserOfError(error);
