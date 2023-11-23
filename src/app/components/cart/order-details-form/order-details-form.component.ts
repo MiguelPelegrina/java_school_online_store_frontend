@@ -11,6 +11,9 @@ import { OrderStatus } from 'src/app/shared/domain/order/order-status/order-stat
 import { PaymentMethod } from 'src/app/shared/domain/order/payment-method/payment-method';
 import { PaymentStatus } from 'src/app/shared/domain/order/payment-status/payment-status';
 
+/**
+ * Angular component representing a form for order details. Includes inputs for selecting delivery method, order status, payment method, and payment status.
+ */
 @Component({
   selector: 'app-order-details-form',
   templateUrl: './order-details-form.component.html',
@@ -20,25 +23,43 @@ export class OrderDetailsFormComponent extends AbstractForm implements OnDestroy
   // Fields
   @Input()
   public formGroupName!: string;
+
   @Input()
   public selectedDeliveryMethod? = '';
+
   @Input()
   public selectedOrderStatus? = '';
+
   @Input()
   public selectedPaymentMethod? = '';
+
   @Input()
   public selectedPaymentStatus? = '';
 
   protected deliveryMethods: DeliveryMethod[] = [];
+
   protected orderStatuses: OrderStatus[] = [];
+
   protected paymentMethods: PaymentMethod[] = [];
+
   protected paymentStatuses: PaymentStatus[] = [];
 
   private deliveryMethodSubscription?: Subscription;
+
   private orderStatusSubscription?: Subscription;
+
   private paymentMethodSubscription?: Subscription;
+
   private paymentStatusSubscription?: Subscription;
 
+  /**
+   * Constructor of the component.
+   * @param deliveryMethodService - Service for managing delivery methods
+   * @param orderStatusService - Service for managing order statuses
+   * @param paymentMethodService - Service for managing payment methods
+   * @param paymentStatusService - Service for managing payment statuses
+   * @param rootFormGroup - Reference to the root form group
+   */
   constructor(
     private deliveryMethodService: DeliveryMethodService,
     private orderStatusService: OrderStatusService,
@@ -49,7 +70,11 @@ export class OrderDetailsFormComponent extends AbstractForm implements OnDestroy
   }
 
   // Methods
-  // Public methods
+  // Lifecycle hooks
+  /**
+   * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
+   * Fills the form to show the user their address and the options for delivery and payment methods.
+   */
   public ngOnInit(): void {
     this.form = this.rootFormGroup.control.get(this.formGroupName) as FormGroup;
 
@@ -62,6 +87,10 @@ export class OrderDetailsFormComponent extends AbstractForm implements OnDestroy
     this.selectedPaymentStatus = this.form.value.paymentStatus;
   }
 
+  /**
+   * A lifecycle hook that is called when a directive, pipe, or service is destroyed. Used for any custom cleanup that needs to occur when the instance is destroyed.
+   * All subscriptions are unsubscribed.
+   */
   public ngOnDestroy(): void {
     this.deliveryMethodSubscription?.unsubscribe();
     this.orderStatusSubscription?.unsubscribe();
@@ -70,28 +99,39 @@ export class OrderDetailsFormComponent extends AbstractForm implements OnDestroy
   }
 
   // Private methods
+  /**
+   * Loads available delivery methods and updates the deliveryMethods array.
+   */
   private loadDeliveryMethods(){
     this.deliveryMethodSubscription = this.deliveryMethodService.getAll(true).subscribe((response) => {
       this.deliveryMethods = response;
     })
   }
 
+  /**
+   * Loads available order statuses and updates the orderStatuses array.
+   */
   private loadOrderStatuses(){
     this.orderStatusSubscription = this.orderStatusService.getAll(true).subscribe((response) => {
       this.orderStatuses = response;
     })
   }
 
+  /**
+   * Loads available payment methods and updates the paymentMethods array.
+   */
   private loadPaymentMethods(){
     this.paymentMethodSubscription = this.paymentMethodService.getAll(true).subscribe((response) => {
       this.paymentMethods = response;
     })
   }
 
+  /**
+   * Loads available payment statuses and updates the paymentStatuses array.
+   */
   private loadPaymentStatuses(){
     this.paymentStatusSubscription = this.paymentStatusService.getAll(true).subscribe((response) => {
       this.paymentStatuses = response;
     })
   }
-
 }

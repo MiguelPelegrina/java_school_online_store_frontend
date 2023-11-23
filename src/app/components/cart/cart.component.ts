@@ -17,6 +17,9 @@ import { StringValues } from 'src/app/shared/utils/string-values';
 import { informUserOfError } from 'src/app/shared/utils/utils';
 import Swal from 'sweetalert2';
 
+/**
+ *  Represents the shopping cart functionality for user orders.
+ */
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
@@ -55,6 +58,15 @@ export class CartComponent implements OnInit{
 
   protected user?: User;
 
+  /**
+   * Constructor
+   * @param cartService - Service for managing the user's shopping cart.
+   * @param fb - FormBuilder for handling reactive forms.
+   * @param orderService - Service for managing user orders.
+   * @param router - Angular router for navigation.
+   * @param usersService - Service for managing user data.
+   * @param breakpointObserver - Observer for breakpoints to determine stepper orientation.
+   */
   constructor(
     private cartService: CartService,
     private fb: FormBuilder,
@@ -69,7 +81,11 @@ export class CartComponent implements OnInit{
     }
 
   // Methods
-  // Public methods
+  // Lifecycle hooks
+  /**
+   * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
+   * Fills the cart with data from the localStorage. If the user is not logged in, they are redirected to the login.
+   */
   public ngOnInit(): void {
     this.cartService.cartSubject.subscribe((_cart: Cart) => {
       this.cart = _cart;
@@ -83,33 +99,100 @@ export class CartComponent implements OnInit{
       this.id = tokenInfo.id;
 
       this.loadUser();
-
     } else {
+      this.redirectUserToLogin();
+    }
+  }
+
+
+
+  // Protected methods
+  /**
+   * Calculates the total price of bought books in the cart.
+   * @param boughtBooks - Books in the cart.
+   * @returns - Total price.
+   */
+  protected getTotal(boughtBooks: BoughtBook[]): number{
+    return this.cartService.getTotal(boughtBooks);
+  }
+
+  /**
+   * Clears the shopping cart.
+   */
+  protected onClearCart(): void {
+    // TODO Ask user for confirmation
+    this.cartService.clearCart();
+  }
+
+  /**
+   * Submits the order after user confirmation.
+   * Creates an order with books, clears the cart, and displays a success message.
+   */
+  protected onSubmit(){
+    if(!this.form.invalid){
       Swal.fire({
-        allowEscapeKey: false,
-        allowOutsideClick: false,
-        title: 'You need to log in before checking out',
-        icon: 'warning',
+        title: 'Confirm your order',
+        icon: 'info',
+        showCancelButton: true,
         focusConfirm: true,
-        confirmButtonText: 'Login',
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
       }).then((result) => {
         if(result.isConfirmed){
-          this.router.navigate(['/auth/login']);
+          this.createOrder();
         }
       })
     }
   }
 
-  private loadUser() {
-    this.usersService.getById(this.id!).subscribe((response) => {
-      this.user = response;
+  /**
+ * Creates a new order using the form data, user information, and items in the shopping cart. Submits the order to the order service and handles
+ * the success and error scenarios accordingly.
+ */
+  private createOrder() {
+    const order: Order = {
+      orderedBooks: [],
+      date: new Date(),
+      deliveryMethod: {name: this.form.value.orderDetails.deliveryMethod},
+      orderStatus: {name: this.selectedOrderStatus},
+      paymentMethod: {name: this.form.value.orderDetails.paymentMethod},
+      paymentStatus: {name: this.selectedPaymentStatus},
+      user: this.user!
+    };
 
-      this.fillOrderForm(response);
+    const orderedBooks = this.cart.boughtBooks.map((book) => {
+      return {
+        book: book,
+        amount: book.quantity,
+        id: 0,
+      };
+    });
 
-      this.loading = false;
-    })
+    this.orderService.createOrderWithBooks(order, orderedBooks).subscribe({
+      next: () => {
+        this.stepper.next();
+        this.cartService.clearCart();
+        Swal.fire('Order issued succesfully', '', 'success');
+      },
+      error: (error) => {
+        informUserOfError(error);
+      }
+    });
   }
 
+   /**
+   * Removes a book from the shopping cart.
+   * @param bookBought - Book to be removed.
+   */
+  protected onRemoveFromCart(bookBought: BoughtBook): void {
+    this.cartService.removeFromCart(bookBought);
+  }
+
+  // Private methods
+  /**
+   * Fills the reactive form with user address and order details.
+   * @param response - User information.
+   */
   private fillOrderForm(response: any){
     this.form = this.fb.group({
       address: this.fb.group({
@@ -128,61 +211,32 @@ export class CartComponent implements OnInit{
     });
   }
 
-  // Protected methods
-  protected getTotal(boughtBooks: BoughtBook[]): number{
-    return this.cartService.getTotal(boughtBooks);
+  /**
+   * Loads user information based on the authenticated user ID.
+   */
+  private loadUser() {
+    this.usersService.getById(this.id!).subscribe((response) => {
+      this.user = response;
+
+      this.fillOrderForm(response);
+
+      this.loading = false;
+    })
   }
 
-  protected onClearCart(): void {
-    // TODO Ask user for confirmation
-    this.cartService.clearCart();
-  }
-
-  protected onSubmit(){
-    if(!this.form.invalid){
-      Swal.fire({
-        title: 'Confirm your order',
-        icon: 'info',
-        showCancelButton: true,
-        focusConfirm: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No'
-      }).then((result) => {
-        if(result.isConfirmed){
-          const order: Order = {
-            orderedBooks: [],
-            date: new Date(),
-            deliveryMethod: {name: this.form.value.orderDetails.deliveryMethod},
-            orderStatus: {name: this.selectedOrderStatus},
-            paymentMethod: {name: this.form.value.orderDetails.paymentMethod},
-            paymentStatus: {name: this.selectedPaymentStatus},
-            user: this.user!
-          };
-
-          const orderedBooks = this.cart.boughtBooks.map((book) => {
-            return {
-              book: book,
-              amount: book.quantity,
-              id: 0,
-            };
-          });
-
-          this.orderService.createOrderWithBooks(order, orderedBooks).subscribe({
-            next: () => {
-              this.stepper.next();
-              this.cartService.clearCart();
-              Swal.fire('Order issued succesfully', '', 'success');
-            },
-            error: (error) => {
-              informUserOfError(error);
-            }
-          });
-        }
-      })
-    }
-  }
-
-  protected onRemoveFromCart(bookBought: BoughtBook): void {
-    this.cartService.removeFromCart(bookBought);
+ /**
+  * Informing the user that they need to log in before checking out. If the user confirms, it redirects them to the login page.
+  */
+  private redirectUserToLogin() {
+    Swal.fire({
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      title: 'You need to log in before checking out',
+      icon: 'warning',
+      focusConfirm: true,
+      confirmButtonText: 'Login',
+    }).then(() => {
+        this.router.navigate(['/auth/login']);
+    })
   }
 }
