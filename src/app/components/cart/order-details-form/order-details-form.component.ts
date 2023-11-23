@@ -10,6 +10,7 @@ import { DeliveryMethod } from 'src/app/shared/domain/order/delivery-method/deli
 import { OrderStatus } from 'src/app/shared/domain/order/order-status/order-status';
 import { PaymentMethod } from 'src/app/shared/domain/order/payment-method/payment-method';
 import { PaymentStatus } from 'src/app/shared/domain/order/payment-status/payment-status';
+import { informUserOfError } from 'src/app/shared/utils/utils';
 
 /**
  * Angular component representing a form for order details. Includes inputs for selecting delivery method, order status, payment method, and payment status.
@@ -103,8 +104,13 @@ export class OrderDetailsFormComponent extends AbstractForm implements OnDestroy
    * Loads available delivery methods and updates the deliveryMethods array.
    */
   private loadDeliveryMethods(){
-    this.deliveryMethodSubscription = this.deliveryMethodService.getAll(true).subscribe((response) => {
-      this.deliveryMethods = response;
+    this.deliveryMethodSubscription = this.deliveryMethodService.getAll(true).subscribe({
+      next: (response) => {
+        this.deliveryMethods = response;
+      },
+      error: (error) => {
+        informUserOfError(error);
+      }
     })
   }
 
@@ -112,8 +118,13 @@ export class OrderDetailsFormComponent extends AbstractForm implements OnDestroy
    * Loads available order statuses and updates the orderStatuses array.
    */
   private loadOrderStatuses(){
-    this.orderStatusSubscription = this.orderStatusService.getAll(true).subscribe((response) => {
-      this.orderStatuses = response;
+    this.orderStatusSubscription = this.orderStatusService.getAll(true).subscribe({
+      next: (response) => {
+        this.orderStatuses = response;
+      },
+      error: (error) => {
+        informUserOfError(error);
+      }
     })
   }
 
@@ -121,8 +132,13 @@ export class OrderDetailsFormComponent extends AbstractForm implements OnDestroy
    * Loads available payment methods and updates the paymentMethods array.
    */
   private loadPaymentMethods(){
-    this.paymentMethodSubscription = this.paymentMethodService.getAll(true).subscribe((response) => {
-      this.paymentMethods = response;
+    this.paymentMethodSubscription = this.paymentMethodService.getAll(true).subscribe({
+      next: (response) => {
+        this.paymentMethods = response;
+      },
+      error: (error) => {
+        informUserOfError(error);
+      }
     })
   }
 
@@ -130,8 +146,13 @@ export class OrderDetailsFormComponent extends AbstractForm implements OnDestroy
    * Loads available payment statuses and updates the paymentStatuses array.
    */
   private loadPaymentStatuses(){
-    this.paymentStatusSubscription = this.paymentStatusService.getAll(true).subscribe((response) => {
-      this.paymentStatuses = response;
+    this.paymentStatusSubscription = this.paymentStatusService.getAll(true).subscribe({
+      next: (response) => {
+        this.paymentStatuses = response;
+      },
+      error: (error) => {
+        informUserOfError(error);
+      }
     })
   }
 }

@@ -17,6 +17,9 @@ import { ANIMATION_DURATION, StringValues } from 'src/app/shared/utils/string-va
 import { informUserOfError } from 'src/app/shared/utils/utils';
 import Swal from 'sweetalert2';
 
+/**
+ * Component that lists all orders in a table.
+ */
 @Component({
   selector: 'app-list-order',
   templateUrl: './list-order.component.html',
@@ -30,7 +33,6 @@ import Swal from 'sweetalert2';
     ]),
   ],
 })
-
 // TODO Advanced filter for orders:
 // - Date
 // - Delivery method
@@ -85,12 +87,12 @@ export class ListOrderComponent implements AfterViewInit, OnDestroy, OnInit {
 
   private filter = '';
 
-  /**
+   /**
    * Constructor
-   * @param orderService
-   * @param orderStatusService
-   * @param paymentStatusService
-   * @param snackbar
+   * @param orderService - Service for handling order-related operations.
+   * @param orderStatusService - Service for handling order status-related operations.
+   * @param paymentStatusService - Service for handling payment status-related operations.
+   * @param snackbar - Service for displaying snack bar messages.
    */
   constructor(
     private orderService: OrderService,
@@ -170,10 +172,18 @@ export class ListOrderComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   // Protected methods
+  /**
+   * Gets the total cost of the expanded order.
+   * @returns The total cost of the expanded order.
+   */
   protected getTotal(): number | undefined{
     return this.expandedElement?.orderedBooks.map((orderedBook) => orderedBook.amount * orderedBook.book.price).reduce((prev, current) => prev + current, 0);
   }
 
+  /**
+   * Initiates the reorder process for the specified order. Displays a confirmation dialog before reordering.
+   * @param order - The order to be reordered.
+   */
   protected reorder(order: Order){
     Swal.fire({
       title:'Confirm reorder',
@@ -186,7 +196,6 @@ export class ListOrderComponent implements AfterViewInit, OnDestroy, OnInit {
       cancelButtonText: 'No'})
     .then((result) => {
       if(result.isConfirmed){
-
         order.id = undefined;
         order.date = new Date();
         order.orderStatus.name = StringValues.DEFAULT_ORDER_STATUS_ON_ORDER;
@@ -205,10 +214,18 @@ export class ListOrderComponent implements AfterViewInit, OnDestroy, OnInit {
     })
   }
 
+  /**
+   * Sets the filter for the orders based on the search bar input.
+   * @param filter - The filter string.
+   */
   protected setFilter(filter: string){
     this.filter = filter;
   }
 
+  /**
+   * Sets the order status for the specified order. Initiates the update process and handles the response.
+   * @param order - The order to be updated.
+   */
   protected setOrderStatus(order: Order){
     this.allowUpdates = false;
     this.isLoading = true;
@@ -221,6 +238,11 @@ export class ListOrderComponent implements AfterViewInit, OnDestroy, OnInit {
     }
   }
 
+  /**
+   * Sets the payment status for the specified order.
+   * Initiates the update process and handles the response.
+   * @param order - The order to be updated.
+   */
   protected setPaymentStatus(order: Order){
     this.allowUpdates = false;
     this.isLoading = true;
@@ -299,6 +321,9 @@ export class ListOrderComponent implements AfterViewInit, OnDestroy, OnInit {
     })
   }
 
+  /**
+   * Loads available order statuses and updates the orderStatuses array.
+   */
   private loadOrderStatuses(){
     this.orderStatusSubscription = this.orderStatusService.getAll(true).subscribe({
       next: (response) => {
@@ -310,9 +335,17 @@ export class ListOrderComponent implements AfterViewInit, OnDestroy, OnInit {
     });
   }
 
+  /**
+   * Loads available payment statuses and updates the paymentStatuses array.
+   */
   private loadPaymentStatuses(){
-    this.paymentStatusSubscription = this.paymentStatusService.getAll(true).subscribe((response) => {
-      this.paymentStatuses = response;
+    this.paymentStatusSubscription = this.paymentStatusService.getAll(true).subscribe({
+      next: (response) => {
+        this.paymentStatuses = response;
+      },
+      error: (error) => {
+        this.informUserOfError(error)
+      }
     })
   }
 }
