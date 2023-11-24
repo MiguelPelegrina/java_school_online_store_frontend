@@ -3,11 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BookService } from 'src/app/services/book/book.service';
 import { Book } from 'src/app/shared/domain/book/book';
 
-// TODO Document
 @Component({
   selector: 'app-view-book',
   templateUrl: './view-book.component.html',
-  styleUrls: ['./view-book.component.css']
+  styleUrls: ['./view-book.component.css', '../../../app.component.css']
 })
 export class ViewBookComponent implements OnInit {
   // Fields
@@ -34,7 +33,7 @@ export class ViewBookComponent implements OnInit {
 
   protected image: string = '';
 
-  protected isBookLoaded: boolean = false;
+  protected isLoading: boolean = true;
 
   // Constructor
   constructor(private activatedRoute: ActivatedRoute, private router: Router, private service: BookService){}
@@ -45,7 +44,7 @@ export class ViewBookComponent implements OnInit {
     this.id = this.activatedRoute.snapshot.params['id'];
     this.service.getById(this.id).subscribe(response => {
       this.book = response;
-      this.isBookLoaded = true;
+      this.isLoading = false;
     });
   }
 
