@@ -4,6 +4,10 @@ import { Subscription } from 'rxjs';
 import { BookGenreService } from 'src/app/services/book/genre/book-genre.service';
 import { BookGenre } from 'src/app/shared/domain/book/book-genre/book-genre';
 
+/**
+ * Angular component representing a set of filters for book genres.
+ * This component provides a list of genres that users can select to filter books based on genre.
+ */
 @Component({
   selector: 'app-filters',
   templateUrl: './filters.component.html',
@@ -24,6 +28,10 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   private genre: string = '';
 
+  /**
+   * Constructor of the component.
+   * @param service - Service for managing book genres
+   */
   constructor(private service: BookGenreService) {}
 
   /**
@@ -35,7 +43,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   /**
    * A lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
-   * Fills the collection with data from the database
+   * Fills the collection with data from the database.
    */
   public ngOnInit(): void {
     this.bookGenreSubscription = this.service.getAll().subscribe(response => {
@@ -43,6 +51,11 @@ export class FiltersComponent implements OnInit, OnDestroy {
     })
   }
 
+  /**
+   * Event handler for when a genre is selected or deselected.
+   * Emits the selected genre through the `showGenre` event.
+   * @param genre - The selected genre
+   */
   protected onShowGenre(genre: string): void {
     if(this.genre === genre){
       this.genre = '';
@@ -54,9 +67,11 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.showGenre.next(this.genre);
   }
 
+  /**
+   * Resets the selected genre and emits an event with an empty string to indicate no genre filtering.
+   */
   protected resetGenre(){
     this.matSelect._items.forEach((data: MatListOption) => data._setSelected(false));
-    // TODO Not sure about this
     this.showGenre.next('');
   }
 }
