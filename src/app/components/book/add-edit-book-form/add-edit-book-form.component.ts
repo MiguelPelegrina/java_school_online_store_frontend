@@ -97,7 +97,6 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
 
     // Generate the form
     this.form = this.fb.group({
-      // TODO Not sure if right, should I use form?.value instead of empty values?
       active: [false, Validators.required],
       id: [''],
       image: ['', Validators.required],
