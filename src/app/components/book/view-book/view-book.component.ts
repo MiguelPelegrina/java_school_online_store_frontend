@@ -3,6 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BookService } from 'src/app/services/book/book.service';
 import { Book } from 'src/app/shared/domain/book/book';
 
+/**
+ * Angular component representing the view details page for a book.
+ */
 @Component({
   selector: 'app-view-book',
   templateUrl: './view-book.component.html',
@@ -10,8 +13,8 @@ import { Book } from 'src/app/shared/domain/book/book';
 })
 export class ViewBookComponent implements OnInit {
   // Fields
-  // TODO Not sure if default values or undefined fields with ? and continous checking with if's and ngIf's is better
   protected id: number = 0;
+
   protected book: Book = {
     active: true,
     id: 0,
@@ -35,11 +38,20 @@ export class ViewBookComponent implements OnInit {
 
   protected isLoading: boolean = true;
 
-  // Constructor
+  /**
+   * Constructor of the component.
+   * @param activatedRoute - Service to access the activated route
+   * @param router - Service to navigate between routes
+   * @param service - Service for managing books
+   */
   constructor(private activatedRoute: ActivatedRoute, private router: Router, private service: BookService){}
 
   // Methods
-  // Public
+  // Lifecycle hooks
+   /**
+   * Lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
+   * Retrieves the book ID from the route parameters and loads the book details from the service.
+   */
   public ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params['id'];
     this.service.getById(this.id).subscribe(response => {
@@ -50,8 +62,8 @@ export class ViewBookComponent implements OnInit {
 
   // Protected
   /**
-   *
-   * @param id Number
+   * Navigates to the edit page for the specified book ID.
+   * @param id - The ID of the book to edit
    */
   protected editBook(id: number){
     this.router.navigate(['books/edit', id]);

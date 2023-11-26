@@ -9,8 +9,10 @@ import { BookService } from 'src/app/services/book/book.service';
 import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
 import { Book } from 'src/app/shared/domain/book/book';
 import { ANIMATION_DURATION, StringValues } from 'src/app/shared/utils/string-values';
-import Swal from 'sweetalert2';
 
+/**
+ * Angular component representing a list of books with search, sorting, and pagination features.
+ */
 @Component({
   selector: 'app-list-book',
   templateUrl: './list-book.component.html',
@@ -78,7 +80,7 @@ export class ListBookComponent implements AfterViewInit, OnDestroy {
   // Methods
   // Public methods
   /**
-   * A lifecycle hook that is called after Angular has fully initialized a component's view.
+   * A lifecycle hook that is called after Angular has fully initialized a component's view. Sets up subscriptions for sorting, pagination, and search bar events.
    */
   public ngAfterViewInit(){
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
@@ -110,6 +112,11 @@ export class ListBookComponent implements AfterViewInit, OnDestroy {
     )
   }
 
+  // Lifecycle hooks
+  /**
+   * Lifecycle hook that is called when a directive, pipe, or service is destroyed.
+   * Used for any custom cleanup that needs to occur when the instance is destroyed.
+   */
   public ngOnDestroy(): void {
     this.bookSubscription?.unsubscribe();
   }
@@ -124,11 +131,15 @@ export class ListBookComponent implements AfterViewInit, OnDestroy {
     this.isLoading = true;
 
     this.bookSubscription = this.bookService.update(book.id, book).subscribe({
-      complete: () => this.handleUpdateSuccessResponse(`Activity of ${book.title} updated successfully!`),
+      next: () => this.handleUpdateSuccessResponse(`Activity of ${book.title} updated successfully!`),
       error: () => this.handleUpdateErrorResponse(book, `Activity of ${book.title} could not be changed.`)
     })
   }
 
+  /**
+   * Sets the filter string for searching books.
+   * @param filter - Value to filter books.
+   */
   protected setFilter(filter: string){
     this.filter = filter;
   }

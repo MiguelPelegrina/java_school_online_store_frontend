@@ -9,10 +9,12 @@ import { BookGenre } from '../../../shared/domain/book/book-genre/book-genre';
 import Swal from 'sweetalert2';
 import { Subscription } from 'rxjs';
 import { AbstractForm } from 'src/app/shared/components/abstract-form';
-import { getBase64 } from 'src/app/shared/utils/utils';
+import { getBase64, informUserOfError } from 'src/app/shared/utils/utils';
 import { requiredFileType } from 'src/app/shared/utils/required-file-type';
 
-// TODO Document
+/**
+ * Component representing a form for adding or editing a book.
+ */
 @Component({
   selector: 'app-add-edit-book-form',
   templateUrl: './add-edit-book-form.component.html',
@@ -46,14 +48,13 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
 
   // Constructor
   /**
-   * Default constructor
-   * @param bookService
-   * @param bookFormatService
-   * @param bookGenreService
-   * @param fb
-   * @param route
-   * @param router
-   * @param snackbar
+   * Constructor of the component.
+   * @param bookService - Service for managing books
+   * @param bookFormatService - Service for managing book formats
+   * @param bookGenreService - Service for managing book genres
+   * @param fb - FormBuilder for working with forms
+   * @param route - ActivatedRoute for accessing route parameters
+   * @param router - Router for navigation
    */
   constructor(
     private bookService: BookService,
@@ -67,15 +68,19 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
   }
 
   // Methods
-  // Public methods
+  // Lifecycle hooks
+  /**
+   * Lifecycle hook that is called when a directive, pipe, or service is destroyed. Used for any custom cleanup that needs to occur when the instance is destroyed.
+   */
   public ngOnDestroy(): void {
     this.booksSubscription?.unsubscribe();
     this.bookFormatsSubscription?.unsubscribe();
     this.bookGenresSubscription?.unsubscribe()
   }
 
-  /**
-   *
+   /**
+   * Lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
+   * Initializes the form, loads available genres and formats, and loads the book if in edit mode.
    */
   public ngOnInit(): void {
     // Get the book id
@@ -115,6 +120,10 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
   }
 
   // Protected methods
+  /**
+   * Event handler for file selection in the form. Converts the selected image file to a base64 string.
+   * @param event - The file selection event
+   */
   protected onFileSelected(event: any): void{
     const inputElement: HTMLInputElement = event.target;
 
@@ -132,13 +141,16 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
     }
   }
 
+  /**
+   * Resets the currently selected image in the form.
+   */
   protected resetImage(){
     this.image = '';
     this.form.get('image')?.setValue('');
   }
 
   /**
-   *
+   * Event handler for form submission. Submits the form data for creating or updating a book.
    */
   protected onSubmit(){
     this.submitted = true;
@@ -156,68 +168,89 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
 
   // Private methods
   /**
-   *
+   * Submits a request to create a new book using the form data.
    */
   private createBook(){
-    this.booksSubscription = this.bookService.create(this.form.value)
-      .subscribe({
+    this.booksSubscription = this.bookService.create(this.form.value).subscribe({
         next: () => {
           this.handleSuccessResponse('created');
         },
-        error: error => {
-          this.handleErrorResponse('created', error);
+        error: (error) => {
+          informUserOfError(error);
         }
       })
   }
 
-  private handleErrorResponse(action: string, error: any) {
-    Swal.fire('Error', `The book could not be ${action}: ${error.message}` , 'warning');
-    this.isLoading = false;
-  }
-
+  /**
+   * Handles success response from a book creation or update operation.
+   * @param action - The action (created or updated)
+   */
   private handleSuccessResponse(action: string){
     Swal.fire(`Book ${action}!`,`The book ${this.form.value.title} has been ${action} successfully`,`success`);
     this.router.navigate(['/books']);
   }
 
+  /**
+   * Loads the details of an existing book when in edit mode.
+   */
   private loadBook(): void {
-    this.booksSubscription = this.bookService.getById(this.id!).subscribe((response) => {
-      this.selectedFormat = response.parameters.format.name;
-      this.selectedGenre = response.genre.name;
+    this.booksSubscription = this.bookService.getById(this.id!).subscribe({
+      next: (response) => {
+        this.selectedFormat = response.parameters.format.name;
+        this.selectedGenre = response.genre.name;
 
-      if(response.image){
-        this.image = response.image;
+        if(response.image){
+          this.image = response.image;
+        }
+
+        this.form.patchValue(response);
+
+        this.isLoading = false;
+      },
+      error: (error) => {
+        informUserOfError(error);
       }
-
-      this.form.patchValue(response);
-
-      this.isLoading = false;
-    });
-  }
-
-  private loadFormats(): void {
-    this.bookGenresSubscription = this.bookFormatService.getAll().subscribe(bookFormatList => {
-      this.formatTypes = bookFormatList;
-    })
-  }
-
-  private loadGenres(): void {
-    this.bookFormatsSubscription = this.bookGenreService.getAll().subscribe(bookGenreList => {
-      this.genreTypes = bookGenreList;
     });
   }
 
   /**
-   *
+   * Loads the list of available book formats for selection in the form.
+   */
+  private loadFormats(): void {
+    this.bookGenresSubscription = this.bookFormatService.getAll().subscribe({
+      next: (bookFormatList) => {
+        this.formatTypes = bookFormatList
+      },
+      error: (error) => {
+        informUserOfError(error)
+      }
+    })
+  }
+
+  /**
+   * Loads the list of available book genres for selection in the form.
+   */
+  private loadGenres(): void {
+    this.bookFormatsSubscription = this.bookGenreService.getAll().subscribe({
+      next: (bookGenreList) => {
+        this.genreTypes = bookGenreList
+      },
+      error: (error) => {
+        informUserOfError(error)
+      }
+    });
+  }
+
+  /**
+   * Submits a request to update an existing book using the form data.
    */
   private updateBook(): void{
-    this.booksSubscription = this.bookService.update(this.id!, this.form.value)
-      .subscribe({
+    this.booksSubscription = this.bookService.update(this.id!, this.form.value).subscribe({
         next: () => {
           this.handleSuccessResponse('updated');
         },
-        error: error => {
-          this.handleErrorResponse('updated', error);
+        error: (error) => {
+          informUserOfError(error);
         }
       })
   }

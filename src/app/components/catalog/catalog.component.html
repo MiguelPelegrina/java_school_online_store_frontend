@@ -1,13 +1,13 @@
-<!-- PROGRESS BAR -->
-<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
-<!-- /PROGRESS BAR -->
-
 <!-- TITLE -->
 <h1 class="text-center p-3">Catalog</h1>
 <!-- /TITLE -->
 
 <!-- CONTAINER -->
-<mat-drawer-container [autosize]="true" class="drawer-container mat-elevation-z8">
+<mat-drawer-container autosize class="drawer-container mat-elevation-z8">
+  <div class="loading-shade" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
+  </div>
+
   <!-- DRAWER -->
   <mat-drawer class="p-3" mode="side" opened>
     <app-filters (showGenre)="onShowGenre($event)"></app-filters>
@@ -40,8 +40,6 @@
       [rowHeight]="rowHeight"
     >
       <mat-grid-tile *ngFor="let element of data">
-        <!-- TODO Decide which one looks better -->
-        <!-- <app-book-box [ngClass]="{'w-100': cols === 1}" [fullWidthMode]="cols === 1"></app-book-box> -->
         <app-book-box
           (addToCart)="onAddToCart($event)"
           [book]="element"
