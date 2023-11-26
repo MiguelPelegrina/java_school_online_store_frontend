@@ -22,5 +22,5 @@ jobs:
       - name: npm install and npm run CI commands
         run: |
           npm i
-          npm run test:ci
-          npm run build:ci
+          npm run test
+          npm run build
