@@ -50,7 +50,6 @@
         <mat-form-field class="form-group w-100">
           <mat-label>Your date of birth </mat-label>
           <input formControlName="dateOfBirth" matInput [matDatepicker]="picker" required>
-          <!-- TODO Change format -->
           <mat-hint>DD/MM/YYYY</mat-hint>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
