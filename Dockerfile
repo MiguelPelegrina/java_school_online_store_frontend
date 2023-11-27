@@ -1,6 +1,8 @@
-FROM nginx:alpine
-
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY target/frontend-0.0.1-SNAPSHOT.tar.gz ./frontend-0.0.1-SNAPSHOT.tar.gz
-
-RUN tar -xvpzf ./frontend-0.0.1-SNAPSHOT.tar.gz -C /usr/share/nginx/html
+FROM node:18.10.0-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+EXPOSE 4200
+RUN npm install -g @angular/cli
+RUN npm install
+COPY . .
+CMD ["npm", "start"]

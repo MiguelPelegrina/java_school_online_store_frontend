@@ -9,6 +9,7 @@ import { UserService } from 'src/app/services/user/user.service';
 import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
 import { User } from 'src/app/shared/domain/user/user';
 import { ANIMATION_DURATION, StringValues } from 'src/app/shared/utils/string-values';
+import { informUserOfError } from 'src/app/shared/utils/utils';
 
 @Component({
   selector: 'app-list-customer',
@@ -143,6 +144,10 @@ export class ListCustomerComponent implements AfterViewInit, OnDestroy {
 
         this.dataSource.data = response.content;
 
+        this.isLoading = false;
+      },
+      error: (error) => {
+        informUserOfError(error);
         this.isLoading = false;
       }
     });
