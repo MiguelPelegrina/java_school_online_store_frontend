@@ -1,8 +1,8 @@
-FROM node:18.10.0-alpine AS build
+FROM node:18.13.0-alpine AS build
 WORKDIR /app
 COPY package*.json ./
 EXPOSE 4200
 RUN npm install -g @angular/cli
 RUN npm install
 COPY . .
-CMD ["npm", "start"]
+CMD ng serve --host 0.0.0.0 --disable-host-check --port 4200
