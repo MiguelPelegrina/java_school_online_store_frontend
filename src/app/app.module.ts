@@ -58,6 +58,7 @@ import { RevenueCalculatorComponent } from './components/sales-statistics/revenu
 import { TopProductsComponent } from './components/sales-statistics/top-products/top-products.component';
 import { ButtonGroupComponent } from './components/cart/button-group/button-group.component';
 import { NgxPermissionsModule } from 'ngx-permissions';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -85,6 +86,7 @@ import { NgxPermissionsModule } from 'ngx-permissions';
     TopProductsComponent,
     TwoDigitDecimalNumberDirective,
     ViewBookComponent,
+    FooterComponent,
   ],
   imports: [
     AppRoutingModule,

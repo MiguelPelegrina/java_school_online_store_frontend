@@ -1,10 +1,6 @@
-span {
-  color: white;
-}
-
-.app-toolbar-header {
+.app-toolbar-footer {
   position: sticky;
   position: -webkit-sticky;
-  top: 0;
+  bottom: 0;
   z-index: 1000;
 }
