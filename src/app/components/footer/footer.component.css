@@ -1,6 +1,7 @@
 .app-toolbar-footer {
-  position: sticky;
+  bottom: 0px;
+  margin: 0 auto;
+  position: fixed;
   position: -webkit-sticky;
-  bottom: 0;
   z-index: 1000;
 }
