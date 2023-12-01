@@ -82,7 +82,7 @@
       <!-- PRICE -->
       <ng-container matColumnDef="price">
         <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Price of the book" sortActionDescription="Sort by price">Price</th>
-        <td mat-cell *matCellDef="let book"> {{book.price}}</td>
+        <td mat-cell *matCellDef="let book"> {{book.price | currency}}</td>
       </ng-container>
       <!-- /PRICE -->
 
@@ -127,7 +127,7 @@
         <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
           <div class="element-detail"
               [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-            <div class="row vertical-align">
+            <div class="row align-items-center w-100">
               <div class="col-sm">
                 <img alt="Book Cover" class="small-img" *ngIf="element.image" [src]="element.image">
               </div>

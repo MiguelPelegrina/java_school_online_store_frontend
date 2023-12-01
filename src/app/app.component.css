@@ -18,6 +18,8 @@ tr.detail-row {
 .element-detail {
   overflow: hidden;
   display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .form-container {

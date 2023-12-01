@@ -117,23 +117,22 @@
 
     <ng-container matColumnDef="expandedDetail">
       <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
-        <!-- TODO Does not look that good -->
-        <div class="element-detail"
+       <div class="element-detail flex-column"
             [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
           <ng-container *ngFor="let orderedBook of element.orderedBooks">
-            <div class="row">
-              <!-- <div class="col-sm">
+            <div class="row align-items-center m-1 p-1">
+              <div class="col-sm text-left">
                 <img alt="Book Cover" class="small-img" *ngIf="orderedBook.book.image" [src]="orderedBook.book.image">
-              </div> -->
-              <div class="col">
+              </div>
+              <div class="col-sm text-center">
                 <a [routerLink]="['/books/view', orderedBook.book.id]">{{orderedBook.book.title}}</a>
               </div>
-              <div class="col">Amount: {{orderedBook.amount}}</div>
-              <div class="col">Book total: {{orderedBook.amount * orderedBook.book.price | currency}} </div>
+              <div class="col-sm text-center">Amount: {{orderedBook.amount}}</div>
+              <div class="col-sm text-right">Book total: {{orderedBook.amount * orderedBook.book.price | currency}} </div>
             </div>
           </ng-container>
-          <div class="col">
-            Order total: {{ getTotal() | currency}}
+          <div class="d-flex border-top justify-content-end m-2 p-2">
+              Order total: {{ getTotal() | currency}}
           </div>
         </div>
       </td>
