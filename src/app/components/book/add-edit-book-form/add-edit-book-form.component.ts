@@ -11,6 +11,7 @@ import { BookGenreService } from 'src/app/services/book/genre/book-genre.service
 import { AbstractForm } from 'src/app/shared/components/abstract-form';
 import { allowedImageExtensions, requiredFileType } from 'src/app/shared/utils/required-file-type';
 import { getBase64, informUserOfError } from 'src/app/shared/utils/utils';
+
 /**
  * Component representing a form for adding or editing a book.
  */
@@ -135,6 +136,8 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
         });
       } else {
         Swal.fire('Wrong image type',`The file needs to be in one of the following types: ${allowedImageExtensions}`,'warning');
+
+        event.target.value = null;
       }
     }
   }

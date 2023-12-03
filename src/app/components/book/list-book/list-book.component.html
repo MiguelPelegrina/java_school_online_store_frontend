@@ -1,5 +1,4 @@
 <!-- TODO
-  - Book import from excel
   - Multi-select with Deactivate -> FABs for activate/deactivate of several books
   - Remove div between searchbar and table
   - Advanced filter for searchbar? So the user can choose the criteria
@@ -34,14 +33,14 @@
     <app-search-bar [placeholder]="'by title or author'" (setFilterEvent)="setFilter($event)"></app-search-bar>
     <!-- /SEARCHBAR -->
 
-    <mat-paginator
+    <!-- <mat-paginator
       [length]="dataLength"
       [pageIndex]="dataPage"
       [pageSize]="dataPageSize"
       [pageSizeOptions]="dataPageSizeOptions"
       [showFirstLastButtons]="true"
     >
-    </mat-paginator>
+    </mat-paginator> -->
 
       <!-- TABLE -->
     <table class="container mat-elevation-z8 table-responsive-md"

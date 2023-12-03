@@ -44,6 +44,14 @@ tr.detail-row {
   transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
+.content-outer-container {
+  min-height: 100%;
+}
+
+.content-outer-container {
+  padding-bottom: 72px;
+}
+
 .loading-shade {
   position: absolute;
   top: 0;

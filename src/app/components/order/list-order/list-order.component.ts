@@ -33,12 +33,6 @@ import Swal from 'sweetalert2';
     ]),
   ],
 })
-// TODO Advanced filter for orders:
-// - Date
-// - Delivery method
-// - Order status
-// - Payment method
-// - Payment status
 export class ListOrderComponent implements AfterViewInit, OnDestroy, OnInit {
   // Subcomponents
   @ViewChild(MatPaginator)
