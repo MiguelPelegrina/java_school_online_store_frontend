@@ -28,6 +28,17 @@ export class BookService extends AbstractService<Book, number> {
   }
 
   /**
+   * Creates a new books in the API.
+   * @param instances - The Book objects to be created.
+   * @returns An Observable of the created Book objects.
+   */
+  createAll(books: Book[]): Observable<Book[]>{
+    return this.httpClient.post<Book[]>(this.baseUrl + "/save_all", books).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
    * Retrieves a list of books based on optional query parameters.
    * @param active - Optional. Filters books based on their active status.
    * @param filter - Optional. Filters books based on a search term.
@@ -38,7 +49,7 @@ export class BookService extends AbstractService<Book, number> {
    * @param genre - Optional. Filters books based on the genre.
    * @returns An Observable containing the list of books matching the specified criteria.
    */
-  public override getAll(
+  override getAll(
     active?: boolean,
     filter?: string,
     sortType?: string,
@@ -69,7 +80,7 @@ export class BookService extends AbstractService<Book, number> {
    * @param number - The limit of top products to retrieve.
    * @returns An Observable containing the list of top products.
    */
-  public getTopProducts(number: number): Observable<any> {
+  getTopProducts(number: number): Observable<any> {
     const topProductsUrl = `${this.baseUrl}/top_products?limit=${number}`;
 
     return this.httpClient.get<any>(topProductsUrl).pipe(

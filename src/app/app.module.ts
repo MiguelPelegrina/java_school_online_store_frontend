@@ -59,6 +59,7 @@ import { TopProductsComponent } from './components/sales-statistics/top-products
 import { ButtonGroupComponent } from './components/cart/button-group/button-group.component';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { FooterComponent } from './components/footer/footer.component';
+import { BookExcelParserComponent } from './components/book/book-excel-parser/book-excel-parser.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +88,7 @@ import { FooterComponent } from './components/footer/footer.component';
     TwoDigitDecimalNumberDirective,
     ViewBookComponent,
     FooterComponent,
+    BookExcelParserComponent,
   ],
   imports: [
     AppRoutingModule,

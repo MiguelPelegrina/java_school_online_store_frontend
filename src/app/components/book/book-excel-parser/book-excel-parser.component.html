@@ -1,0 +1,81 @@
+<div class="d-flex justify-content-center m-2 p-2">
+  <div class="d-flex flex-column justify-content-center">
+    <h1 class="m-1 p-1">Excel parser</h1>
+  </div>
+</div>
+<div class="container">
+  <h2>Instructions</h2>
+  <p>
+    1. This excel parser allows you to choose an excel file (.xlsx), see all the values of it in a table and then import those books into the database.
+  </p>
+</div>
+
+<div class="d-flex justify-content-center">
+  <input class="m-2 p-2" (change)="readExcel($event)" type="file">
+  <input class="m-2 p-2" (click)="importExcel()" *ngIf="excelSelected" type="submit">
+</div>
+
+<table class="container mat-elevation-z8 table-responsive-md"
+      [dataSource]="data"
+      [hidden]="!excelSelected"
+      matSort
+      mat-table
+    >
+    <!-- TITLE -->
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Title of the book" sortActionDescription="Sort by title">Title</th>
+      <td mat-cell *matCellDef="let book"> {{book.Title}}</td>
+    </ng-container>
+    <!-- /TITLE -->
+
+    <!-- ACTIVE -->
+    <ng-container matColumnDef="active">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Book available for sale" sortActionDescription="Sort by active">Active</th>
+      <td mat-cell *matCellDef="let book">
+        <mat-slide-toggle
+        [(ngModel)]="book.Active"
+        [disabled]=true
+        >
+        </mat-slide-toggle>
+      </td>
+    </ng-container>
+    <!-- /ACTIVE -->
+
+    <!-- PRICE -->
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Price of the book" sortActionDescription="Sort by price">Price</th>
+      <td mat-cell *matCellDef="let book"> {{book.Price | currency}}</td>
+    </ng-container>
+    <!-- /PRICE -->
+
+    <!-- STOCK -->
+    <ng-container matColumnDef="stock">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Remaining stock of the book" sortActionDescription="Sort by stock">Stock</th>
+      <td mat-cell *matCellDef="let book"> {{book.Stock}}</td>
+    </ng-container>
+    <!-- /STOCK -->
+
+    <!-- AUTHOR -->
+    <ng-container matColumnDef="genre">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Genre of the book" sortActionDescription="Sort by genre">Genre</th>
+      <td mat-cell *matCellDef="let book"> {{book.Genre}}</td>
+    </ng-container>
+    <!-- /AUTHOR -->
+
+    <!-- AUTHOR -->
+    <ng-container matColumnDef="parameters.author">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Author of the book" sortActionDescription="Sort by author">Author</th>
+      <td mat-cell *matCellDef="let book"> {{book.Author}}</td>
+    </ng-container>
+    <!-- /AUTHOR -->
+
+    <!-- FORMAT -->
+    <ng-container matColumnDef="parameters.format">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Format of the book" sortActionDescription="Sort by format">Format</th>
+      <td mat-cell *matCellDef="let book"> {{book.Format}}</td>
+    </ng-container>
+    <!-- /FORMAT -->
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+</table>

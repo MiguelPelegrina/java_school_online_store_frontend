@@ -7,16 +7,6 @@ import { Observable, catchError, throwError } from 'rxjs';
  * @param ID - The type of the entity's identifier
  */
 export abstract class AbstractService<Entity, ID> {
-  // Setting request headers to JSON
-  // TODO Set headers?
-  /*headers = new HttpHeaders()
-            .set('Content-Type', 'application/json')
-            .set('Accept', 'application/json');
-
-  httpOptions = {
-    headers: this.headers
-  };*/
-
   /**
    * All arguments constructor for child classes.
    * @param baseUrl - The base URL for the service's API endpoint.

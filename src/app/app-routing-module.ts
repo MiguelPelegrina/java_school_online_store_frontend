@@ -14,6 +14,7 @@ import { ngxPermissionsGuard } from "ngx-permissions";
 import { TopProductsComponent } from "./components/sales-statistics/top-products/top-products.component";
 import { ListCustomerComponent } from "./components/sales-statistics/list-customer/list-customer.component";
 import { RevenueCalculatorComponent } from "./components/sales-statistics/revenue-calculator/revenue-calculator.component";
+import { BookExcelParserComponent } from "./components/book/book-excel-parser/book-excel-parser.component";
 
 
 /**
@@ -68,6 +69,7 @@ const routes: Routes = [
   { path: 'books/view/:id', component: ViewBookComponent },
   { path: 'cart', component: CartComponent },
   { path: 'catalog', component: CatalogComponent },
+  {path: 'import-excel', component: BookExcelParserComponent},
   { path: 'profile', component: ProfileComponent },
   generateRoute('book_formats', ListBookParametersFormatComponent),
   generateRoute('orders', ListOrderComponent, ['ADMIN', 'EMPLOYEE', 'CLIENT']),

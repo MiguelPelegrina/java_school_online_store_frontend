@@ -1,17 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BookFormatService } from 'src/app/services/book/format/book-format.service';
-import { BookGenreService } from 'src/app/services/book/genre/book-genre.service';
-import { BookService } from 'src/app/services/book/book.service';
 import { BookFormat } from '../../../shared/domain/book/parameters/book-parameters-format/book-parameters-format';
 import { BookGenre } from '../../../shared/domain/book/book-genre/book-genre';
 import Swal from 'sweetalert2';
 import { Subscription } from 'rxjs';
+import { BookService } from 'src/app/services/book/book.service';
+import { BookFormatService } from 'src/app/services/book/format/book-format.service';
+import { BookGenreService } from 'src/app/services/book/genre/book-genre.service';
 import { AbstractForm } from 'src/app/shared/components/abstract-form';
+import { allowedImageExtensions, requiredFileType } from 'src/app/shared/utils/required-file-type';
 import { getBase64, informUserOfError } from 'src/app/shared/utils/utils';
-import { requiredFileType } from 'src/app/shared/utils/required-file-type';
-
 /**
  * Component representing a form for adding or editing a book.
  */
@@ -129,13 +128,13 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
     if (inputElement.files && inputElement.files[0]) {
       const file = event.target.files[0];
 
-      if(file && requiredFileType(file)){
+      if(file && requiredFileType(file, allowedImageExtensions)){
         getBase64(file, (base64String) => {
           this.image = base64String;
           this.form.get('image')?.setValue(this.image);
         });
       } else {
-        Swal.fire('','','warning');
+        Swal.fire('Wrong image type',`The file needs to be in one of the following types: ${allowedImageExtensions}`,'warning');
       }
     }
   }
