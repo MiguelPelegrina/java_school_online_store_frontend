@@ -42,9 +42,10 @@ export class BookExcelParserComponent {
     this.isLoading = true;
     this.parseExcelBooksToBooks();
     this.service.createAll(this.parsedData).subscribe({
-      next: () => {
+      next: (response) => {
         this.isLoading = false;
         Swal.fire('Books imported!','All books where imported successfully!','success');
+        console.log(response);
       },
       error: (error) => {
         this.isLoading = false;
