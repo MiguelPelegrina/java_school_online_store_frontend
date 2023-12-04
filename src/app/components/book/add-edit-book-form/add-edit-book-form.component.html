@@ -52,6 +52,7 @@
       <input
         formControlName="isbn"
         matInput
+        [readonly]="!this.isAddMode"
         placeholder="Enter the ISBN"
         required
         type="text"

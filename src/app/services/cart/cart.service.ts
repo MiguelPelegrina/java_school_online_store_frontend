@@ -24,12 +24,14 @@ export class CartService {
    */
   constructor(private snackbar: MatSnackBar){}
 
+  // TODO Might need to abstract and use in two methods
   /**
    * Adds a new item to the cart.
    *
    * @param newItem - The item to be added to the cart.
    */
   public addToCart(newItem: BoughtBook): void {
+    // TODO Check if enough stock
     this.loadCart();
 
     const itemInCart = this.cart.find(item => item.id === newItem.id);

@@ -179,6 +179,8 @@ export class ListOrderComponent implements AfterViewInit, OnDestroy, OnInit {
    * @param order - The order to be reordered.
    */
   protected reorder(order: Order){
+    // TODO Add to cart and show snackbar with link to cart
+    // Need to reset id of orderbook?
     Swal.fire({
       title:'Confirm reorder',
       text: 'Are you sure you want to reorder this?',
