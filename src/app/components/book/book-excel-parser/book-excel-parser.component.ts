@@ -13,7 +13,7 @@ import { capitalizeFirstLetter, informUserOfError } from 'src/app/shared/utils/u
 @Component({
   selector: 'app-book-excel-parser',
   templateUrl: './book-excel-parser.component.html',
-  styleUrls: ['./book-excel-parser.component.css']
+  styleUrls: ['./book-excel-parser.component.css', '../../../app.component.css']
 })
 export class BookExcelParserComponent {
   // Fields
@@ -40,7 +40,9 @@ export class BookExcelParserComponent {
    */
   protected importExcel(){
     this.isLoading = true;
+
     this.parseExcelBooksToBooks();
+
     this.service.createAll(this.parsedData).subscribe({
       next: (response) => {
         this.isLoading = false;
@@ -72,6 +74,8 @@ export class BookExcelParserComponent {
         fileReader.readAsBinaryString(file);
 
         fileReader.onload = (e) => {
+          this.parsedData = [];
+
           this.excelSelected = true;
 
           const workBook = XLSX.read(fileReader.result, {type:'binary'});
