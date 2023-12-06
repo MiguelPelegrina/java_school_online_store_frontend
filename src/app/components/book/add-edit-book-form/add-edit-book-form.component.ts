@@ -177,7 +177,7 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
           this.handleSuccessResponse('created');
         },
         error: (error) => {
-          informUserOfError(error);
+          this.informUserOfError(error);
         }
       })
   }
@@ -209,7 +209,7 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
         this.isLoading = false;
       },
       error: (error) => {
-        informUserOfError(error);
+        this.informUserOfError(error);
       }
     });
   }
@@ -223,7 +223,7 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
         this.formatTypes = bookFormatList
       },
       error: (error) => {
-        informUserOfError(error)
+        this.informUserOfError(error)
       }
     })
   }
@@ -237,7 +237,7 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
         this.genreTypes = bookGenreList
       },
       error: (error) => {
-        informUserOfError(error)
+        this.informUserOfError(error);
       }
     });
   }
@@ -251,8 +251,17 @@ export class AddEditBookFormComponent extends AbstractForm implements OnDestroy,
           this.handleSuccessResponse('updated');
         },
         error: (error) => {
-          informUserOfError(error);
+          this.informUserOfError(error)
         }
       })
+  }
+
+  /**
+ * Shows an error that ocurred to the user and sets the loading state to false.
+ * @param error - The error response.
+ */
+  private informUserOfError(error: any){
+    this.isLoading = false;
+    informUserOfError(error);
   }
 }

@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Book } from 'src/app/shared/domain/book/book';
 import { BoughtBook } from 'src/app/shared/domain/book/bought-book/bought-book';
 import { Cart } from 'src/app/shared/domain/cart/cart';
+import { Order } from 'src/app/shared/domain/order/order';
 
 /**
  * A service for managing the shopping cart.
@@ -31,20 +32,46 @@ export class CartService {
    * @param newItem - The item to be added to the cart.
    */
   public addToCart(newItem: BoughtBook): void {
-    // TODO Check if enough stock
+    if(this.handleAddingToCart(newItem)){
+      this.snackbar.open(`${newItem.title} added to cart`, 'Ok', { duration: 3000 });
+    } else {
+      this.snackbar.open(`${newItem.title} is currently out of stock`,'Ok', {duration: 3000});
+    }
+  }
+
+  private handleAddingToCart(newItem: BoughtBook): boolean{
+    let addedToCart = false;
+
     this.loadCart();
 
     const itemInCart = this.cart.find(item => item.id === newItem.id);
 
-    if (itemInCart) {
-      itemInCart.quantity++;
-    } else {
-      this.cart.push(newItem);
+    if(newItem.stock > 0){
+      if (itemInCart) {
+        itemInCart.quantity++;
+      } else {
+        this.cart.push(newItem);
+      }
+      this.saveCart();
+
+      addedToCart = true;
     }
 
-    this.saveCart();
+    return addedToCart;
+  }
 
-    this.snackbar.open(`${newItem.title} added to cart`, 'Ok', { duration: 3000 });
+  public reorder(order: Order): void{
+    let allBooksAdded = true;
+
+    order.orderedBooks.forEach((orderBook) => {
+      const orderedBook: BoughtBook = {...orderBook.book, quantity: orderBook.amount};
+
+      if(this.handleAddingToCart(orderedBook)){
+        allBooksAdded = false;
+      }
+    });
+
+    this.snackbar.open('Not all books could be added because some of them are currently out of stock', 'Ok', {duration: 3000});
   }
 
   /**

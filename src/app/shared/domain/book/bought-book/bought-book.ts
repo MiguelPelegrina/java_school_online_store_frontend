@@ -1,5 +1,5 @@
 import { Book } from "../book";
 
-export interface BoughtBook extends Book{
+export interface BoughtBook extends Book {
   quantity: number,
 }

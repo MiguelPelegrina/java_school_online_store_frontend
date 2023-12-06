@@ -5,10 +5,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, Subscription, catchError, map, merge, startWith, switchMap } from 'rxjs';
+import { CartService } from 'src/app/services/cart/cart.service';
 import { OrderStatusService } from 'src/app/services/order/order-status/order-status.service';
 import { OrderService } from 'src/app/services/order/order.service';
 import { PaymentStatusService } from 'src/app/services/order/payment-status/payment-status.service';
 import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
+import { BoughtBook } from 'src/app/shared/domain/book/bought-book/bought-book';
 import { Order } from 'src/app/shared/domain/order/order';
 import { OrderStatus } from 'src/app/shared/domain/order/order-status/order-status';
 import { PaymentStatus } from 'src/app/shared/domain/order/payment-status/payment-status';
@@ -89,6 +91,7 @@ export class ListOrderComponent implements AfterViewInit, OnDestroy, OnInit {
    * @param snackbar - Service for displaying snack bar messages.
    */
   constructor(
+    private cartService: CartService,
     private orderService: OrderService,
     private orderStatusService: OrderStatusService,
     private paymentStatusService: PaymentStatusService,
@@ -179,35 +182,7 @@ export class ListOrderComponent implements AfterViewInit, OnDestroy, OnInit {
    * @param order - The order to be reordered.
    */
   protected reorder(order: Order){
-    // TODO Add to cart and show snackbar with link to cart
-    // Need to reset id of orderbook?
-    Swal.fire({
-      title:'Confirm reorder',
-      text: 'Are you sure you want to reorder this?',
-      icon: 'info',
-      showCloseButton: true,
-      showCancelButton: true,
-      focusConfirm: false,
-      confirmButtonText: 'Yes',
-      cancelButtonText: 'No'})
-    .then((result) => {
-      if(result.isConfirmed){
-        order.id = undefined;
-        order.date = new Date();
-        order.orderStatus.name = StringValues.DEFAULT_ORDER_STATUS_ON_ORDER;
-        order.paymentStatus.name = StringValues.DEFAULT_PAYMENT_STATUS_ON_ORDER;
-
-        this.orderService.createOrderWithBooks(order, order.orderedBooks).subscribe({
-          next: () => {
-            this.loadAllOrders();
-            Swal.fire('Reorder successful', '', 'success');
-          },
-          error: (error) => {
-            this.informUserOfError(error);
-          }
-        });
-      }
-    })
+    this.cartService.reorder(order);
   }
 
   /**
