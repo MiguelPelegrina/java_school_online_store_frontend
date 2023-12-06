@@ -105,7 +105,7 @@
     <ng-container matColumnDef="expand">
       <th mat-header-cell *matHeaderCellDef aria-label="row actions">Actions</th>
       <td mat-cell *matCellDef="let element">
-        <button (click)="reorder(element); $event.stopPropagation()" mat-mini-fab matTooltip="Order this order again">
+        <button (click)="reorder(element); $event.stopPropagation()" [hidden]="!isClient" mat-mini-fab matTooltip="Order this order again">
           <mat-icon>add</mat-icon>
         </button>
         <button mat-icon-button aria-label="expand row">
