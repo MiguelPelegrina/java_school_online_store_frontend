@@ -23,37 +23,12 @@ import { BookExcelParserComponent } from "./components/book/book-excel-parser/bo
  * @param component - The component associated with the route.
  * @param permissions - An array of user permissions required for the route. Default is ['ADMIN', 'EMPLOYEE'].
  * @returns A route configuration object.
- *
- * @example
- * const route = generateRoute('books', BookComponent, ['USER']);
- * // Result: { path: 'books', component: BookComponent, data: { permissions: { only: ['USER'] } } }
  */
 const generateRoute = (path: string, component: any, permissions: string[] = []) => ({
-  /**
-   * The route path.
-   * @type {string}
-   */
   path,
-
-  /**
-   * The component associated with the route.
-   * @type {any}
-   */
   component,
-
-  /**
-   * An array of route guards for activation. Uses ngxPermissionGuard as default.
-   * @type {any[]}
-   */
   canActivate: [ngxPermissionsGuard],
 
-  /**
-   * Data associated with the route, including permissions required for access.
-   * @type {object}
-   * @property {object} permissions - Object specifying user permissions.
-   * @property {string[]} permissions.only - An array of user permissions required for the route. Default is ['ADMIN', 'EMPLOYEE'].
-   * @property {string} permissions.redirectTo - The path to redirect if permissions are not met. Default is '/catalog'.
-   */
   data: {
     permissions: {
       only: permissions.length ? permissions : ['ADMIN', 'EMPLOYEE'],
