@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-center m-2 p-2">
   <div class="d-flex flex-column justify-content-center">
-    <h1 class="m-1 p-1">Excel importer</h1>
+    <h1 class="m-2 p-2">Excel importer</h1>
   </div>
 </div>
 <div class="container">
@@ -39,7 +39,8 @@
   </div>
 </div>
 
-<table class="container mat-elevation-z8 table-responsive-md"
+<div class="container">
+  <table class="container mat-elevation-z8 table-responsive-md"
       [dataSource]="data"
       [hidden]="!excelSelected"
       matSort
@@ -109,4 +110,5 @@
 
     <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
-</table>
+  </table>
+</div>
