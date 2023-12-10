@@ -1,5 +1,5 @@
-<h2 class="text-center" *ngIf="isAddMode">Add a new book</h2>
-<h2 class="text-center" *ngIf="!isAddMode">Edit book</h2>
+<h1 class="text-center m-2 p-2" *ngIf="isAddMode">Add a new book</h1>
+<h1 class="text-center m-2 p-2" *ngIf="!isAddMode">Edit book</h1>
 
 <div class="container form-container mat-elevation-z8">
   <div class="loading-shade" *ngIf="isLoading">
@@ -100,15 +100,6 @@
     <div class="row">
       <div class="col-sm">
       <!-- COLUMN -->
-        <!-- KILLER FEATURE: Table for different prices depending on currencies
-            Option 1: Create a auto incremental table -> one row with empty fields for price and currency.
-            If the fields of the row are set, generate a new row with empty. <-- I favor this option
-            Option 2: Create a table with as many rows as currencies are supported. At least one must be filled.
-            Optional: Checkbox or toggle to enable currency converter. The conversion values need to be managed by someone (employees?).
-            Problem: What if more then one price is manually set?
-            Solution: Only allow one currency to be inserted manully, disable the fields of other rows and convert the prices from
-            the setted one to the others?
-          -->
           <!-- PRICE -->
         <mat-form-field class="form-group w-100" floatLabel="always">
             <mat-label>Price</mat-label>
@@ -120,7 +111,7 @@
             required
           >
 
-          <span class="text-white" matTextSuffix>€&nbsp;</span>
+          <span class="text-white" matTextSuffix>$&nbsp;</span>
           <!-- /PRICE -->
 
           <mat-error *ngIf="f['price'].invalid">{{getErrorMessage('price')}}</mat-error>
@@ -139,7 +130,7 @@
           placeholder="Enter the stock"
           type="number"
           >
-          <mat-error *ngIf="form.controls['stock'].invalid">{{getErrorMessage('stock')}}</mat-error>
+          <mat-error *ngIf="f['stock'].invalid">{{getErrorMessage('stock')}}</mat-error>
           <!-- /STOCK -->
         </mat-form-field>
         <!-- /COLUMN -->
@@ -157,6 +148,7 @@
 
           <div class="d-flex justify-content-center m-3 ">
             <img *ngIf="this.image" [src]="this.image" alt="Uploaded File">
+            <mat-error *ngIf="f['image'].invalid">{{getErrorMessage('image')}}</mat-error>
           </div>
 
           <div class="d-flex justify-content-center">

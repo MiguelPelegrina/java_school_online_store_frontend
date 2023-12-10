@@ -39,7 +39,8 @@
       <div class="col-sm">
         <mat-form-field class="form-group w-100" appearance="fill">
           <mat-label>Password</mat-label>
-          <input formControlName="password" matInput placeholder="Enter your password" required type="password">
+          <input formControlName="password" matInput minlength="6" placeholder="Enter your password" required type="password">
+          <mat-hint class="text-white">Min 6 characters</mat-hint>
           <mat-error *ngIf="f['password'].invalid">{{getErrorMessage('password')}}</mat-error>
         </mat-form-field>
       </div>
@@ -50,7 +51,7 @@
         <mat-form-field class="form-group w-100">
           <mat-label>Your date of birth </mat-label>
           <input formControlName="dateOfBirth" matInput [matDatepicker]="picker" required>
-          <mat-hint>DD/MM/YYYY</mat-hint>
+          <mat-hint class="text-white">DD/MM/YYYY</mat-hint>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           <mat-error *ngIf="f['dateOfBirth'].invalid">{{getErrorMessage('dateOfBirth')}}</mat-error>
@@ -60,10 +61,9 @@
       <div class="col-sm">
         <mat-form-field class="form-group w-100">
           <mat-label>Phone number</mat-label>
-          <!-- TODO Might need to establish another mask -->
           <input formControlName="phone" mask="(00) 000 000 000" matInput required type="text">
           <mat-icon matSuffix>phone</mat-icon>
-          <mat-hint>Include area code</mat-hint>
+          <mat-hint class="text-white">Include area code</mat-hint>
           <mat-error *ngIf="f['phone'].invalid">{{getErrorMessage('phone')}}</mat-error>
         </mat-form-field>
       </div>

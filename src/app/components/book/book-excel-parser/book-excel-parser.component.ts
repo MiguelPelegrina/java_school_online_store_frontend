@@ -17,7 +17,7 @@ import { capitalizeFirstLetter, informUserOfError } from 'src/app/shared/utils/u
 })
 export class BookExcelParserComponent {
   // Fields
-  protected columnsToDisplay: string [] = ['title', 'active', 'price', 'stock', 'genre', 'parameters.author', 'parameters.format'];
+  protected columnsToDisplay: string [] = ['title', 'isbn', 'active', 'price', 'stock', 'genre', 'parameters.author', 'parameters.format'];
 
   protected data: ExcelBook[] = [];
 
@@ -39,21 +39,35 @@ export class BookExcelParserComponent {
    * Initiates the process of importing and parsing Excel data into books.
    */
   protected importExcel(){
-    this.isLoading = true;
 
-    this.parseExcelBooksToBooks();
+    Swal.fire({
+      title: "Possible data loss",
+      titleText: "Books which share the same ISBN will be updated, be careful!",
+      icon: 'warning',
+      showCloseButton: true,
+      showCancelButton: true,
+      focusConfirm: false,
+      confirmButtonText: 'Okay',
+      cancelButtonText: 'Cancel',
+    }).then((result) => {
+      if(result.isConfirmed){
+        this.isLoading = true;
 
-    this.service.createAll(this.parsedData).subscribe({
-      next: (response) => {
-        this.isLoading = false;
-        Swal.fire('Books imported!','All books where imported successfully!','success');
-        console.log(response);
-      },
-      error: (error) => {
-        this.isLoading = false;
-        informUserOfError(error);
-      }}
-    );
+        this.parseExcelBooksToBooks();
+
+        this.service.createAll(this.parsedData).subscribe({
+          next: (response) => {
+            this.isLoading = false;
+            Swal.fire('Books created/updated!','All books where created/updated successfully!','success');
+            console.log(response);
+          },
+          error: (error) => {
+            this.isLoading = false;
+            informUserOfError(error);
+          }}
+        );
+      }
+    });
   }
 
   /**
@@ -114,7 +128,6 @@ export class BookExcelParserComponent {
    * @returns - The corresponding Book object.
    */
   private parseExcelBookToBook(excelBook: ExcelBook): Book {
-    // TODO Image?
     const book: Book = {
       id: 0,
       title: excelBook.Title,

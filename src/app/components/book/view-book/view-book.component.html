@@ -13,7 +13,7 @@
 
   <div class="row">
     <div class="col text-center">
-      <img alt="Book Cover" *ngIf="book.image" [src]="book.image">
+      <img alt="No image available" *ngIf="book.image" [src]="book.image">
     </div>
     <div class="col">
       <div class="row text-white">
@@ -45,7 +45,8 @@
       </div>
 
       <div class="row text-white">
-        <label>Active for sale</label> <mat-slide-toggle [(ngModel)]="book.active" disabled></mat-slide-toggle>
+        <label>Active for sale</label>
+        <mat-slide-toggle class="mx-2 px-2" [(ngModel)]="book.active" disabled></mat-slide-toggle>
       </div>
     </div>
   </div>
