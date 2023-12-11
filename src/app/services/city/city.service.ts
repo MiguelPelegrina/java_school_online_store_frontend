@@ -35,7 +35,7 @@ export class CityService extends AbstractService<City, string> {
   public override getAll(active?: boolean, name?: string): Observable<any> {
     const queryParams = this.queryBuilderService.buildQueryParams({
       active,
-      name: name
+      country_name: name
     });
 
     const searchUrl = `${this.baseUrl}/search${queryParams}`;

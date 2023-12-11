@@ -7,7 +7,7 @@
         <!-- COUNTRY -->
         <mat-form-field class="form-group w-100">
           <mat-label>Country</mat-label>
-          <mat-select formControlName="country" (selectionChange)="onCountrySelected($event.value)" [(value)]="selectedCountry">
+          <mat-select formControlName="country" (selectionChange)="onCountrySelected()" [(value)]="selectedCountry">
             <mat-option *ngFor="let country of countries" [value]="country.name">
               {{country.name}}
             </mat-option>
@@ -21,7 +21,7 @@
         <!-- CITY -->
         <mat-form-field class="form-group w-100">
           <mat-label>City</mat-label>
-          <mat-select [attr.disabled]="!selectedCountry" formControlName="city" (selectionChange)="onCitySelected($event.value)" [(value)]="selectedCity">
+          <mat-select [attr.disabled]="!selectedCountry" formControlName="city" (selectionChange)="onCitySelected()" [(value)]="selectedCity">
             <mat-option *ngFor="let city of cities" [value]="city.name">
               {{city.name}}
             </mat-option>

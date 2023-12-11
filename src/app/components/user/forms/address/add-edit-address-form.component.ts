@@ -97,8 +97,8 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
    * Handles the city selection event. Loads postal codes based on the selected city.
    * @param city The selected city.
    */
-  protected onCitySelected(city: City): void{
-    this.postalCodeService.getAll(true, city.name).subscribe(() => {
+  protected onCitySelected(): void{
+    this.postalCodeService.getAll(true, this.selectedCity).subscribe(() => {
       this.selectedPostalCode = '';
       this.loadPostalCodes();
     })
@@ -108,8 +108,8 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
    * Handles the country selection event. Loads cities and resets selected city and postal code.
    * @param country The selected country.
    */
-  protected onCountrySelected(country: Country): void{
-    this.cityService.getAll(true, country.name).subscribe(() => {
+  protected onCountrySelected(): void{
+    this.cityService.getAll(true, this.selectedCountry).subscribe(() => {
       this.selectedCity = '';
       this.selectedPostalCode = '';
       this.loadCities();
@@ -121,7 +121,7 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
    * Loads cities based on the selected country.
    */
   private loadCities(): void{
-    this.citySubscription = this.cityService.getAll(true,this.selectedCountry).subscribe(cityList => {
+    this.citySubscription = this.cityService.getAll(true, this.selectedCountry).subscribe(cityList => {
       this.cities = cityList;
     });
   }
