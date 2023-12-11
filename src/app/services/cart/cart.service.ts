@@ -39,39 +39,26 @@ export class CartService {
     }
   }
 
-  private handleAddingToCart(newItem: BoughtBook): boolean{
-    let addedToCart = false;
-
-    this.loadCart();
-
-    const itemInCart = this.cart.find(item => item.id === newItem.id);
-
-    if(newItem.stock > 0){
-      if (itemInCart) {
-        itemInCart.quantity++;
-      } else {
-        this.cart.push(newItem);
-      }
-      this.saveCart();
-
-      addedToCart = true;
-    }
-
-    return addedToCart;
-  }
-
+  /**
+   * Reorders books by adding them to the shopping cart based on the provided order.
+   * @param order - The order containing information about the books to be reordered, represented by the `Order` type.
+   */
   public reorder(order: Order): void{
     let allBooksAdded = true;
 
     order.orderedBooks.forEach((orderBook) => {
       const orderedBook: BoughtBook = {...orderBook.book, quantity: orderBook.amount};
 
-      if(this.handleAddingToCart(orderedBook)){
+      if(!this.handleAddingToCart(orderedBook)){
         allBooksAdded = false;
       }
     });
 
-    this.snackbar.open('Not all books could be added because some of them are currently out of stock', 'Ok', {duration: 3000});
+    if(!allBooksAdded){
+      this.snackbar.open('Not all books could be added because some of them are currently out of stock', 'Ok', {duration: 3000});
+    } else {
+      this.snackbar.open('All books added to the cart', 'Ok', {duration: 3000});
+    }
   }
 
   /**
@@ -177,6 +164,32 @@ export class CartService {
   }
 
   // Private methods
+  /**
+   * Handles the addition of a book to the shopping cart.
+   * @param newItem - The book to be added to the cart, represented by the `BoughtBook` type.
+   * @returns `true` if the book was successfully added to the cart; otherwise, `false`.
+   */
+  private handleAddingToCart(newItem: BoughtBook): boolean {
+    let addedToCart = false;
+
+    this.loadCart();
+
+    const itemInCart = this.cart.find(item => item.id === newItem.id);
+
+    if(newItem.stock > 0){
+      if (itemInCart) {
+        itemInCart.quantity++;
+      } else {
+        this.cart.push(newItem);
+      }
+      this.saveCart();
+
+      addedToCart = true;
+    }
+
+    return addedToCart;
+  }
+
   /**
    * Saves the current cart state to local storage and notifies subscribers.
    */

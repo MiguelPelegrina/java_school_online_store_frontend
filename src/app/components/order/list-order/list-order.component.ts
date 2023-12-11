@@ -4,16 +4,17 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgxPermissionsService } from 'ngx-permissions';
 import { Observable, Subscription, catchError, map, merge, startWith, switchMap } from 'rxjs';
 import { CartService } from 'src/app/services/cart/cart.service';
 import { OrderStatusService } from 'src/app/services/order/order-status/order-status.service';
 import { OrderService } from 'src/app/services/order/order.service';
 import { PaymentStatusService } from 'src/app/services/order/payment-status/payment-status.service';
 import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
-import { BoughtBook } from 'src/app/shared/domain/book/bought-book/bought-book';
 import { Order } from 'src/app/shared/domain/order/order';
 import { OrderStatus } from 'src/app/shared/domain/order/order-status/order-status';
 import { PaymentStatus } from 'src/app/shared/domain/order/payment-status/payment-status';
+import { AuthUtils } from 'src/app/shared/utils/auth-utils';
 import { IIndexable } from 'src/app/shared/utils/interfaces/i-indexable';
 import { ANIMATION_DURATION, StringValues } from 'src/app/shared/utils/string-values';
 import { informUserOfError } from 'src/app/shared/utils/utils';
@@ -95,6 +96,7 @@ export class ListOrderComponent implements AfterViewInit, OnDestroy, OnInit {
     private orderService: OrderService,
     private orderStatusService: OrderStatusService,
     private paymentStatusService: PaymentStatusService,
+    private permissionsService: NgxPermissionsService,
     private snackbar: MatSnackBar
   ) {}
 
@@ -162,6 +164,8 @@ export class ListOrderComponent implements AfterViewInit, OnDestroy, OnInit {
    * Fills the table with data from the database and sets the filter of the searchbar
    */
   public ngOnInit(): void {
+    this.permissionsService.loadPermissions(AuthUtils.getRoles());
+
     this.loadOrderStatuses();
     this.loadPaymentStatuses();
 
