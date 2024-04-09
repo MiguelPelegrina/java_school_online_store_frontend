@@ -1,3 +1,5 @@
+![Build Status](https://github.com/MiguelPelegrina/java_school_online_store_frontend/actions/workflows/ci.yml/badge.svg)
+
 # Onlinestoreapp
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.1.
