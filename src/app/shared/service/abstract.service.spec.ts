@@ -4,7 +4,7 @@ import { AbstractService } from './abstract.service';
 import { Country } from '../domain/country/country';
 
 describe('AbstractService', () => {
-  let service: AbstractService<Country>;
+  let service: AbstractService<Country, string>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
