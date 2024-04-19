@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import * as moment from 'moment';
 import { OrderService } from 'src/app/services/order/order.service';
 import { DATE_FORMAT } from 'src/app/shared/utils/string-values';
+import Chart from 'chart.js/auto';
 
 /**
  * Component for calculating and displaying revenue statistics.
@@ -14,6 +15,18 @@ import { DATE_FORMAT } from 'src/app/shared/utils/string-values';
 })
 export class RevenueCalculatorComponent implements AfterViewInit, OnInit {
   // Fields
+  private static revenueOfCurrentYearByMonths: string = `Revenue of the current year (${moment().year()}) by months`;
+
+  private static revenueOfLastYearByMonths: string = `Revenue of the last year (${moment().year()-1}) by months`;
+
+  private static revenueOfLast12Months: string = 'Revenue of last 12 months';
+
+  protected revenueChartOfCurrentYearByMonths?: any;
+
+  protected revenueChartOfLastYearByMonths?: any;
+
+  protected revenueChartOfLast12Months?: any;
+
   protected calculatedValue?: number;
 
   protected fb: FormBuilder = new FormBuilder();
@@ -86,6 +99,18 @@ export class RevenueCalculatorComponent implements AfterViewInit, OnInit {
 
     // Calculate revenue of the last 30 days
     this.calculateRevenue(this.thirtyDaysBefore, this.today, 'revenueOfLast30Days');
+
+    this.orderService.getRevenueOfYear(moment().format(DATE_FORMAT)).subscribe((response) => {
+      this.createRevenueChartOfYearByMonths(moment.months(), RevenueCalculatorComponent.revenueOfCurrentYearByMonths, "revenueChartOfCurrentYearByMonths", response);
+    });
+
+    this.orderService.getRevenueOfYear(moment().subtract(1,'years').format(DATE_FORMAT)).subscribe((response) => {
+      this.createRevenueChartOfYearByMonths(moment.months(), RevenueCalculatorComponent.revenueOfLastYearByMonths, "revenueChartOfLastYearByMonths", response);
+    });
+
+    this.orderService.getRevenueOfLast12Months(moment().format(DATE_FORMAT)).subscribe((response) => {
+      this.createRevenueChartOfYearByMonths(this.getLast12Months(), RevenueCalculatorComponent.revenueOfLast12Months, "revenueChartOfLast12Months", response)
+    });
   }
 
   /**
@@ -120,14 +145,57 @@ export class RevenueCalculatorComponent implements AfterViewInit, OnInit {
   private calculateRevenue(startDate: string, endDate: string, targetField: string): void {
     const targetProperty = targetField as keyof RevenueCalculatorComponent;
 
-    this.orderService.getRevenue(startDate, endDate).subscribe((response) => {
+    this.orderService.getTotalRevenue(startDate, endDate).subscribe((response) => {
       // Update the target field with the calculated revenue
       this[targetProperty] = response;
     });
   }
 
-  // Helper methods for obtaining date strings
+  /**
+   * Creates a revenue chart for the last year by months.
+   *
+   * @param months - An array of month names (e.g., ['January', 'February', ...]).
+   * @param revenueChartLabel - The label for the revenue chart dataset.
+   * @param revenueChartId - The ID of the HTML canvas element where the chart will be rendered.
+   * @param response - The data to be displayed on the chart, typically an array of numbers representing revenue for each month.
+   */
+  private createRevenueChartOfYearByMonths(months: string[], revenueChartLabel: string, revenueChartId: string, response: any){
+    console.log(response)
+    this.revenueChartOfLastYearByMonths = new Chart(revenueChartId, {
+      type: 'bar',
+      data: {
+        labels: months,
+          datasets: [
+          {
+            label: revenueChartLabel,
+            data: response,
+            backgroundColor: '#7b1fa2'
+          },
+        ]
+      },
+      options: {
+        aspectRatio:2.5,
+        plugins: {
+          legend: {
+            labels: {
+              color: 'white'
+            }
+          }
+        },
+        responsive: true,
+        scales: {
+          y: {
+            ticks: { color: 'white' }
+          },
+          x: {
+            ticks: { color: 'white' }
+          }
+        }
+      }
+    });
+  }
 
+  // Helper methods for obtaining date strings
   /**
    * Gets the date string for 7 days before the current date.
    */
@@ -189,5 +257,19 @@ export class RevenueCalculatorComponent implements AfterViewInit, OnInit {
    */
   private getToday(): string {
     return moment().format(DATE_FORMAT);
+  }
+
+  /**
+ * Generates an array of strings representing the last 12 months in the format 'YYYY-MM'.
+ * Iterates over the last 12 months, starting from the current month, and formats each month as a string in the 'YYYY-MM' format.
+ *
+ * @returns {string[]} An array of strings, each representing a month in the 'YYYY-MM' format, for the last 12 months.
+ */
+  private getLast12Months(): string[] {
+    const months: string[] = [];
+    for (let i = 11; i >= 0; i--) {
+       months.push(moment().subtract(i, 'months').format('MM-YYYY'));
+    }
+    return months;
   }
 }

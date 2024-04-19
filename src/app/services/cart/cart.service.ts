@@ -25,7 +25,6 @@ export class CartService {
    */
   constructor(private snackbar: MatSnackBar){}
 
-  // TODO Might need to abstract and use in two methods
   /**
    * Adds a new item to the cart.
    *

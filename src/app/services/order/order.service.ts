@@ -76,8 +76,36 @@ export class OrderService extends AbstractService<Order, number> {
    * @param endDate - The end date of the range.
    * @returns An Observable containing the revenue information for the specified date range.
    */
-  public getRevenue(startDate: string, endDate: string): Observable<any> {
+  public getTotalRevenue(startDate: string, endDate: string): Observable<any> {
     const revenueUrl = `${this.baseUrl}/revenue?start=${startDate}&end=${endDate}`;
+
+    return this.httpClient.get<any>(revenueUrl).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+ * Retrieves the revenue data for a specific year based on the provided date.
+ *
+ * @param {string} date - The date string in a format that the backend service expects (e.g., '2023-04-19').
+ * @returns {Observable<any>} An Observable that will emit the revenue data for the specified year.
+ */
+  public getRevenueOfYear(date: string): Observable<any> {
+    const revenueUrl = `${this.baseUrl}/revenueOfYearByMonths?date=${date}`;
+
+    return this.httpClient.get<any>(revenueUrl).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+ * Retrieves the revenue data for the last 12 months based on the provided date.
+ *
+ * @param date - The date string in a format that the backend service expects (e.g., '2023-04-19').
+ * @returns An Observable that will emit the revenue data for the last 12 months.
+ */
+  public getRevenueOfLast12Months(date: string): Observable<any>{
+    const revenueUrl = `${this.baseUrl}/revenueOfLast12Months?date=${date}`
 
     return this.httpClient.get<any>(revenueUrl).pipe(
       catchError(this.handleError)

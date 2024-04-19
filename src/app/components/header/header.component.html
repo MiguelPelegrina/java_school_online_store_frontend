@@ -113,6 +113,7 @@
   <!-- Profile -->
   <mat-menu #menuProfile="matMenu">
     <div class="d-flex flex-column m-1 p-1">
+      <!-- TODO Bad condition, not scalable, as any new role that gets added, needs to be added here. Change condition and find out if global variables that stores roles are accesible -->
       <!-- LOGIN -->
       <a mat-button *ngxPermissionsExcept="['ADMIN', 'EMPLOYEE', 'CLIENT']" routerLink="auth/login"><mat-icon>how_to_reg</mat-icon>Login</a>
       <!-- /LOGIN -->
