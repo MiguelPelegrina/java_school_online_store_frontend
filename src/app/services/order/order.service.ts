@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 import { Order } from 'src/app/shared/domain/order/order';
 import { OrderedBook } from 'src/app/shared/domain/order/ordered-book';
 import { AbstractService } from 'src/app/shared/service/abstract.service';
@@ -40,6 +40,21 @@ export class OrderService extends AbstractService<Order, number> {
     return this.httpClient.post(
       `${StringValues.BASE_ORDER_URL}/withBooks`,
       body,
+    ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Generates a PDF for a specific order and returns it as a Blob.
+   *
+   * @param {number} id - The ID of the order for which the PDF should be generated.
+   * @returns {Observable<any>} An Observable that emits the PDF file as a Blob.
+   */
+  public generateOrderPDF(id: number): Observable<any>{
+    return this.httpClient.get(
+      `${StringValues.BASE_ORDER_URL}/generateOrderPDF/${id}`,
+      {responseType: 'blob'},
     ).pipe(
       catchError(this.handleError)
     );
@@ -111,4 +126,34 @@ export class OrderService extends AbstractService<Order, number> {
       catchError(this.handleError)
     );
   }
+
+  /**
+ * Handles errors that occur during the generation of the PDF.
+ *
+ * @param error - The error object.
+ * @returns An Observable that emits an error.
+ */
+private handleBlobError(error: any): Observable<never> {
+  if (error.error instanceof Blob) {
+     // Handle Blob error
+     const reader = new FileReader();
+     reader.onload = () => {
+       try {
+         const errorMessage = JSON.parse(reader.result as string);
+         console.error('Error generating PDF:', errorMessage);
+         // You can also display this error message to the user
+       } catch (e) {
+         console.error('Error parsing error Blob:', e);
+       }
+     };
+     reader.onerror = () => {
+       console.error('Error reading error Blob:', reader.error);
+     };
+     reader.readAsText(error.error);
+  } else {
+     // Handle other types of errors
+     console.error('Error generating PDF:', error);
+  }
+  return throwError(error);
+ }
 }

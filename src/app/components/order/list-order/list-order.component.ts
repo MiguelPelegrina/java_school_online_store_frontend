@@ -19,6 +19,7 @@ import { IIndexable } from 'src/app/shared/utils/interfaces/i-indexable';
 import { ANIMATION_DURATION, StringValues } from 'src/app/shared/utils/string-values';
 import { informUserOfError } from 'src/app/shared/utils/utils';
 import Swal from 'sweetalert2';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Component that lists all orders in a table.
@@ -173,6 +174,23 @@ export class ListOrderComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   // Protected methods
+  /**
+   * Generates a PDF for a specific order and triggers a download of the PDF file.
+   *
+   * @param {number} id - The ID of the order for which the PDF should be generated.
+   */
+  protected generateOrderPDF(id: number){
+    this.orderService.generateOrderPDF(id).subscribe((blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${uuidv4()}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  }
+
   /**
    * Gets the total cost of the expanded order.
    * @returns The total cost of the expanded order.
