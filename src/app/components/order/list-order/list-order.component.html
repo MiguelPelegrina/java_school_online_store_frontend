@@ -105,10 +105,17 @@
     <ng-container matColumnDef="expand">
       <th mat-header-cell *matHeaderCellDef aria-label="row actions">Actions</th>
       <td mat-cell *matCellDef="let element">
+        <mat-icon
+          (click)="generateOrderPDF(element.id); $event.stopPropagation()"
+          fontIcon="file_download"
+          matTooltip="Download the order as PDF file"
+        >
+        </mat-icon>
         <button (click)="reorder(element); $event.stopPropagation()" *ngxPermissionsOnly="['CLIENT']" mat-mini-fab matTooltip="Order this order again">
           <mat-icon>add</mat-icon>
         </button>
-        <button mat-icon-button aria-label="expand row">
+
+        <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
           <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
           <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
         </button>
