@@ -50,19 +50,5 @@ export class AddEditUserForm extends AbstractForm implements OnDestroy, OnInit {
     this.id = this.route.snapshot.params['id'];
 
     this.form = this.rootFormGroup.control.get(this.formGroupName) as FormGroup;
-
-    if(this.id){
-      this.loadUser();
-    }
-  }
-
-  // Private methods
-  /**
-   * Load user data using the user service based on the provided ID.
-   */
-  private loadUser(){
-    this.userService.getById(this.id!).subscribe((response) => {
-      this.form.patchValue(response);
-    })
   }
 }

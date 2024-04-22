@@ -60,6 +60,7 @@ import { ButtonGroupComponent } from './components/cart/button-group/button-grou
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { FooterComponent } from './components/footer/footer.component';
 import { BookExcelParserComponent } from './components/book/book-excel-parser/book-excel-parser.component';
+import { WholeNumberDirective } from './shared/utils/directives/whole-number.directive';
 
 @NgModule({
   declarations: [
@@ -89,6 +90,7 @@ import { BookExcelParserComponent } from './components/book/book-excel-parser/bo
     ViewBookComponent,
     FooterComponent,
     BookExcelParserComponent,
+    WholeNumberDirective,
   ],
   imports: [
     AppRoutingModule,
