@@ -44,6 +44,8 @@ export class BookExcelParserComponent implements AfterViewInit{
 
   protected parsedData: Book[] = [];
 
+  protected fileReader = new FileReader();
+
   /**
    * Constructor
    * @param {BookService} service - The BookService for handling book-related operations.
@@ -108,22 +110,16 @@ export class BookExcelParserComponent implements AfterViewInit{
       const file = event.target.files[0];
 
       if(file && requiredFileType(file, allowedParserExtensions)){
-        let fileReader = new FileReader();
-
         this.isLoading = true;
 
-        fileReader.readAsBinaryString(file);
+        this.fileReader.readAsBinaryString(file);
 
-        fileReader.onload = (e) => {
+        this.fileReader.onload = (e) => {
           this.parsedData = [];
 
           this.excelSelected = true;
 
-          const workBook = XLSX.read(fileReader.result, {type:'binary'});
-
-          const sheetNames = workBook.SheetNames;
-
-          this.data = XLSX.utils.sheet_to_json(workBook.Sheets[sheetNames[0]]);
+          this.readExcelWorkBook();
 
           this.dataSource.data = this.data;
 
@@ -138,6 +134,22 @@ export class BookExcelParserComponent implements AfterViewInit{
 
         this.data = [];
       }
+    }
+  }
+
+  /**
+   * Reads an Excel workbook and extracts data from all its sheets into a single array.
+   * This method is useful for processing Excel files in web applications where data from multiple sheets needs to be combined or displayed together.
+   */
+  private readExcelWorkBook() {
+    const workBook = XLSX.read(this.fileReader.result, {type:'binary'});
+
+    const sheetNames = workBook.SheetNames;
+
+    for (let index = 0; index < sheetNames.length; index++) {
+      const sheetName = sheetNames[index];
+      const sheet = workBook.Sheets[sheetName]
+      this.data = this.data.concat(XLSX.utils.sheet_to_json(sheet));
     }
   }
 

@@ -6,25 +6,39 @@
 <div class="container">
   <h2>Instructions</h2>
   <p>
-    1. This importer allows you to choose an excel file, see all the values of it in a table and then import those books into the database.
+    This importer allows you to choose an excel file, see all the values of it in a table and then import those books into the database.
   </p>
   <p>
-    2. Currently <b>supported extensions:</b>.
+    The importer assigns each value of a row depending on the column header. As a consequence the <b>first row of the excel file must contain</b> the following values:
+  </p>
+    <ul>
+      <li><b>Title</b></li>
+      <li><b>ISBN</b></li>
+      <li><b>Active</b></li>
+      <li><b>Price</b></li>
+      <li><b>Stock</b></li>
+      <li><b>Genre</b></li>
+      <li><b>Author</b></li>
+      <li><b>Format</b></li>
+    </ul>
+  <h2>Reminder</h2>
+  <p>
+    1. Currently <b>supported extensions:</b>.
   </p>
     <ul>
       <li><b>.xlsx</b></li>
     </ul>
   <p>
-    3. All <b>new genres</b> used in the excel <b>will be created</b>.
+    2. All <b>new genres</b> used in the excel <b>will be created</b>.
   </p>
   <p>
-    4. All <b>new formats</b> used in the excel <b>will be created</b>.
+    3. All <b>new formats</b> used in the excel <b>will be created</b>.
   </p>
   <p>
-    5. Books are <b>identified by their ISBN</b>. This has the following consequences:</p>
+    4. Books are <b>identified by their ISBN</b>. This has the following consequences:</p>
     <ul>
-      <li>If the ISBN is <b>not assigned yet</b>, the book will be <b>added</b>.</li>
-      <li>If the ISBN is <b>already assigned</b>, the book will be <b>updated</b>.</li>
+      <li>If the ISBN is <b>not assigned yet</b>, a new book will be <b>added</b>.</li>
+      <li>If the ISBN is <b>already assigned</b>, the existing book will be <b>updated</b>.</li>
     </ul>
 </div>
 
