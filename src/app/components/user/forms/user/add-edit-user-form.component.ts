@@ -16,7 +16,10 @@ import { AbstractForm } from 'src/app/shared/components/abstract-form';
 export class AddEditUserForm extends AbstractForm implements OnDestroy, OnInit {
   // Fields
   @Input()
-  formGroupName!: string;
+  public formGroupName!: string;
+
+  @Input()
+  public isAddMode = false; 
 
   protected id?: number;
 

@@ -29,7 +29,7 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
   // Fields
   protected id?: number;
 
-  protected isAddMode?: boolean;
+  protected isAddMode: boolean = false;
 
   protected isLoading = true;
 
@@ -259,7 +259,7 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
 
   /**
    * Handles the error response from API calls.
-   * @param action The action performed when the error occurred (e.g., 'loaded', 'created', 'updated').
+   * @param action The action performed when the error occurred.
    * @param error The error object.
    */
   private handleErrorResponse(error: any) {
@@ -267,6 +267,10 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
     this.isLoading = false;
   }
 
+  /**
+   * Handles the success response from API calls.
+   * @param action The action performed when the operation concluded.
+   */
   private handleSuccessResponse(action: string){
     Swal.fire(`User ${action}`,`The user ${this.form.value.personalData.name} has been ${action} successfully`,`success`);
 

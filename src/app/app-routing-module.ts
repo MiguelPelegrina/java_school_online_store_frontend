@@ -16,7 +16,6 @@ import { ListCustomerComponent } from "./components/sales-statistics/list-custom
 import { RevenueCalculatorComponent } from "./components/sales-statistics/revenue-calculator/revenue-calculator.component";
 import { BookExcelParserComponent } from "./components/book/book-excel-parser/book-excel-parser.component";
 
-
 /**
  * Generates a route configuration object with optional permissions.
  * @param path - The route path.
@@ -44,8 +43,8 @@ const routes: Routes = [
   { path: 'books/view/:id', component: ViewBookComponent },
   { path: 'cart', component: CartComponent },
   { path: 'catalog', component: CatalogComponent },
-  {path: 'import-excel', component: BookExcelParserComponent},
   { path: 'profile', component: ProfileComponent },
+  generateRoute('import-excel', BookExcelParserComponent),
   generateRoute('book_formats', ListBookParametersFormatComponent),
   generateRoute('orders', ListOrderComponent, ['ADMIN', 'EMPLOYEE', 'CLIENT']),
   generateRoute('book_genres', ListBookGenreComponent),

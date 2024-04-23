@@ -31,7 +31,7 @@
       <div class="col-sm">
         <mat-form-field class="form-group w-100" appearance="fill">
           <mat-label>Email</mat-label>
-          <input formControlName="email" matInput placeholder="Enter your email" required type="text" >
+          <input formControlName="email" matInput placeholder="Enter your email" [readonly]="!isAddMode" required type="text" >
           <mat-error *ngIf="f['email'].invalid">{{getErrorMessage('email')}}</mat-error>
         </mat-form-field>
       </div>
