@@ -28,14 +28,16 @@
     <app-search-bar [placeholder]="'by title or author'" (setFilterEvent)="setFilter($event)"></app-search-bar>
     <!-- /SEARCHBAR -->
 
-    <!-- <mat-paginator
+    <mat-paginator
+      #paginatorTop
       [length]="dataLength"
+      (page)="paginatorBottom.pageIndex = $event.pageIndex; paginatorBottom.pageSize=$event.pageSize"
       [pageIndex]="dataPage"
       [pageSize]="dataPageSize"
       [pageSizeOptions]="dataPageSizeOptions"
       [showFirstLastButtons]="true"
     >
-    </mat-paginator> -->
+    </mat-paginator>
 
       <!-- TABLE -->
     <table class="container mat-elevation-z8 table-responsive-md"
@@ -151,7 +153,9 @@
 
     <!-- PAGINATOR -->
     <mat-paginator
+      #paginatorBottom
       [length]="dataLength"
+      (page)="paginatorTop.pageIndex = $event.pageIndex; paginatorTop.pageSize = $event.pageSize;"
       [pageIndex]="dataPage"
       [pageSize]="dataPageSize"
       [pageSizeOptions]="dataPageSizeOptions"
