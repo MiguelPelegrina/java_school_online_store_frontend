@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { allowedParserExtensions, requiredFileType } from 'src/app/shared/utils/required-file-type';
 import Swal from 'sweetalert2';
@@ -6,6 +6,9 @@ import { BookService } from 'src/app/services/book/book.service';
 import { Book } from 'src/app/shared/domain/book/book';
 import { ExcelBook } from 'src/app/shared/domain/book/excel-book/excel-book';
 import { capitalizeFirstLetter, informUserOfError } from 'src/app/shared/utils/utils';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { StringValues } from 'src/app/shared/utils/string-values';
 
 /**
  * Component for importing and parsing book data from an Excel file.
@@ -15,11 +18,25 @@ import { capitalizeFirstLetter, informUserOfError } from 'src/app/shared/utils/u
   templateUrl: './book-excel-parser.component.html',
   styleUrls: ['./book-excel-parser.component.css', '../../../app.component.css']
 })
-export class BookExcelParserComponent {
+export class BookExcelParserComponent implements AfterViewInit{
+  // Subcomponents
+  @ViewChild(MatPaginator)
+  protected paginator!: MatPaginator;
+
   // Fields
   protected columnsToDisplay: string [] = ['title', 'isbn', 'active', 'price', 'stock', 'genre', 'parameters.author', 'parameters.format'];
 
   protected data: ExcelBook[] = [];
+
+  protected dataSource = new MatTableDataSource<ExcelBook>(this.data);
+
+  protected dataPageSize = StringValues.DEFAULT_PAGE_SIZE;
+
+  protected dataLength = 0;
+
+  protected dataPage = 0;
+
+  protected dataPageSizeOptions: number[] = StringValues.DEFAULT_PAGE_SIZE_OPTIONS;
 
   protected excelSelected = false;
 
@@ -32,7 +49,17 @@ export class BookExcelParserComponent {
    * @param {BookService} service - The BookService for handling book-related operations.
    */
   constructor(private service: BookService){}
+  
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
 
+    this.paginator.page.subscribe((event) => {
+      this.dataPageSize = event.length;
+      this.dataPage = event.pageIndex;
+      this.dataPageSize = event.pageSize;
+    });
+  }
+  
   // Methods
   // Protected methods
   /**
@@ -97,6 +124,8 @@ export class BookExcelParserComponent {
           const sheetNames = workBook.SheetNames;
 
           this.data = XLSX.utils.sheet_to_json(workBook.Sheets[sheetNames[0]]);
+
+          this.dataSource.data = this.data;
 
           this.isLoading = false;
         }

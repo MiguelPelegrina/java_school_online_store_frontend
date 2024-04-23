@@ -40,8 +40,19 @@
 </div>
 
 <div class="container">
+  <mat-paginator
+    #paginatorTop
+    [hidden]="!excelSelected"
+    [length]="dataLength"
+    [pageIndex]="dataPage"
+    [pageSize]="dataPageSize"
+    [pageSizeOptions]="dataPageSizeOptions"
+    [showFirstLastButtons]="true"
+  >
+
+  </mat-paginator>
   <table class="container mat-elevation-z8 table-responsive-md"
-      [dataSource]="data"
+      [dataSource]="dataSource"
       [hidden]="!excelSelected"
       matSort
       mat-table
