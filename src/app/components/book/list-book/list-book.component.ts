@@ -6,7 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { map, merge, Observable, startWith, Subscription, switchMap } from 'rxjs';
 import { BookService } from 'src/app/services/book/book.service';
-import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
+import { SearchBarComponent } from 'src/app/components/search-bar/search-bar.component';
 import { Book } from 'src/app/shared/domain/book/book';
 import { ANIMATION_DURATION, StringValues } from 'src/app/shared/utils/string-values';
 

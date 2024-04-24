@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { StringValues } from '../../shared/utils/string-values';
 import { HttpClient } from '@angular/common/http';
 import { Country } from '../../shared/domain/country/country';
-import { AbstractService } from '../../shared/service/abstract.service';
+import { AbstractService } from '../abstract/abstract.service';
 import { Observable, catchError } from 'rxjs';
-import { QueryBuilderService } from 'src/app/shared/service/query-builder.service';
+import { buildQueryParams } from 'src/app/shared/utils/utils';
 
 /**
  * A service for managing country-related operations.
@@ -20,8 +20,7 @@ export class CountryService extends AbstractService<Country, string> {
    * @param queryBuilderService - The service for building query parameters.
    */
   constructor(
-    protected override httpClient: HttpClient,
-    private queryBuilderService: QueryBuilderService
+    protected override httpClient: HttpClient
   ) {
     super(StringValues.BASE_COUNTRY_URL, httpClient);
   }
@@ -32,7 +31,7 @@ export class CountryService extends AbstractService<Country, string> {
    * @returns An Observable containing the list of countries matching the specified criteria.
    */
   public override getAll(active?: boolean): Observable<any> {
-    const queryParams = this.queryBuilderService.buildQueryParams({
+    const queryParams = buildQueryParams({
       active
     });
 

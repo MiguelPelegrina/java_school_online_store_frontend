@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError } from 'rxjs';
 import { PostalCode } from 'src/app/shared/domain/user/address/postal-code/postal-code';
-import { AbstractService } from 'src/app/shared/service/abstract.service';
-import { QueryBuilderService } from 'src/app/shared/service/query-builder.service';
+import { AbstractService } from 'src/app/services/abstract/abstract.service';
 import { StringValues } from 'src/app/shared/utils/string-values';
+import { buildQueryParams } from 'src/app/shared/utils/utils';
 
 /**
  * A service for managing postal code-related operations.
@@ -19,7 +19,7 @@ export class PostalCodeService extends AbstractService<PostalCode, string>{
    * @param httpClient - The Angular HttpClient for making HTTP requests.
    * @param queryBuilderService - The service for building query parameters.
    */
-  constructor(protected override httpClient: HttpClient, private queryBuilderService: QueryBuilderService) {
+  constructor(protected override httpClient: HttpClient) {
     super(StringValues.BASE_POSTAL_CODE_URL, httpClient)
   }
 
@@ -30,7 +30,7 @@ export class PostalCodeService extends AbstractService<PostalCode, string>{
    * @returns An Observable containing the list of postal codes matching the specified criteria.
    */
   public override getAll(active?: boolean, cityName?: string): Observable<any> {
-    const queryParams = this.queryBuilderService.buildQueryParams({
+    const queryParams = buildQueryParams({
       active,
       city_name: cityName
     });

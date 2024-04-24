@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Order } from 'src/app/shared/domain/order/order';
 import { OrderedBook } from 'src/app/shared/domain/order/ordered-book';
-import { AbstractService } from 'src/app/shared/service/abstract.service';
-import { QueryBuilderService } from 'src/app/shared/service/query-builder.service';
+import { AbstractService } from 'src/app/services/abstract/abstract.service';
 import { StringValues } from 'src/app/shared/utils/string-values';
+import { buildQueryParams } from 'src/app/shared/utils/utils';
 
 /**
  * A service for managing order-related operations.
@@ -21,8 +21,7 @@ export class OrderService extends AbstractService<Order, number> {
    * @param queryBuilderService - The service for building query parameters.
    */
   constructor(
-    protected override httpClient: HttpClient,
-    private queryBuilderService: QueryBuilderService
+    protected override httpClient: HttpClient
   ) {
     super(StringValues.BASE_ORDER_URL, httpClient);
   }
@@ -70,7 +69,7 @@ export class OrderService extends AbstractService<Order, number> {
    * @returns An Observable containing the list of orders matching the specified criteria.
    */
   public override getAll(filter?: string, sortType?: string, sortProperty?: string, page?: number, size?: number): Observable<any> {
-    const queryParams = this.queryBuilderService.buildQueryParams({
+    const queryParams = buildQueryParams({
       name: filter,
       sortType: sortType || 'asc',
       sortProperty: sortProperty || 'date',

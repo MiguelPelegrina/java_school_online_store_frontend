@@ -10,7 +10,7 @@ import { CartService } from 'src/app/services/cart/cart.service';
 import { OrderStatusService } from 'src/app/services/order/order-status/order-status.service';
 import { OrderService } from 'src/app/services/order/order.service';
 import { PaymentStatusService } from 'src/app/services/order/payment-status/payment-status.service';
-import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
+import { SearchBarComponent } from 'src/app/components/search-bar/search-bar.component';
 import { Order } from 'src/app/shared/domain/order/order';
 import { OrderStatus } from 'src/app/shared/domain/order/order-status/order-status';
 import { PaymentStatus } from 'src/app/shared/domain/order/payment-status/payment-status';

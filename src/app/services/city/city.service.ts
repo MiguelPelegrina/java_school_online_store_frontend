@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError } from 'rxjs';
 import { City } from 'src/app/shared/domain/user/address/postal-code/city/city';
-import { AbstractService } from 'src/app/shared/service/abstract.service';
-import { QueryBuilderService } from 'src/app/shared/service/query-builder.service';
+import { AbstractService } from 'src/app/services/abstract/abstract.service';
 import { StringValues } from 'src/app/shared/utils/string-values';
+import { buildQueryParams } from 'src/app/shared/utils/utils';
 
 /**
  * A service for managing city-related operations.
@@ -20,8 +20,7 @@ export class CityService extends AbstractService<City, string> {
    * @param queryBuilderService - The service for building query parameters.
    */
   constructor(
-    protected override httpClient: HttpClient,
-    private queryBuilderService: QueryBuilderService
+    protected override httpClient: HttpClient
   ) {
     super(StringValues.BASE_CITY_URL, httpClient);
   }
@@ -33,7 +32,7 @@ export class CityService extends AbstractService<City, string> {
    * @returns An Observable containing the list of cities matching the specified criteria.
    */
   public override getAll(active?: boolean, name?: string): Observable<any> {
-    const queryParams = this.queryBuilderService.buildQueryParams({
+    const queryParams = buildQueryParams({
       active,
       country_name: name
     });

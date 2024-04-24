@@ -5,7 +5,7 @@ import { jwtDecode } from 'jwt-decode';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserService } from 'src/app/services/user/user.service';
-import { AbstractForm } from 'src/app/shared/components/abstract-form';
+import { AbstractForm } from 'src/app/components/abstract/abstract-form';
 import { Address } from 'src/app/shared/domain/user/address/address';
 import { User } from 'src/app/shared/domain/user/user';
 import { AuthResultDto } from 'src/app/shared/utils/interfaces/authResultDto';

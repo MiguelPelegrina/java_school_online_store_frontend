@@ -32,7 +32,7 @@ import { BooksHeaderComponent } from './components/catalog/books-header/books-he
 import { CatalogComponent } from './components/catalog/catalog.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './components/user/login/login.component';
-import { SearchBarComponent } from './shared/components/search-bar/search-bar.component';
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { FiltersComponent } from './components/catalog/filters/filters.component';
@@ -60,7 +60,7 @@ import { ButtonGroupComponent } from './components/cart/button-group/button-grou
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { FooterComponent } from './components/footer/footer.component';
 import { BookExcelParserComponent } from './components/book/book-excel-parser/book-excel-parser.component';
-import { WholeNumberDirective } from './shared/utils/directives/whole-number.directive';
+import { WholeNumberDirective } from './shared/utils/directives/wholeNumber.directive';
 
 @NgModule({
   declarations: [

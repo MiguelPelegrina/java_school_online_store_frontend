@@ -3,7 +3,7 @@ import { FormGroup, FormGroupDirective } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/services/user/user.service';
-import { AbstractForm } from 'src/app/shared/components/abstract-form';
+import { AbstractForm } from 'src/app/components/abstract/abstract-form';
 
 /**
  * Component for adding or editing user information.

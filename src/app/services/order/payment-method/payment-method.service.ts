@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError } from 'rxjs';
 import { PaymentMethod } from 'src/app/shared/domain/order/payment-method/payment-method';
-import { AbstractService } from 'src/app/shared/service/abstract.service';
-import { QueryBuilderService } from 'src/app/shared/service/query-builder.service';
+import { AbstractService } from 'src/app/services/abstract/abstract.service';
 import { StringValues } from 'src/app/shared/utils/string-values';
+import { buildQueryParams } from 'src/app/shared/utils/utils';
 
 /**
  * A service for managing payment method-related operations.
@@ -20,8 +20,7 @@ export class PaymentMethodService extends AbstractService<PaymentMethod, string>
    * @param queryBuilderService - The service for building query parameters.
    */
   constructor(
-    protected override httpClient: HttpClient,
-    private queryBuilderService: QueryBuilderService
+    protected override httpClient: HttpClient
   ) {
     super(StringValues.BASE_PAYMENT_METHODS_URL, httpClient);
   }
@@ -32,7 +31,7 @@ export class PaymentMethodService extends AbstractService<PaymentMethod, string>
    * @returns An Observable containing the list of payment methods matching the specified criteria.
    */
   public override getAll(active?: boolean): Observable<any> {
-    const queryParams = this.queryBuilderService.buildQueryParams({
+    const queryParams = buildQueryParams({
       active
     });
 

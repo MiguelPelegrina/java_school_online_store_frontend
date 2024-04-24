@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError } from 'rxjs';
 import { PaymentStatus } from 'src/app/shared/domain/order/payment-status/payment-status';
-import { AbstractService } from 'src/app/shared/service/abstract.service';
-import { QueryBuilderService } from 'src/app/shared/service/query-builder.service';
+import { AbstractService } from 'src/app/services/abstract/abstract.service';
 import { StringValues } from 'src/app/shared/utils/string-values';
+import { buildQueryParams } from 'src/app/shared/utils/utils';
 
 /**
  * A service for managing payment status-related operations.
@@ -20,8 +20,7 @@ export class PaymentStatusService extends AbstractService<PaymentStatus, string>
    * @param queryBuilderService - The service for building query parameters.
    */
   constructor(
-    protected override httpClient: HttpClient,
-    private queryBuilderService: QueryBuilderService
+    protected override httpClient: HttpClient
   ) {
     super(StringValues.BASE_PAYMENT_STATUS_URL, httpClient);
   }
@@ -32,7 +31,7 @@ export class PaymentStatusService extends AbstractService<PaymentStatus, string>
    * @returns An Observable containing the list of payment statuses matching the specified criteria.
    */
   public override getAll(active?: boolean): Observable<any> {
-    const queryParams = this.queryBuilderService.buildQueryParams({
+    const queryParams = buildQueryParams({
       active
     });
 

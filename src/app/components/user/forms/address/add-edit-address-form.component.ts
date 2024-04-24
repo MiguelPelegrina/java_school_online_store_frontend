@@ -7,7 +7,7 @@ import { PostalCodeService } from 'src/app/services/postal-code/postal-code.serv
 import { Country } from '../../../../shared/domain/country/country';
 import { City } from '../../../../shared/domain/user/address/postal-code/city/city';
 import { PostalCode } from '../../../../shared/domain/user/address/postal-code/postal-code';
-import { AbstractForm } from 'src/app/shared/components/abstract-form';
+import { AbstractForm } from 'src/app/components/abstract/abstract-form';
 
 /**
  * Component for adding or editing address information.

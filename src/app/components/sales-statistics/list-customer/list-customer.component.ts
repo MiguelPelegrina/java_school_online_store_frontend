@@ -6,7 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, Subscription, map, merge, startWith, switchMap } from 'rxjs';
 import { UserService } from 'src/app/services/user/user.service';
-import { SearchBarComponent } from 'src/app/shared/components/search-bar/search-bar.component';
+import { SearchBarComponent } from 'src/app/components/search-bar/search-bar.component';
 import { User } from 'src/app/shared/domain/user/user';
 import { ANIMATION_DURATION, StringValues } from 'src/app/shared/utils/string-values';
 import { informUserOfError } from 'src/app/shared/utils/utils';

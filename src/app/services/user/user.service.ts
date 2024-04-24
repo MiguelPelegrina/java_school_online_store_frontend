@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AbstractService } from '../../shared/service/abstract.service';
+import { AbstractService } from '../abstract/abstract.service';
 import { User } from '../../shared/domain/user/user';
 import { HttpClient } from '@angular/common/http';
 import { StringValues } from '../../shared/utils/string-values';
 import { Observable, catchError } from 'rxjs';
-import { QueryBuilderService } from 'src/app/shared/service/query-builder.service';
+import { buildQueryParams } from 'src/app/shared/utils/utils';
 
 /**
  * A service for managing user-related operations.
@@ -18,7 +18,7 @@ export class UserService extends AbstractService<User, number>{
    * Constructor for the UserService.
    * @param httpClient - The Angular HttpClient for making HTTP requests.
    */
-  constructor(protected override httpClient: HttpClient, private queryBuilderService: QueryBuilderService) {
+  constructor(protected override httpClient: HttpClient) {
     super(StringValues.BASE_USER_URL, httpClient);
   }
 
@@ -40,7 +40,7 @@ export class UserService extends AbstractService<User, number>{
     page?: number,
     size?: number
   ): Observable<any> {
-    const queryParams = this.queryBuilderService.buildQueryParams({
+    const queryParams = buildQueryParams({
       active,
       name: filter,
       sortType: sortType || 'asc',
