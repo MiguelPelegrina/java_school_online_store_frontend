@@ -127,7 +127,6 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
         email: ['', [Validators.required, Validators.email]],
         id: [''],
         name: ['', Validators.required],
-        // TODO Not sure about this. Once logged in, it should not be necessary to introduced the password again for changes, or?
         password: ['', Validators.required],
         phone: ['', Validators.required],
         surname: ['', Validators.required]
@@ -189,8 +188,7 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
         email: [response.email, [Validators.required, Validators.email]],
         id: [response.id],
         name: [response.name, Validators.required],
-        // TODO Not sure about this. Once logged in, it should not be necessary to introduced the password again for changes, or?
-        password: ['', Validators.required],
+        password: ['', this.isAddMode ? Validators.required : Validators.nullValidator],
         phone: [response.phone, Validators.required],
         surname: [response.surname, Validators.required]
       }),

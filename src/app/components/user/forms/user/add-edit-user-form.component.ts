@@ -32,7 +32,7 @@ export class AddEditUserForm extends AbstractForm implements OnDestroy, OnInit {
    * @param userService The service for user-related operations.
    */
   constructor(
-    private rootFormGroup: FormGroupDirective, private route: ActivatedRoute, private userService: UserService){
+    private rootFormGroup: FormGroupDirective, private route: ActivatedRoute){
     super();
   }
 
