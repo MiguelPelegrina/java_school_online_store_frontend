@@ -1,8 +1,7 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormGroup, FormGroupDirective } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { UserService } from 'src/app/services/user/user.service';
 import { AbstractForm } from 'src/app/components/abstract/abstract-form';
 
 /**
@@ -21,7 +20,12 @@ export class AddEditUserForm extends AbstractForm implements OnDestroy, OnInit {
   @Input()
   public isAddMode = false; 
 
+  @Output()
+  public isNewPasswordEmitter = new EventEmitter<boolean>();
+
   protected id?: number;
+
+  protected isNewPassword: boolean = false;
 
   protected userSubscription?: Subscription;
 
@@ -53,5 +57,17 @@ export class AddEditUserForm extends AbstractForm implements OnDestroy, OnInit {
     this.id = this.route.snapshot.params['id'];
 
     this.form = this.rootFormGroup.control.get(this.formGroupName) as FormGroup;
+  }  
+
+  public setNewPassword(value: string){
+    if(!this.isAddMode){
+      if(value.trim() === ""){
+        this.isNewPassword = false;
+        this.isNewPasswordEmitter.emit(false);
+      } else {
+        this.isNewPassword = true;
+        this.isNewPasswordEmitter.emit(true);
+      }      
+    }
   }
 }

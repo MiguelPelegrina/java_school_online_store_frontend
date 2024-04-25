@@ -6,7 +6,7 @@
     <mat-spinner></mat-spinner>
   </div>
   <form [formGroup]="form" *ngIf="form" (ngSubmit)="onSubmit()">
-    <app-add-edit-user-form formGroupName="personalData" [isAddMode]="isAddMode"></app-add-edit-user-form>
+    <app-add-edit-user-form formGroupName="personalData" [isAddMode]="isAddMode" (isNewPasswordEmitter)="setNewPasswordRequirement($event)"></app-add-edit-user-form>
 
     <app-add-edit-address-form formGroupName="address" [selectedCity]="selectedCity" [selectedCountry]="selectedCountry" [selectedPostalCode]="selectedPostalCode" ></app-add-edit-address-form>
 

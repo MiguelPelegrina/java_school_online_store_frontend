@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { Subscription } from 'rxjs';
@@ -107,11 +107,23 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
     if(!this.form.invalid){
       this.isLoading = true;
 
+      console.log(this.form.errors);
+
       if(this.isAddMode){
         this.createUser();
       } else {
         this.updateUser();
       }
+    }
+  }
+
+  protected setNewPasswordRequirement(isNewPassword: boolean){
+    if(isNewPassword){
+      this.form.get('personalData.confirmPassword')!.addValidators([Validators.required])
+      this.form.get('personalData.confirmPassword')!.updateValueAndValidity();
+    } else {
+      this.form.get('personalData.confirmPassword')!.clearValidators();
+      this.form.get('personalData.confirmPassword')!.updateValueAndValidity();
     }
   }
 
@@ -189,6 +201,7 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
         id: [response.id],
         name: [response.name, Validators.required],
         password: ['', this.isAddMode ? Validators.required : Validators.nullValidator],
+        confirmPassword: ['', this.isAddMode ? Validators.required : Validators.nullValidator],
         phone: [response.phone, Validators.required],
         surname: [response.surname, Validators.required]
       }),
@@ -199,7 +212,7 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
         postalCode: [response.address.postalCode.code, Validators.required],
         street: [response.address.street, Validators.required]
       })
-    })
+    }, {validators: this.isAddMode ? Validators.nullValidator: confirmPasswordValidator})
 
     this.selectedCity = response.address.postalCode.city.name;
     this.selectedCountry = response.address.postalCode.city.country.name;
@@ -224,21 +237,21 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
    */
   private updateUser(): void {
     const user: User = {
-      ...this.form.controls['personalData'].value,
+      ...this.f['personalData'].value,
       address: {
         id: 1,
         active: this.response?.address.active,
-        number: this.form.controls['address'].value.number,
-        street: this.form.controls['address'].value.street,
+        number: this.f['address'].value.number,
+        street: this.f['address'].value.street,
         postalCode: {
           active: this.response?.address.postalCode.active,
-          code: this.form.controls['address'].value.postalCode,
+          code: this.f['address'].value.postalCode,
           city: {
             active: this.response?.address.postalCode.city.active,
-            name: this.form.controls['address'].value.city,
+            name: this.f['address'].value.city,
             countryName: {
-              active: this.form.controls['address'].value.country.active,
-              name: this.form.controls['address'].value.country
+              active: this.f['address'].value.country.active,
+              name: this.f['address'].value.country
             }
           }
         }
@@ -275,3 +288,7 @@ export class ProfileComponent extends AbstractForm implements OnDestroy, OnInit 
     this.router.navigate(['../']);
   }
 }
+
+const confirmPasswordValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  return control.value.personalData['password'] === control.value.personalData['confirmPassword'] ? null : { PasswordNoMatch: true };
+};

@@ -36,14 +36,19 @@
         </mat-form-field>
       </div>
 
-      <div class="col-sm">
-        <div>
-          <mat-form-field class="form-group w-100" appearance="fill">
-            <mat-label>Password</mat-label>
-            <input formControlName="password" matInput placeholder="Enter your password" type="password">
-            <mat-hint *ngIf="!isAddMode" class="text-white">Leave blank to keep the same password</mat-hint>
-          </mat-form-field>          
-        </div>
+      <div class="col-sm">        
+        <mat-form-field class="form-group w-100" appearance="fill">
+          <mat-label>Password</mat-label>
+          <input #password formControlName="password" matInput placeholder="Enter your password" type="password" (keyup)="setNewPassword(password.value)">
+          <mat-hint *ngIf="!isAddMode" class="text-white">Leave blank to keep the same password</mat-hint>
+        </mat-form-field>    
+      </div>
+      <div class="col-sm" *ngIf="!isAddMode && isNewPassword">
+        <mat-form-field class="form-group w-100" appearance="fill">
+          <mat-label>Confirm password</mat-label>
+          <input formControlName="confirmPassword" matInput placeholder="Confirm your new password" type="password">
+          <mat-error *ngIf="form.errors?.['PasswordNoMatch']">{{getErrorMessage('confirmPassword')}}</mat-error>
+        </mat-form-field>
       </div>
     </div>
 

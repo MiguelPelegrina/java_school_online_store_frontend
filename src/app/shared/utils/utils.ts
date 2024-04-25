@@ -35,7 +35,6 @@ export function getBase64(
  * @param error - The error response.
  */
 export function informUserOfError(error: any) {
-  console.log(error);
   if (error instanceof HttpErrorResponse) {
     if (error.status === 0) {
       Swal.fire(
@@ -46,7 +45,6 @@ export function informUserOfError(error: any) {
     } else {
       Swal.fire('An error ocurred', error.error, 'warning');
     }
-    // TODO Not sure about this
   } else {
     Swal.fire('An error ocurred', error.error, 'warning');
   }
