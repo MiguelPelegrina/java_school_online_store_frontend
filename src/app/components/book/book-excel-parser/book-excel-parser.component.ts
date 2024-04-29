@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { allowedParserExtensions, requiredFileType } from 'src/app/shared/utils/required-file-type';
 import Swal from 'sweetalert2';
@@ -7,7 +7,7 @@ import { Book } from 'src/app/shared/domain/book/book';
 import { ExcelBook } from 'src/app/shared/domain/book/excel-book/excel-book';
 import { capitalizeFirstLetter, informUserOfError } from 'src/app/shared/utils/utils';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { StringValues } from 'src/app/shared/utils/string-values';
 
 /**
@@ -51,7 +51,7 @@ export class BookExcelParserComponent implements AfterViewInit{
    * @param {BookService} service - The BookService for handling book-related operations.
    */
   constructor(private service: BookService){}
-  
+
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
 
@@ -61,7 +61,7 @@ export class BookExcelParserComponent implements AfterViewInit{
       this.dataPageSize = event.pageSize;
     });
   }
-  
+
   // Methods
   // Protected methods
   /**
