@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ListOrderComponent } from './list-order.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ListOrderComponent', () => {
   let component: ListOrderComponent;
@@ -8,7 +9,8 @@ describe('ListOrderComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ListOrderComponent]
+      declarations: [ListOrderComponent],
+      imports:[HttpClientTestingModule]
     });
     fixture = TestBed.createComponent(ListOrderComponent);
     component = fixture.componentInstance;

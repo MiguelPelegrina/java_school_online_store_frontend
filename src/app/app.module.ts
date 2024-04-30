@@ -15,7 +15,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import {
+  MatSnackBarModule,
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
+} from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -34,19 +37,23 @@ import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './components/user/login/login.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FiltersComponent } from './components/catalog/filters/filters.component';
 import { BookBoxComponent } from './components/catalog/book-box/book-box.component';
 import { CartComponent } from './components/cart/cart.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MAT_DATE_LOCALE, MatNativeDateModule, MatOptionModule } from '@angular/material/core';
-import { TwoDigitDecimalNumberDirective } from './shared/utils/directives/twoDigitDecimalNumber.directive'
+import {
+  MAT_DATE_LOCALE,
+  MatNativeDateModule,
+  MatOptionModule,
+} from '@angular/material/core';
+import { TwoDigitDecimalNumberDirective } from './shared/utils/directives/twoDigitDecimalNumber.directive';
 import { MatSelectModule } from '@angular/material/select';
 import { ProfileComponent } from './components/user/profile/profile.component';
 import { AddEditAddressForm } from './components/user/forms/address/add-edit-address-form.component';
 import { AddEditUserForm } from './components/user/forms/user/add-edit-user-form.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { NgxMaskDirective, NgxMaskPipe, provideNgxMask} from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { MatStepperModule } from '@angular/material/stepper';
 import { OrderDetailsFormComponent } from './components/cart/order-details-form/order-details-form.component';
 import { ListOrderComponent } from './components/order/list-order/list-order.component';
@@ -132,12 +139,11 @@ import { WholeNumberDirective } from './shared/utils/directives/wholeNumber.dire
     RouterModule,
   ],
   providers: [
-    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 5000} },
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 5000 } },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     provideNgxMask(),
-    {provide: MAT_DATE_LOCALE, useValue: 'es-ES'},
-
+    { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

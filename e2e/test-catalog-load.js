@@ -1,7 +1,7 @@
-const {Builder, until} = require("selenium-webdriver")
+const {Builder, until, Browser} = require("selenium-webdriver")
 
 async function checkCatalogPage(){
-  let driver = await new Builder().forBrowser("chrome").build();
+  let driver = await new Builder().forBrowser(Browser.CHROME).build();
 
   try{
     await driver.get('http://localhost:4200');
