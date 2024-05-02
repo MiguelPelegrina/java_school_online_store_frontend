@@ -4,6 +4,9 @@ import { CartComponent } from './cart.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatCardModule } from '@angular/material/card';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('CartComponent', () => {
   let component: CartComponent;
@@ -13,7 +16,10 @@ describe('CartComponent', () => {
     TestBed.configureTestingModule({
       declarations: [CartComponent],
       imports:[
+        BrowserAnimationsModule,
         HttpClientTestingModule,
+        MatCardModule,
+        MatProgressBarModule,
         MatStepperModule,
         MatSnackBarModule,
       ]

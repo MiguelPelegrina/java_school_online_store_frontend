@@ -1,7 +1,7 @@
 import { FormGroup } from "@angular/forms";
 
 export class AbstractForm {
-  protected form!: FormGroup;
+  public form!: FormGroup;
 
   /**
    * Gets access to form fields

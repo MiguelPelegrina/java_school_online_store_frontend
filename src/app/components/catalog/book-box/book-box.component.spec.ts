@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BookBoxComponent } from './book-box.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 describe('BookBoxComponent', () => {
   let component: BookBoxComponent;
@@ -10,7 +10,7 @@ describe('BookBoxComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [BookBoxComponent],
-      //imports:[MatSnackBar]
+      imports:[MatSnackBarModule],
     });
     fixture = TestBed.createComponent(BookBoxComponent);
     component = fixture.componentInstance;

@@ -7,7 +7,7 @@ import { PostalCodeService } from 'src/app/services/postal-code/postal-code.serv
 import { Country } from '../../../../shared/domain/country/country';
 import { City } from '../../../../shared/domain/user/address/postal-code/city/city';
 import { PostalCode } from '../../../../shared/domain/user/address/postal-code/postal-code';
-import { AbstractForm } from 'src/app/components/abstract/abstract-form';
+import { AbstractForm } from 'src/app/shared/components/abstract/abstract-form';
 
 /**
  * Component for adding or editing address information.
@@ -17,7 +17,7 @@ import { AbstractForm } from 'src/app/components/abstract/abstract-form';
   templateUrl: './add-edit-address-form.component.html',
   styleUrls: ['./add-edit-address-form.component.css' , '../../../../app.component.css'],
 })
-export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnInit {
+export class AddEditAddressFormComponent extends AbstractForm implements OnDestroy, OnInit {
   // Fields
   @Input()
   public formGroupName!: string;
@@ -78,6 +78,7 @@ export class AddEditAddressForm extends AbstractForm implements OnDestroy, OnIni
   public ngOnInit(): void {
     this.form = this.rootFormGroup.control.get(this.formGroupName) as FormGroup;
 
+    console.log(this.form)
     this.loadCountries();
 
     this.selectedCountry = this.form.value.country;

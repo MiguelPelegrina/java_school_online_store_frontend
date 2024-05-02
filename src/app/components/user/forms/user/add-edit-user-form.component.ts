@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormGroup, FormGroupDirective } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AbstractForm } from 'src/app/components/abstract/abstract-form';
+import { AbstractForm } from 'src/app/shared/components/abstract/abstract-form';
 
 /**
  * Component for adding or editing user information.
@@ -12,7 +12,7 @@ import { AbstractForm } from 'src/app/components/abstract/abstract-form';
   templateUrl: './add-edit-user-form.component.html',
   styleUrls: ['./add-edit-user-form.component.css', '../../../../app.component.css'],
 })
-export class AddEditUserForm extends AbstractForm implements OnDestroy, OnInit {
+export class AddEditUserFormComponent extends AbstractForm implements OnDestroy, OnInit {
   // Fields
   @Input()
   public formGroupName!: string;

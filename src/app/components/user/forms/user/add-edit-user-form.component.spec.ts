@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddEditUserForm } from './add-edit-user-form.component';
+import { AddEditUserFormComponent } from './add-edit-user-form.component';
 import { FormGroupDirective } from '@angular/forms';
 
 describe('AddEditUserForm', () => {
-  let component: AddEditUserForm;
-  let fixture: ComponentFixture<AddEditUserForm>;
+  let component: AddEditUserFormComponent;
+  let fixture: ComponentFixture<AddEditUserFormComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [AddEditUserForm],
+      declarations: [AddEditUserFormComponent],
       //imports: [FormGroupDirective]
     });
-    fixture = TestBed.createComponent(AddEditUserForm);
+    fixture = TestBed.createComponent(AddEditUserFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

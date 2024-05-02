@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BookFormat } from 'src/app/shared/domain/book/parameters/book-parameters-format/book-parameters-format';
-import { AbstractService } from 'src/app/services/abstract/abstract.service';
+import { AbstractService } from 'src/app/shared/services/abstract/abstract.service';
 import { StringValues } from 'src/app/shared/utils/string-values';
 
 /**

@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TopProductsComponent } from './top-products.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MatTableModule } from '@angular/material/table';
 
 describe('TopProductsComponent', () => {
   let component: TopProductsComponent;
@@ -12,8 +12,11 @@ describe('TopProductsComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [TopProductsComponent],
-      imports:[HttpClientTestingModule,MatProgressSpinnerModule],
-      schemas: [NO_ERRORS_SCHEMA]
+      imports:[
+        HttpClientTestingModule,
+        MatProgressSpinnerModule,
+        MatTableModule
+      ],
     });
     fixture = TestBed.createComponent(TopProductsComponent);
     component = fixture.componentInstance;

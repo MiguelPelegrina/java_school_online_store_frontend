@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 import { BookService } from 'src/app/services/book/book.service';
 import { BookFormatService } from 'src/app/services/book/format/book-format.service';
 import { BookGenreService } from 'src/app/services/book/genre/book-genre.service';
-import { AbstractForm } from 'src/app/components/abstract/abstract-form';
+import { AbstractForm } from 'src/app/shared/components/abstract/abstract-form';
 import { allowedImageExtensions, requiredFileType } from 'src/app/shared/utils/required-file-type';
 import { getBase64, informUserOfError } from 'src/app/shared/utils/utils';
 

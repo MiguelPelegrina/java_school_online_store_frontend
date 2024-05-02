@@ -50,8 +50,8 @@ import {
 import { TwoDigitDecimalNumberDirective } from './shared/utils/directives/twoDigitDecimalNumber.directive';
 import { MatSelectModule } from '@angular/material/select';
 import { ProfileComponent } from './components/user/profile/profile.component';
-import { AddEditAddressForm } from './components/user/forms/address/add-edit-address-form.component';
-import { AddEditUserForm } from './components/user/forms/user/add-edit-user-form.component';
+import { AddEditAddressFormComponent } from './components/user/forms/address/add-edit-address-form.component';
+import { AddEditUserFormComponent } from './components/user/forms/user/add-edit-user-form.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -71,9 +71,9 @@ import { WholeNumberDirective } from './shared/utils/directives/wholeNumber.dire
 
 @NgModule({
   declarations: [
-    AddEditAddressForm,
+    AddEditAddressFormComponent,
     AddEditBookFormComponent,
-    AddEditUserForm,
+    AddEditUserFormComponent,
     AppComponent,
     BookBoxComponent,
     BooksHeaderComponent,

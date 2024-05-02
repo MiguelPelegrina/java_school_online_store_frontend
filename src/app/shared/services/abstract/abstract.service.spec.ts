@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { AbstractService } from './abstract.service';
-import { Country } from '../../shared/domain/country/country';
+import { Country } from '../../domain/country/country';
 
 describe('AbstractService', () => {
   let service: AbstractService<Country, string>;

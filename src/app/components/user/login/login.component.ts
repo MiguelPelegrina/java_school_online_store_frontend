@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth/auth.service';
 import { Router } from '@angular/router';
-import { AbstractForm } from 'src/app/components/abstract/abstract-form';
+import { AbstractForm } from 'src/app/shared/components/abstract/abstract-form';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { AuthUtils } from 'src/app/shared/utils/auth-utils';
 import { informUserOfError } from 'src/app/shared/utils/utils';

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { StringValues } from '../../shared/utils/string-values';
 import { HttpClient } from '@angular/common/http';
 import { Country } from '../../shared/domain/country/country';
-import { AbstractService } from '../abstract/abstract.service';
+import { AbstractService } from '../../shared/services/abstract/abstract.service';
 import { Observable, catchError } from 'rxjs';
 import { buildQueryParams } from 'src/app/shared/utils/utils';
 

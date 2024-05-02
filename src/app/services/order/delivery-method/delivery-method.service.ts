@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError } from 'rxjs';
 import { DeliveryMethod } from 'src/app/shared/domain/order/delivery-method/delivery-method';
-import { AbstractService } from 'src/app/services/abstract/abstract.service';
+import { AbstractService } from 'src/app/shared/services/abstract/abstract.service';
 import { StringValues } from 'src/app/shared/utils/string-values';
 import { buildQueryParams } from 'src/app/shared/utils/utils';
 

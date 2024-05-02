@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Order } from 'src/app/shared/domain/order/order';
 import { OrderedBook } from 'src/app/shared/domain/order/ordered-book';
-import { AbstractService } from 'src/app/services/abstract/abstract.service';
+import { AbstractService } from 'src/app/shared/services/abstract/abstract.service';
 import { StringValues } from 'src/app/shared/utils/string-values';
 import { buildQueryParams } from 'src/app/shared/utils/utils';
 

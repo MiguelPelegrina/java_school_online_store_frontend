@@ -6,8 +6,6 @@
   </mat-expansion-panel-header>
 
   <mat-selection-list #selection [multiple]="false">
-    <!-- <mat-list-item *ngFor="let genre of genres" [value]="genre.name"> -->
-    <!-- <mat-list-option *ngFor="let genre of genres" [value]="genre.name"> -->
     <mat-list-option (click)="onShowGenre(genre.name)" *ngFor="let genre of genres" [value]="genre.name">
       <button class="btn btn-default" >{{genre.name}}</button>
     </mat-list-option>

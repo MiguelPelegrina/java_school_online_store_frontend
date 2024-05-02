@@ -5,7 +5,7 @@ import { DeliveryMethodService } from 'src/app/services/order/delivery-method/de
 import { OrderStatusService } from 'src/app/services/order/order-status/order-status.service';
 import { PaymentMethodService } from 'src/app/services/order/payment-method/payment-method.service';
 import { PaymentStatusService } from 'src/app/services/order/payment-status/payment-status.service';
-import { AbstractForm } from 'src/app/components/abstract/abstract-form';
+import { AbstractForm } from 'src/app/shared/components/abstract/abstract-form';
 import { DeliveryMethod } from 'src/app/shared/domain/order/delivery-method/delivery-method';
 import { OrderStatus } from 'src/app/shared/domain/order/order-status/order-status';
 import { PaymentMethod } from 'src/app/shared/domain/order/payment-method/payment-method';
