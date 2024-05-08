@@ -31,7 +31,7 @@
     "ngx-permissions": "^16.0.1",
     "rxjs": "~7.8.0",
     "selenium-webdriver": "^4.20.0",
-    "sweetalert2": "^11.10.7",
+    "sweetalert2": "^11.10.8",
     "tslib": "^2.3.0",
     "uuid": "^9.0.1",
     "xlsx": "^0.18.5",
