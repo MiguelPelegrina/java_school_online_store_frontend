@@ -11,6 +11,6 @@ export class FooterComponent {
   constructor(@Inject(DOCUMENT) private document: Document) { }
 
   protected goToDocumentation(): void {
-    this.document.location.href = StringValues.API_SPECIFICATION;
+    this.document.location.href = StringValues.DOCUMENTATION;
   }
 }
