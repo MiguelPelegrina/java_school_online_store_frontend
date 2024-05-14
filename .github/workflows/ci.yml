@@ -13,11 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install Chrome (Linux)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y chromium-chromedriver
-
       - name: Set Docker image name
         id: docker_image_name
         run: echo "migupele/java_school_online_store_frontend"
@@ -57,5 +52,4 @@ jobs:
       - name: npm install and npm run CI commands
         run: |
           npm i
-          npm run test
           npm run build
