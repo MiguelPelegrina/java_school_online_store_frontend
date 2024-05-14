@@ -40,11 +40,11 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
 
       # Extract metadata for Docker (consider using docker/metadata-action)
-      - name: Extract metadata for Docker
+      - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v1   # Or your preferred metadata action
+        uses: docker/metadata-action@v1
         with:
-          images: ${{ steps.docker_image_name.outputs.image_name }}  # Use defined image name
+          images: migupele/java_school_online_store_frontend
 
       # Build and push Docker image
       - uses: docker/build-push-action@v3  # Consider using docker/layer-cache
