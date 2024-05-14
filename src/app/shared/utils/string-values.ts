@@ -6,7 +6,8 @@ export const ANIMATION_DURATION = '225ms cubic-bezier(0.4, 0.0, 0.2, 1)';
  * Class containing all default values and shared URLs.
  */
 export class StringValues{
-  public static BASE_URL: string = 'http://localhost:8081'
+  public static BASE_URL: string = 'http://localhost:8081';
+  public static API_SPECIFICATION: string = 'https://miguelpelegrina.github.io/java_school_online_store_documentation/';
 
   /////////////////////////////////////////////////////
   // Authentication
