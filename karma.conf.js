@@ -16,6 +16,12 @@ module.exports = function (config) {
         reports: ["html", "lcovonly"],
         fixWebpackSourcePaths: true,
       },
+      customLaunchers: {
+        ChromeHeadless: {
+          base: 'ChromeHeadless',
+          flags: ['--no-sandbox', '--disable-gpu']
+        }
+      },
       angularCli: {
         environment: "dev",
       },
@@ -24,7 +30,7 @@ module.exports = function (config) {
       colors: true,
       logLevel: config.LOG_INFO,
       autoWatch: true,
-      browsers: ["Chrome"],
+      browsers: ["ChromeHeadless"],
       singleRun: false,
     });
   };
