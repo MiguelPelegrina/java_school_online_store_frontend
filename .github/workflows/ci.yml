@@ -27,8 +27,14 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      - name: Build Docker image
-        run: docker build . --file Dockerfile
+      - name: Cache Docker layers
+        uses: docker/layer-cache@v3 
+        with:
+          key: ${{ runner.os }}-docker-${{ hashFiles('./Dockerfile') }} 
+
+      - name: Build Docker image (using cache)
+        run: |
+          docker build --cache-from ${{ steps.docker_layer_cache.outputs.layer_cache }} -t ${{ steps.docker_image_name.outputs.image_name }} .  
 
       - uses: docker/login-action@v3
         with:
