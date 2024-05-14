@@ -61,4 +61,3 @@ jobs:
           npm i
           npm run test
           npm run build
-        fail-fast: true  # Fail workflow on build errors
