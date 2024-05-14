@@ -12,6 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: Set Docker image name
+        id: docker_image_name
         
       - uses: actions/cache@v3
         env:
@@ -23,7 +26,7 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      - name: Build Docker image (using cache)
+      - name: Build Docker image
         run: |
           run: docker build . --file Dockerfile  
 
