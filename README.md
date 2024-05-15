@@ -1,11 +1,12 @@
 ![Build Status](https://github.com/MiguelPelegrina/java_school_online_store_frontend/actions/workflows/ci.yml/badge.svg)
 
-Disclaimer:
-I am currently reviewing my most important projects from GitHub and trying to implement new features to it, so updates will be added step by step. 
+# Disclaimer 
+
+I am currently reviewing my most important projects from GitHub and trying to implement new features to it, so updates will be coming soon.
 
 This repository is part of my final project for the Java School of T-Systems Iberia and contains the frontend. For further information please refer to my documentation at https://miguelpelegrina.github.io/java_school_online_store_documentation/.
 
-# Onlinestoreapp
+# Online Bookstore
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.1.
 
